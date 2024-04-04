@@ -14,7 +14,8 @@ public record UserInfoDTO (
     String addr1,
     String addr2,
     String regDt,
-    String existsYn
+    String existsYn,
+    int authNumber
 
 ) {
 }

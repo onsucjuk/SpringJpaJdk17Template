@@ -16,5 +16,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfoEntity, String
 
     // 로그인 (아이디, 비밀번호 확인)
     Optional<UserInfoEntity> findByUserIdAndPassword(String userId, String password);
+    Optional<UserInfoEntity> findByUserIdAndUserNameAndEmail(String userId, String userName, String email);
 
 }

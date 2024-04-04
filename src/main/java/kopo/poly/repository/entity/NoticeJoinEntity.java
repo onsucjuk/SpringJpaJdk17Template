@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "NOTICE")
+@Table(name = "OWNER_BOARD")
 @DynamicInsert
 @DynamicUpdate
 @Builder

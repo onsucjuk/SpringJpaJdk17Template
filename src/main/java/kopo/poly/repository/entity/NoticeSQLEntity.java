@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "NOTICE")
+@Table(name = "OWNER_BOARD")
 @DynamicInsert
 @DynamicUpdate
 @Builder

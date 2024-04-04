@@ -9,6 +9,27 @@ $(document).ready(function () {
     })
 
     $("#btnSendAuth").on("click", function () {
+
+        let f = document.getElementById("f");
+
+        if (f.userId.value === "") {
+            alert("아이디를 입력하세요.");
+            f.userId.focus();
+            return;
+        }
+
+        if (f.userName.value === "") {
+            alert("이름을 입력하세요.");
+            f.userName.focus();
+            return;
+        }
+
+        if (f.email.value === "") {
+            alert("이메일을 입력하세요.");
+            f.email.focus();
+            return;
+        }
+
         $.ajax({
                 url: "/user/sendEmailAuth",
                 type: "post",
@@ -32,6 +53,26 @@ $(document).ready(function () {
     })
 
     $("#btnAuth").on("click", function () {
+
+        let f = document.getElementById("f");
+
+        if (f.userId.value === "") {
+            alert("아이디를 입력하세요.");
+            f.userId.focus();
+            return;
+        }
+
+        if (f.userName.value === "") {
+            alert("이름을 입력하세요.");
+            f.userName.focus();
+            return;
+        }
+
+        if (f.email.value === "") {
+            alert("이메일을 입력하세요.");
+            f.email.focus();
+            return;
+        }
 
         $.ajax({
                 url: "/user/getUserIdExists",
@@ -64,7 +105,6 @@ $(document).ready(function () {
 
     // 비밀번호  찾기
     $("#btnSearchPassword").on("click", function () {
-        let f = document.getElementById("f"); // form 태그
 
         if (f.userId.value === "") {
             alert("아이디를 입력하세요.");
@@ -91,7 +131,7 @@ $(document).ready(function () {
         }
 
         f.method = "post"; // 비밀번호 찾기 정보 전송 방식
-        f.action = "/user/searchPasswordProc" // 비밀번호 찾기 URL
+        f.action = "/user/newPassword" // 비밀번호 찾기 URL
 
         f.submit(); // 아이디 찾기 정보 전송하기
     })

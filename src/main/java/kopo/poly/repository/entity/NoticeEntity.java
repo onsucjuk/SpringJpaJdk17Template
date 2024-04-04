@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "NOTICE")
+@Table(name = "OWNER_BOARD")
 @DynamicInsert
 @DynamicUpdate
 @Builder

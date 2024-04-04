@@ -10,6 +10,7 @@ import kopo.poly.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,107 @@ public class UserInfoController {
         return "user/searchPassword";
     }
 
+    @GetMapping(value = "newPasswordResult")
+    public String newPasswordResult() {
+
+        log.info(this.getClass().getName() + ".user/newPasswordResult Start!");
+
+        log.info(this.getClass().getName() + ".user/newPasswordResult End!");
+
+        return "user/newPasswordResult";
+    }
+
+    @PostMapping(value = "newPassword")
+    public String searchPasswordProc(HttpServletRequest request, HttpSession session) throws Exception {
+        log.info(this.getClass().getName() + ".user/newPassword Start!");
+
+        String userId = CmmUtil.nvl((request.getParameter("userId"))); // 아이디
+        String userName = CmmUtil.nvl((request.getParameter("userName"))); // 이름
+        String email = CmmUtil.nvl((request.getParameter("email"))); // 이메일
+
+        log.info("userId : " + userId);
+        log.info("userName : " + userName);
+        log.info("email : " + email);
+
+        UserInfoDTO pDTO = UserInfoDTO.builder()
+                .userId(userId)
+                .userName(userName)
+                .email(EncryptUtil.encAES128CBC(email))
+                .build();
+
+        // 비밀번호 찾기 가능한지 확인하기
+        int res = userInfoService.searchUserIdOrPasswordPro(pDTO);
+
+        // 비밀번호 재생성 화면은 보안을 위해 반드시 NEW_PASSWORD 세션이 존재해야 접속 가능하도록 구현
+        // userId 값을 넣은 이유는 비밀번호 재설정하는 newPasswordProc 함수에서 사용하기 위함
+
+        if (res > 0) {
+
+            session.setAttribute("NEW_PASSWORD", userId);
+
+            log.info(this.getClass().getName() + ".user/newPassword End!");
+
+            return "user/newPassword";
+        }
+
+        else {
+
+            session.setAttribute("NEW_PASSWORD", "");
+
+            log.info(this.getClass().getName() + ".user/newPassword End!");
+
+            return "user/newPassword";
+        }
+    }
+
+
+    @PostMapping(value = "updatePassword")
+    public String newPasswordProc(HttpServletRequest request, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".user/updatePassword Strat!");
+
+        String msg = ""; // 웹에 보여줄 메세지
+
+        // 정상적인 접근인지 체크
+        String newPassword = CmmUtil.nvl((String) session.getAttribute("NEW_PASSWORD"));
+
+        if(newPassword.length() > 0) { //정상접근
+            String password = CmmUtil.nvl(request.getParameter("password")); //신규 비밀번호
+
+            log.info("password : " + password);
+
+            UserInfoDTO pDTO = UserInfoDTO.builder()
+                    .userId(newPassword)
+                    .password(EncryptUtil.encHashSHA256(password))
+                    .build();
+
+            int res = userInfoService.updatePassword(pDTO);
+
+            // 비밀번호 재생성 화면은 보안을 위해 생성한 NEW_PASSWORD 세션 삭제
+            session.setAttribute("NEW_PASSWORD", "");
+            session.removeAttribute("NEW_PASSWORD");
+
+            if(res > 0) {
+                msg = "비밀번호가 재설정되었습니다.";
+            } else {
+                msg = "비밀번호 변경에 문제가 생겼습니다. 다시 시도해주세요.";
+            }
+
+        } else { //비정상 접근
+            msg = "비정상 접근입니다.";
+        }
+
+        session.setAttribute("MSG", msg);
+
+        log.info("msg : " + msg);
+
+        log.info(this.getClass().getName() + ".user/updatePassword End!");
+
+        return "/user/newPasswordResult";
+    }
+
+
+
     @ResponseBody
     @PostMapping(value="getUserIdExists")
     public UserInfoDTO getUserExists(HttpServletRequest request) throws Exception {
@@ -73,6 +175,28 @@ public class UserInfoController {
                 .orElseGet(() -> UserInfoDTO.builder().build());
 
         log.info(this.getClass().getName() + ".getUserIdExists End!");
+
+        return rDTO;
+    }
+
+
+    @ResponseBody
+    @PostMapping(value = "sendEmailAuth")
+    public UserInfoDTO SendEmailAuth(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + ".sendEmailAuth Start!");
+
+        String email = CmmUtil.nvl(request.getParameter("email")); // 이메일
+
+        log.info("email : " + email);
+
+        UserInfoDTO pDTO =  UserInfoDTO.builder()
+                .email(EncryptUtil.encAES128CBC(email))
+                .build();
+
+        UserInfoDTO rDTO = Optional.ofNullable(userInfoService.sendEmailAuth(pDTO))
+                .orElseGet(() -> UserInfoDTO.builder().build());
+
+        log.info(this.getClass().getName() + ".sendEmailAuth End!");
 
         return rDTO;
     }
@@ -103,7 +227,7 @@ public class UserInfoController {
                 .userId(userId)
                 .userName(userName)
                 .password(EncryptUtil.encHashSHA256(password))
-                .email(EncryptUtil.encHashSHA256(email))
+                .email(EncryptUtil.encAES128CBC(email))
                 .addr1(addr1)
                 .addr2(addr2)
                 .build();
@@ -136,6 +260,23 @@ public class UserInfoController {
         log.info(this.getClass().getName() + ".user/login End!");
 
         return  "user/login";
+    }
+
+    /**
+     * 비밀번호 변경 고유 세션 삭제 후 이동
+     */
+    @GetMapping(value = "passProc")
+    public String passProc(HttpSession session) {
+
+        log.info(this.getClass().getName() + ".user/passProc Start!");
+
+        // 비밀번호 재생성 화면은 보안을 위해 생성한 NEW_PASSWORD 세션 삭제
+        session.setAttribute("NEW_PASSWORD", "");
+        session.removeAttribute("NEW_PASSWORD");
+
+        log.info(this.getClass().getName() + ".user/passProc End!");
+
+        return  "redirect:/user/login";
     }
 
     @ResponseBody
@@ -224,7 +365,7 @@ public class UserInfoController {
         log.info("email : " + email);
 
         UserInfoDTO pDTO = UserInfoDTO.builder()
-                .email(EncryptUtil.encHashSHA256(email))
+                .email(EncryptUtil.encAES128CBC(email))
                 .build();
 
         //이메일을 통해 중복된 이메일인지 조회
