@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기</title>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/user/searchUserId.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/user/login.css">
+</head>
+<body>
+<div id="back">
+    <canvas id="canvas" class="canvas-back"></canvas>
+    <div class="backLeft">
+    </div>
+</div>
+<div id="slideBox">
+    <div class="topLayer">
+        <div class="right">
+            <div class="content">
+                <h2>아이디 찾기</h2>
+                <form id="f" method="post" onsubmit="return false;">
+                    <div class="form-element form-stack">
+                        <label for="userName" class="form-label">이름</label>
+                        <input id="userName" type="text" name="userName">
+                    </div>
+                    <div class="form-element form-stack">
+                        <label for="email" class="form-label">이메일</label>
+                        <input id="email" type="email" name="email">
+                    </div>
+                    <div class="form-element form-submit">
+                        <button id="btnSearchUserId" class="login">Search ID</button>
+                        <button id="btnSearchPassword" class="login off" name="signup">Search PWD</button>
+                        <button id="btnLogin" class="login off" name="signup">Log in</button>
+                        <button id="btnMain" class="login off" name="signup">Main</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

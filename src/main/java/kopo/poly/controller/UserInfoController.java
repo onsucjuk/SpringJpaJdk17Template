@@ -37,6 +37,26 @@ public class UserInfoController {
         return "user/userRegForm";
     }
 
+    @GetMapping(value = "searchUserId")
+    public String searchUserId() {
+
+        log.info(this.getClass().getName() + ".user/searchUserId Start!");
+
+        log.info(this.getClass().getName() + ".user/searchUserId End!");
+
+        return "user/searchUserId";
+    }
+
+    @GetMapping(value = "searchPassword")
+    public String searchPassword() {
+
+        log.info(this.getClass().getName() + ".user/searchPassword Start!");
+
+        log.info(this.getClass().getName() + ".user/searchPassword End!");
+
+        return "user/searchPassword";
+    }
+
     @ResponseBody
     @PostMapping(value="getUserIdExists")
     public UserInfoDTO getUserExists(HttpServletRequest request) throws Exception {
@@ -182,5 +202,38 @@ public class UserInfoController {
     }
 
 
+    /**
+     * ###########################################################################
+     *
+     *  이메일 있는지 체크
+     *
+     * ###########################################################################
+     */
+
+    /**
+     * 회원 가입 전 이메일 중복체크하기(Ajax를 통해 입력한 아이디 정보 받음)
+     * 유효한 이메일인지 확인하기 위해 입력된 이메일에 인증번호 포함하여 메일 발송
+     */
+    @ResponseBody
+    @PostMapping(value = "getEmailExists")
+    public UserInfoDTO getEmailExists(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + ".getEmailExists Start!");
+
+        String email = CmmUtil.nvl(request.getParameter("email")); // 이메일
+
+        log.info("email : " + email);
+
+        UserInfoDTO pDTO = UserInfoDTO.builder()
+                .email(EncryptUtil.encHashSHA256(email))
+                .build();
+
+        //이메일을 통해 중복된 이메일인지 조회
+        UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getEmailExists(pDTO))
+                .orElseGet(() -> UserInfoDTO.builder().build());
+
+        log.info(this.getClass().getName() + ".getEmailExists End!");
+
+        return rDTO;
+    }
 
 }

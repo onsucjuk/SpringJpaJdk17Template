@@ -45,6 +45,39 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
+    public UserInfoDTO getEmailExists(UserInfoDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getEmailExists Start!");
+
+        UserInfoDTO rDTO;
+
+        String email = CmmUtil.nvl(pDTO.email());
+
+        log.info("email : " + email);
+
+        Optional<UserInfoEntity> rEntity = userInfoRepository.findByEmail(email);
+
+        if (rEntity.isPresent()) {
+
+            UserInfoEntity userInfoEntity = rEntity.get();
+            String userId = userInfoEntity.getUserId();
+            log.info("userId : " + userId);
+
+            rDTO = UserInfoDTO.builder()
+                    .existsYn("Y")
+                    .userId(userId)
+                    .build();
+        } else {
+            rDTO = UserInfoDTO.builder().existsYn("N").build();
+        }
+
+        log.info(this.getClass().getName() + ".getEmailExists End!");
+
+        return rDTO;
+
+    }
+
+    @Override
     public int insertUserInfo(UserInfoDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".insertUserInfo Start!");
