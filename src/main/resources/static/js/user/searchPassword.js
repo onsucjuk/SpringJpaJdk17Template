@@ -8,6 +8,10 @@ $(document).ready(function () {
         location.href = "/user/login";
     })
 
+    $("#btnMain").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        location.href = "/html/index";
+    })
+
     $("#btnSendAuth").on("click", function () {
 
         let f = document.getElementById("f");

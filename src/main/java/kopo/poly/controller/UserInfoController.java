@@ -305,6 +305,7 @@ public class UserInfoController {
 
             msg = "로그인이 성공했습니다.";
             session.setAttribute("SS_USER_ID", userId);
+
         } else {
             msg = "아이디와 비밀번호가 올바르지 않습니다.";
         }
@@ -331,8 +332,10 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".logout Start!");
 
-        session.setAttribute("SS_USER_ID", "");
-        session.removeAttribute("SS_USER_ID");
+        /*session.setAttribute("SS_USER_ID", "");
+        session.removeAttribute("SS_USER_ID");*/
+
+        session.invalidate();
 
         MsgDTO dto = MsgDTO.builder().result(1).msg("로그아웃하였습니다.").build();
 
