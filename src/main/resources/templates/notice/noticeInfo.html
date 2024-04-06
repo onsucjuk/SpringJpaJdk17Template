@@ -3,116 +3,170 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>게시판 글보기</title>
-    <link rel="stylesheet" href="/css/table.css"/>
+    <title>게시글 상세보기</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/init-alpine.js"></script>
+    <script src="/js/notice/noticeInfo.js"></script>
+    <script src="/js/home/nav.js"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
-        const session_user_id = [[${session.SESSION_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
+        const session_user_id = [[${session.SS_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
         const user_id = [[${rDTO.userId}]]; // 공지사항 게시글 작성자 아이디
         const nSeq = [[${rDTO.noticeSeq}]]; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
-
-        // HTML로딩이 완료되고, 실행됨
-        $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnEdit").on("click", function () {
-                doEdit(); // 공지사항 수정하기 실행
-            })
-
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnDelete").on("click", function () {
-                doDelete(); // 공지사항 수정하기 실행
-            })
-
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnList").on("click", function () {
-                location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-            })
-        })
-
-        //수정하기
-        function doEdit() {
-            if (session_user_id === user_id) {
-                location.href = "/notice/noticeEditInfo?nSeq=" + nSeq;
-
-            } else if (session_user_id === "") {
-                alert("로그인 하시길 바랍니다.");
-
-            } else {
-                alert("본인이 작성한 글만 수정 가능합니다.");
-
-            }
-        }
-
-        //삭제하기
-        function doDelete() {
-            if (session_user_id === user_id) {
-                if (confirm("작성한 글을 삭제하시겠습니까?")) {
-
-                    // Ajax 호출해서 글 삭제하기
-                    $.ajax({
-                            url: "/notice/noticeDelete",
-                            type: "post", // 전송방식은 Post
-                            dataType: "JSON", // 전송 결과는 JSON으로 받기
-                            data: {"nSeq": nSeq}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                            success:
-                                function (json) { // /notice/noticeDelete 호출이 성공했다면..
-                                    alert(json.msg); // 메시지 띄우기
-                                    location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-                                }
-                        }
-                    )
-                }
-
-            } else if (session_user_id === "") {
-                alert("로그인 하시길 바랍니다.");
-
-            } else {
-                alert("본인이 작성한 글만 수정 가능합니다.");
-
-            }
-        }
 
         /*]]>*/
     </script>
 </head>
 <body>
-<h2>공지사항 상세보기</h2>
-<hr/>
-<br/>
-<div class="divTable minimalistBlack">
-    <div class="divTableBody">
-        <div class="divTableRow">
-            <div class="divTableCell">제목
-            </div>
-            <div class="divTableCell" th:text="${rDTO.title}"></div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">공지글 여부
-            </div>
-            <div class="divTableCell">
-                예<input type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'Y'}"/>
-                아니오<input type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'N'}"/>
-            </div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">작성일</div>
-            <div class="divTableCell" th:text="${rDTO.regDt}"></div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">조회수</div>
-            <div class="divTableCell" th:text="${rDTO.readCnt}"></div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">내용</div>
-            <div class="divTableCell" th:text="${rDTO.contents}"></div>
-        </div>
-    </div>
+
+
+<div class="menu-btn">
+    <i style="font-size:24px" class="fa">&#xf0c9;</i>
 </div>
-<div>
-    <button id="btnEdit" type="button">수정</button>
-    <button id="btnDelete" type="button">삭제</button>
-    <button id="btnList" type="button">목록</button>
+
+<div class="container">
+    <!-- Nav -->
+    <nav class="main-nav">
+        <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+
+        <ul class="right-menu">
+
+            <ul class="main-menu">
+                <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
+                <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
+                <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+            </ul>
+
+            <p th:if="${session.SS_USER_ID}">
+                <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
+                </button>
+            </p>
+
+            <li th:unless="${session.SS_USER_ID}">
+                <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
+            </li>
+
+        </ul>
+    </nav>
+
+    <!-- 게시글 상세보기 -->
+    <div class="flex flex-col flex-1 w-full">
+        <main class="h-full pb-16 overflow-y-auto">
+            <div class="container grid px-6 mx-auto">
+                <h2
+                        class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+                >
+                    게시글 상세
+                </h2>
+
+                <!-- With actions -->
+                <h4
+                        class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
+                >
+                </h4>
+
+                <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full whitespace-no-wrap">
+                            <thead>
+                            <!-- 제목 라인-->
+                            <tr
+                                    class="tr-title-bg font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 " style="background-color: #f0f0f0;"
+                            >
+                                <td class="px-4 py-3 td-title-bg" th:text="제목">
+                                </td>
+                                <td class="td-title-bg">
+                                    <div style="float: left;">
+                                        <span class="px-4 py-3 text-sm" th:text="${rDTO.noticeSeq()}"></span>
+                                    </div>
+                                    <div style="float: left;">
+                                        <span class="px-4 py-3" stlye="float: left" th:text="${rDTO.title()}"></span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 작성자, 조회수, 작성일 -->
+                            <tr>
+                                <td class="px-4 py-3 text-sm left-align font-semibold" th:text="${rDTO.userId()}"></td>
+                                <td class="px-4 py-3 text-sm left-right">
+                                    <div style="float: right;">
+                                        <span class="px-4 py-3 text-sm" th:text="'조회수'"></span>
+                                        <span class="px-4 py-3 text-sm" th:text="'|'"></span>
+                                        <span class="px-4 py-3 text-sm" style="background-color: #f0f0f0;" th:text="${rDTO.readCnt()}"></span>
+                                        <span class="px-4 py-3 text-sm"  th:text="'작성일'"></span>
+                                        <span class="px-4 py-3 text-sm" th:text="'|'"></span>
+                                        <span class="px-4 py-3 text-sm" style="background-color: #f0f0f0;" th:text="${rDTO.regDt()}"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody
+                                    class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+                            >
+                            <tr>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3" colspan="2" style="width : 100%; height: 400px;  vertical-align: top;" th:text="${rDTO.contents()}">
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <!-- 동작 버튼 3개 -->
+                    <div class="flex space-x-1">
+                        <div th:if="${session.SS_USER_ID}==${rDTO.userId()}" class="px-6 my-6">
+                            <button
+                                    id="btnEdit"
+                                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    type="button"
+                            >
+                                <div class="w-full">
+                                    <span class="px-4 py-3 text-sm font-semibold">수정</span>
+                                    <span class="ml-2" aria-hidden="true">*</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div th:if="${session.SS_USER_ID}==${rDTO.userId()}" class="px-6 my-6">
+                            <button
+                                    id="btnDelete"
+                                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    type="button"
+                            >
+                                <div  class="w-full">
+                                    <span class="px-4 py-3 text-sm font-semibold" >삭제</span>
+                                    <span class="ml-2" aria-hidden="true">-</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="px-6 my-6">
+                            <button
+                                    id="btnList"
+                                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    type="button"
+                            >
+                                <div class="w-full">
+                                    <span class="px-4 py-3 text-sm font-semibold">목록</span>
+                                    <span class="ml-2" aria-hidden="true">=</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 </div>
 </body>
 </html>

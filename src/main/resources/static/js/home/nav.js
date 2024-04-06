@@ -1,10 +1,9 @@
 $(document).ready(function () {
-
     $("#btnLogin").on("click", function () {
         location.href = "/user/login";
     })
 
-    $("#btnBnav, #btnBnav1, #btnBnav2").on("click", function () {
+    $("#btnBnav").on("click", function () {
         location.href = "/Bnav/SiAnalysis";
     })
 
@@ -21,11 +20,11 @@ $(document).ready(function () {
         location.href = "/user/login";
     })
 
-    $("#mainLogOut").on("click", function (){
+    $("#mainLogOut").on("click", function () {
 
         $.ajax({
-            url : "/user/logout",
-            type : "post",
+            url: "/user/logout",
+            type: "post",
             dataType: "JSON",
             success: function (json) {
 
@@ -38,8 +37,5 @@ $(document).ready(function () {
             }
         })
     })
-
-
-document.querySelector('.menu-btn').addEventListener('click', () => document.querySelector('.main-menu').classList.toggle('show'));
 
 })

@@ -56,7 +56,7 @@ public class NoticeJoinService implements INoticeJoinService {
             log.info("-----------------------------");
 
             NoticeDTO rDTO = NoticeDTO.builder()
-                    .noticeSeq(noticeSeq).noticeYn(noticeYn)
+                    .noticeSeq(noticeSeq)
                     .title(title).readCnt(readCnt).userName(userName).regDt(regDt).build();
 
             list.add(rDTO);

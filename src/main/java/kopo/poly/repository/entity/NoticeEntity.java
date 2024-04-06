@@ -24,11 +24,6 @@ public class NoticeEntity {
     @NonNull
     @Column(name = "title", length = 500, nullable = false)
     private String title;
-
-    @NonNull
-    @Column(name = "notice_yn", length = 1, nullable = false)
-    private String noticeYn;
-
     @NonNull
     @Column(name = "contents", nullable = false)
     private String contents;

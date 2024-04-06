@@ -25,8 +25,8 @@
         <ul class="right-menu">
 
             <ul class="main-menu">
-                <li><p><a>시장분석</a></p></li>
-                <li><p><a>창업자 게시판</a></p></li>
+                <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
                 <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
                 <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
             </ul>
@@ -47,7 +47,7 @@
     <header class="showcase">
         <h2>당신의 사업을 시작해보세요.</h2>
         <p>Business Navigator, Navigate You!</p>
-        <a href="#" class="btn">
+        <a id="Bnav1" class="btn">
             Go! BNav!
         </a>
     </header>

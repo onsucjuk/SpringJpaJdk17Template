@@ -1,43 +1,224 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>공지 리스트</title>
-    <script type="text/css" href="/css/table.css"/></script>
-    <script type="text/javascript">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>창업자 게시판</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/init-alpine.js"></script>
+    <script src="/js/notice/noticeList.js"></script>
+    <script src="/js/home/nav.js"></script>
 
-        //상세보기 이동
-        function doDetail(seq) {
-            location.href = "/notice/noticeInfo?nSeq=" + seq;
-        }
-
-    </script>
+    <!-- Rest of your HTML content goes here -->
 </head>
 <body>
-<h2>공지사항</h2>
-<hr/>
-<br/>
-<div class="divTable minimalistBlack">
-    <div class="divTableHeading">
-        <div class="divTableRow">
-            <div class="divTableHead">순번</div>
-            <div class="divTableHead">제목</div>
-            <div class="divTableHead">조회수</div>
-            <div class="divTableHead">등록자</div>
-            <div class="divTableHead">등록일</div>
-        </div>
-    </div>
-    <div class="divTableBody">
-        <div class="divTableRow" th:each="dto: ${rList}">
-            <div class="divTableCell" th:if="${dto.noticeYn=='Y'}" th:text="공지사항"></div>
-            <div class="divTableCell" th:unless="${dto.noticeYn=='Y'}" th:text="${dto.noticeSeq}"></div>
-            <div class="divTableCell" th:text="${dto.title}" th:onclick="doDetail([[${dto.noticeSeq}]])"></div>
-            <div class="divTableCell" th:text="${dto.readCnt}"></div>
-            <div class="divTableCell" th:text="${dto.userId}"></div>
-            <div class="divTableCell" th:text="${dto.regDt}"></div>
+
+<div class="menu-btn">
+    <i style="font-size:24px" class="fa">&#xf0c9;</i>
+</div>
+
+<div class="container">
+    <!-- Nav -->
+    <nav class="main-nav">
+        <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+
+        <ul class="right-menu">
+
+            <ul class="main-menu">
+                <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
+                <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
+                <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+            </ul>
+
+            <p th:if="${session.SS_USER_ID}">
+                <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
+                </button>
+            </p>
+
+            <li th:unless="${session.SS_USER_ID}">
+                <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
+            </li>
+
+        </ul>
+    </nav>
+
+    <div
+            class="flex h-screen bg-gray-50 dark:bg-gray-900"
+            :class="{ 'overflow-hidden': isSideMenuOpen}"
+    >
+
+        <div class="flex flex-col flex-1 w-full">
+            <main class="h-full pb-16 overflow-y-auto">
+                <div class="container grid px-6 mx-auto">
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                        창업자 게시판
+                    </h2>
+
+                    <!-- With actions -->
+                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"></h4>
+                    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                        <div class="w-full overflow-x-auto">
+                            <table class="w-full whitespace-no-wrap">
+                                <thead>
+                                    <tr
+                                            class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                                    >
+                                        <th class="px-4 py-3 td-title-bg">글번호</th>
+                                        <th class="px-4 py-3 td-title-bg">제목</th>
+                                        <th class="px-4 py-3 td-title-bg">조회수</th>
+                                        <th class="px-4 py-3 td-title-bg">등록자</th>
+                                        <th class="px-4 py-3 td-title-bg">등록일</th>
+                                    </tr>
+                                </thead>
+                                <tbody
+                                        class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+                                >
+                                    <tr th:each="dto : ${rList}" th:onclick="doDetail([[${dto.noticeSeq}]])" class="text-gray-700 dark:text-gray-400 tr-bg"
+                                    >
+
+                                        <td class="px-4 py-3 seq" th:text="${dto.noticeSeq}">
+                                        </td>
+
+                                        <td class="px-4 py-3 seq" th:text="${dto.title}">
+                                        </td>
+
+                                        <td class="px-4 py-3 seq" th:text="${dto.readCnt}">
+                                        </td>
+
+                                        <td class="px-4 py-3 seq" th:text="${dto.userId}">
+                                        </td>
+
+                                        <td class="px-4 py-3 seq" th:text="${dto.regDt}">
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                                <!--페이징 안 만들어서 주석 처리-->
+                                <!--<div
+                                        class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
+                                >
+                            <span class="flex items-center col-span-3">
+                              Showing 1-10 of n
+                            </span>
+                                    <span class="col-span-2"></span>
+                                    &lt;!&ndash; Pagination &ndash;&gt;
+                                    <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                              <nav aria-label="Table navigation">
+                                <ul class="inline-flex items-center">
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
+                                            aria-label="Previous"
+                                    >
+                                      <svg
+                                              class="w-4 h-4 fill-current"
+                                              aria-hidden="true"
+                                              viewBox="0 0 20 20"
+                                      >
+                                        <path
+                                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                clip-rule="evenodd"
+                                                fill-rule="evenodd"
+                                        ></path>
+                                      </svg>
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 hover:bg-purple-700 rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    >
+                                      1
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    >
+                                      2
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    >
+                                      3
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    >
+                                      4
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <span class="px-3 py-1">...</span>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    >
+                                      8
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    >
+                                      9
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                            class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
+                                            aria-label="Next"
+                                    >
+                                      <svg
+                                              class="w-4 h-4 fill-current"
+                                              aria-hidden="true"
+                                              viewBox="0 0 20 20"
+                                      >
+                                        <path
+                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                clip-rule="evenodd"
+                                                fill-rule="evenodd"
+                                        ></path>
+                                      </svg>
+                                    </button>
+                                  </li>
+                                </ul>
+                              </nav>
+                            </span>
+                                </div>
+                            </div>-->
+                        <div th:if="${session.SS_USER_ID}" class="px-6 my-6">
+                            <button
+                                    id="btnListReg"
+                                    class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    type="button"
+                            >
+                                <div class="w-full">
+                                    <span class="px-4 py-3 text-sm font-semibold">글쓰기</span>
+                                    <span class="ml-2" aria-hidden="true">+</span>
+                                </div>
+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 </div>
-<a href="/notice/noticeReg">글쓰기</a>
 </body>
 </html>

@@ -2,131 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>게시판 글쓰기</title>
-    <link rel="stylesheet" href="/css/table.css"/>
+    <title>게시글 등록하기</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
+    <script src="/assets/js/init-alpine.js"></script>
+    <script src="/js/notice/noticeReg.js"></script>
+    <script src="/js/home/nav.js"></script>
+    <script th:inline="javascript">
+        let SS_USER_ID = [[${session.SS_USER_ID}]];
 
-        // HTML로딩이 완료되고, 실행됨
-        $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnSend").on("click", function () {
-                doSubmit(); // 공지사항 등록하기 실행
-            })
-        })
-
-        //글자 길이 바이트 단위로 체크하기(바이트값 전달)
-        function calBytes(str) {
-            let tcount = 0;
-            let tmpStr = String(str);
-            let strCnt = tmpStr.length;
-            let onechar;
-            for (let i = 0; i < strCnt; i++) {
-                onechar = tmpStr.charAt(i);
-                if (escape(onechar).length > 4) {
-                    tcount += 2;
-                } else {
-                    tcount += 1;
-                }
-            }
-            return tcount;
-        }
-
-        // 공지사항 저장하기
-        function doSubmit() {
-
-            let f = document.getElementById("f"); // form 태그
-
-            if (f.title.value === "") {
-                alert("제목을 입력하시기 바랍니다.");
-                f.title.focus();
-                return;
-            }
-            if (calBytes(f.title.value) > 200) {
-                alert("최대 200Bytes까지 입력 가능합니다.");
-                f.title.focus();
-                return;
-            }
-            let noticeCheck = false; //체크 여부 확인 변수
-            for (let i = 0; i < f.noticeYn.length; i++) {
-                if (f.noticeYn[i].checked) {
-                    noticeCheck = true;
-                    break;
-                }
-            }
-            if (noticeCheck === false) {
-                alert("공지글 여부를 선택하시기 바랍니다.");
-                f.noticeYn[0].focus();
-                return;
-            }
-            if (f.contents.value === "") {
-                alert("내용을 입력하시기 바랍니다.");
-                f.contents.focus();
-                return;
-            }
-            if (calBytes(f.contents.value) > 4000) {
-                alert("최대 4000Bytes까지 입력 가능합니다.");
-                f.contents.focus();
-                return;
-            }
-
-            // Ajax 호출해서 글 등록하기
-            $.ajax({
-                    url: "/notice/noticeInsert",
-                    type: "post", // 전송방식은 Post
-                    // contentType: "application/json",
-                    dataType: "JSON", // 전송 결과는 JSON으로 받기
-                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                    success: function (json) { // /notice/noticeInsert 호출이 성공했다면..
-                        alert(json.msg); // 메시지 띄우기
-                        location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-                    }
-                }
-            )
+        if (SS_USER_ID==null || !(SS_USER_ID.length > 0)) {
+            alert("로그인 해주세요.");
+            location.href = "/user/login";
         }
     </script>
 </head>
 <body>
-<h2>공지사항 등록하기</h2>
-<hr/>
-<br/>
-<form name="f" id="f">
-    <div class="divTable minimalistBlack">
-        <div class="divTableBody">
-            <div class="divTableRow">
-                <div class="divTableCell">제목
+<div class="flex flex-col flex-1 w-full">
+    <main class="h-full pb-16 overflow-y-auto">
+        <div class="container grid px-6 mx-auto">
+            <hr>
+            <h2
+                    class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+            >
+                게시글 등록
+            </h2>
+            <hr>
+            <form name="f" id="f">
+                <!-- With actions -->
+                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                    <label class="block text-sm">
+                        <span class="text-gray-700 dark:text-gray-400">제목</span>
+                        <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="title" placeholder="제목을 입력해주세요.">
+                    </label>
+                    <label class="block mt-4 text-sm">
+                        <textarea class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" name="contents" style="height: 400px" rows="3" placeholder="본문 내용을 입력해주세요."></textarea>
+                    </label>
                 </div>
-                <div class="divTableCell">
-                    <input type="text" name="title" maxlength="100" style="width: 95%"/>
+
+
+                <!-- 기능 버튼 2개-->
+                <div class="flex space-x-1">
+                    <div class="px-6 my-6">
+                        <button
+                                id="btnSend"
+                                class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                type="button"
+                        >
+                            <div class="w-full">
+                                <span class="px-4 py-3 text-sm font-semibold">등록</span>
+                                <span class="ml-2" aria-hidden="true">+</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="px-6 my-6">
+                        <button
+                                class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                type="reset"
+                        >
+                            <div class="w-full">
+                                <span class="px-4 py-3 text-sm font-semibold" >다시 작성</span>
+                                <span class="ml-2" aria-hidden="true">@</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="px-6 my-6">
+                        <button
+                                id="btnList"
+                                class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                type="button"
+                        >
+                            <div class="w-full">
+                                <span class="px-4 py-3 text-sm font-semibold">목록</span>
+                                <span class="ml-2" aria-hidden="true">=</span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">공지글 여부
-                </div>
-                <div class="divTableCell">
-                    예<input type="radio" name="noticeYn" value="Y"/>
-                    아니오<input type="radio" name="noticeYn" value="N"/>
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">조회수
-                </div>
-                <div class="divTableCell">
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">내용
-                </div>
-                <div class="divTableCell">
-                    <textarea name="contents" style="width: 95%; height: 400px"></textarea>
-                </div>
-            </div>
+            </form>
         </div>
-    </div>
-    <div>
-        <button id="btnSend" type="button">등록</button>
-        <button type="reset">다시 작성</button>
-    </div>
-</form>
+    </main>
+</div>
 </body>
 </html>

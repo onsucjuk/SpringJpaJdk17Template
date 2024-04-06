@@ -65,7 +65,7 @@ $(document).ready(function(){
 
                 if (json.result === 1) {
                     alert(json.msg);
-                    location.href = "/user/loginSuccess";
+                    location.href = "/html/index";
                     $("#IdLogin").focus();
                 } else {
                     alert(json.msg);
