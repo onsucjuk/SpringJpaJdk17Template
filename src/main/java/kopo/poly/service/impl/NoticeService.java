@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kopo.poly.dto.NoticeDTO;
 import kopo.poly.repository.NoticeRepository;
 import kopo.poly.repository.entity.NoticeEntity;
+import kopo.poly.repository.entity.UserInfoEntity;
 import kopo.poly.service.INoticeService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
@@ -133,6 +134,9 @@ public class NoticeService implements INoticeService {
         log.info("title : " + title);
         log.info("contents : " + contents);
         log.info("userId : " + userId);
+
+
+
 
         // 공지사항 저장을 위해서는 PK 값은 빌더에 추가하지 않는다.
         // JPA에 자동 증가 설정을 해놨음

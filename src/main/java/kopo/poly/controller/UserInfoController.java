@@ -3,19 +3,24 @@ package kopo.poly.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kopo.poly.dto.MsgDTO;
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.UserInfoDTO;
+import kopo.poly.repository.entity.NoticeEntity;
 import kopo.poly.service.IUserInfoService;
 import kopo.poly.util.CmmUtil;
+import kopo.poly.util.DateUtil;
 import kopo.poly.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -27,6 +32,7 @@ public class UserInfoController {
     // @RequiredArgsConstructor 를 통해 메모리에 올라간 서비스 객체를 Controller에서 사용할 수 있게 주입함
 
     private final IUserInfoService userInfoService;
+
 
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
@@ -111,11 +117,10 @@ public class UserInfoController {
         }
     }
 
-
     @PostMapping(value = "updatePassword")
     public String newPasswordProc(HttpServletRequest request, HttpSession session) throws Exception {
 
-        log.info(this.getClass().getName() + ".user/updatePassword Strat!");
+        log.info(this.getClass().getName() + ".user/updatePassword Start!");
 
         String msg = ""; // 웹에 보여줄 메세지
 
@@ -345,7 +350,6 @@ public class UserInfoController {
 
     }
 
-
     /**
      * ###########################################################################
      *
@@ -378,6 +382,291 @@ public class UserInfoController {
         log.info(this.getClass().getName() + ".getEmailExists End!");
 
         return rDTO;
+    }
+
+    /**
+     *
+     * ##################################################################################
+     *
+     *                                      MyPage
+     *
+     * ##################################################################################
+     */
+
+    @GetMapping(value = "myPage")
+    public String myPage(HttpSession session, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".user/myPage Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("userId : " + userId);
+
+
+        if (userId.length() > 0) {
+
+            UserInfoDTO pDTO = UserInfoDTO.builder()
+                    .userId(userId)
+                    .build();
+
+            UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getUserInfo(pDTO))
+                    .orElseGet(() -> UserInfoDTO.builder().build());
+
+            model.addAttribute("rDTO", rDTO);
+
+        } else {
+
+            return "/user/login";
+
+        }
+
+        log.info(this.getClass().getName() + ".user/myPage End!");
+
+        return  "user/myPage";
+
+    }
+
+
+
+    // 유저 정보 수정 페이지 이동
+
+    @GetMapping(value = "myPageEdit")
+    public String myPageEdit(HttpSession session, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".user/myPageEdit Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("userId : " + userId);
+
+
+        if (userId.length() > 0) {
+
+            UserInfoDTO pDTO = UserInfoDTO.builder()
+                    .userId(userId)
+                    .build();
+
+            UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getUserInfo(pDTO))
+                    .orElseGet(() -> UserInfoDTO.builder().build());
+
+            model.addAttribute("rDTO", rDTO);
+
+        } else {
+
+            return "/user/login";
+
+        }
+
+        log.info(this.getClass().getName() + ".user/myPageEdit End!");
+
+        return  "user/myPageEdit";
+
+    }
+
+    // 비밀 번호 변경 (MyPage) 페이지 이동
+    @GetMapping(value = "myNewPassword")
+    public String myNewPassword(HttpSession session) {
+
+        log.info(this.getClass().getName() + ".user/myNewPassword Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        if (userId.length() > 0) {
+
+        } else {
+
+
+            return "user/login";
+
+        }
+
+        return "user/myNewPassword";
+
+    }
+
+
+    @ResponseBody
+    @PostMapping(value = "myUpdatePassword")
+    public MsgDTO myUpdatePassword(HttpServletRequest request, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".user/myUpdatePassword Start!");
+        
+        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+        String msg = ""; // 웹에 보여줄 메세지
+        int result = 0;
+
+        if(userId.length() > 0) { //정상접근
+            
+            String password = CmmUtil.nvl(request.getParameter("password")); //신규 비밀번호
+
+            log.info("password : " + password);
+
+            UserInfoDTO pDTO = UserInfoDTO.builder()
+                    .userId(userId)
+                    .password(EncryptUtil.encHashSHA256(password))
+                    .build();
+
+            int res = userInfoService.updatePassword(pDTO);
+            
+
+            if(res > 0) {
+                
+                msg = "비밀번호가 재설정되었습니다.";
+                result = 0;
+                
+            } else {
+                
+                msg = "비밀번호 변경에 문제가 생겼습니다. 다시 시도해주세요.";
+
+                result = 1;
+                
+            }
+
+        } else { //비정상 접근
+            
+            msg = "비정상 접근입니다.";
+            result = 2;
+            
+        }
+
+        MsgDTO mDTO = MsgDTO.builder()
+                .msg(msg)
+                .result(result)
+                .build();
+
+        log.info("msg : " + msg);
+
+        log.info(this.getClass().getName() + ".user/myUpdatePassword End!");
+
+        return mDTO;
+    }
+
+
+    // 유저 정보 수정
+    @ResponseBody
+    @PostMapping(value = "updateUserInfo")
+    public MsgDTO userInfoUpdate(HttpServletRequest request, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".updateUserInfo Start!");
+
+        String msg;
+
+        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+        String userName = CmmUtil.nvl(request.getParameter("userName"));
+        String email = CmmUtil.nvl(request.getParameter("email"));
+        String addr1 = CmmUtil.nvl(request.getParameter("addr1"));
+        String addr2 = CmmUtil.nvl(request.getParameter("addr2"));
+
+        log.info("userId : " + userId);
+        log.info("userName : " + userName);
+        log.info("email : " + (email));
+        log.info("addr1 : " + addr1);
+        log.info("addr2 : " + addr2);
+
+        UserInfoDTO pDTO = UserInfoDTO.builder()
+                .userId(userId)
+                .userName(userName)
+                .email(email)
+                .addr1(addr1)
+                .addr2(addr2)
+                .build();
+
+        int res = userInfoService.updateUserInfo(pDTO);
+
+        log.info("호윈 정보 수정 결과(res) : " + res);
+
+        if (res == 1) {
+            msg = "회원 정보 수정되었습니다..";
+
+        } else {
+
+            msg = "오류로 인해 회원 정보 수정에 실패했습니다.";
+
+        }
+
+        MsgDTO dto = MsgDTO.builder().result(res).msg(msg).build();
+
+        log.info(this.getClass().getName() + ".updateUserInfo End!");
+
+        return dto;
+    }
+
+    // 관심 업종 페이지
+    @GetMapping(value = "interrested")
+    public String interrested() {
+
+        log.info(this.getClass().getName() + ".user/interrested Start!");
+
+        log.info(this.getClass().getName() + ".user/interrested End!");
+
+        return "user/interrested";
+    }
+
+    // 회원 탈퇴 페이지
+    @GetMapping(value = "withdrawal")
+    public String deleteUserInfo(HttpSession session) {
+
+        log.info(this.getClass().getName() + ".user/withdrawal Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        if(userId.length()>0){
+
+        } else {
+            return "user/login";
+        }
+
+        log.info(this.getClass().getName() + ".user/withdrawal End!");
+
+        return "user/withdrawal";
+    }
+
+
+    /**
+     * 유저 정보 삭제
+     */
+    @ResponseBody
+    @PostMapping(value = "deleteUserInfo")
+    public MsgDTO noticeDelete(HttpSession session) {
+
+        log.info(this.getClass().getName() + ".deleteUserInfo Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 글번호(PK)
+
+            log.info("userId : " + userId);
+
+            /*
+             * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
+             */
+            UserInfoDTO pDTO = UserInfoDTO.builder()
+                    .userId(userId)
+                    .build();
+
+            // 게시글 삭제하기 DB
+            userInfoService.deleteUserInfo(pDTO);
+
+            session.invalidate();
+
+            msg = "탈퇴하였습니다.";
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            // 결과 메시지 전달하기
+            dto = MsgDTO.builder().msg(msg).build();
+
+            log.info(this.getClass().getName() + ".deleteUserInfo End!");
+
+        }
+
+        return dto;
     }
 
 }
