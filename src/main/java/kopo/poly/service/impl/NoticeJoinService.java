@@ -5,13 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kopo.poly.dto.NoticeDTO;
 import kopo.poly.repository.NoticeJoinRepository;
 import kopo.poly.repository.NoticeSQLRepository;
-import kopo.poly.repository.entity.NoticeEntity;
 import kopo.poly.repository.entity.NoticeJoinEntity;
 import kopo.poly.repository.entity.NoticeSQLEntity;
 import kopo.poly.service.INoticeJoinService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
