@@ -1,8 +1,6 @@
 package kopo.poly.repository;
 
 import kopo.poly.repository.entity.CommentEntity;
-import kopo.poly.repository.entity.NoticeEntity;
-import kopo.poly.repository.entity.UserInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,9 +36,9 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     List<CommentEntity> findByNoticeSeqOrderByCommentSeqAsc(Long noticeSeq);
 
     /**
-     * 댓글 리스트
+     * 댓글 유무 확인
      *
-     * @param commentSeq 공지사항 PK
+     * @param commentSeq 댓글 PK
      */
     Optional<CommentEntity> findByCommentSeq(Long commentSeq);
 
@@ -52,8 +50,8 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
      */
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE USER_INFO A SET A.email = ?2, A.USER_NAME = ?3, A.ADDR1 = ?4, A.ADDR2 = ?5 WHERE A.USER_ID = ?1",
+    @Query(value = "UPDATE BOARD_COMMENTS A SET A.COMMENT_CONTENTS = ?2, A.COMMENT_CHG_ID = ?3, A.COMMENT_CHG_DT = ?4 WHERE A.COMMENT_SEQ = ?1",
             nativeQuery = true)
-    int updateBoardComments(String userId, String email, String userName, String addr1, String add2);
+    int updateBoardComments(Long commentSeq, String commentContents, String commentChgId, String commentChgDt);
 
 }

@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kopo.poly.dto.CommentDTO;
 import kopo.poly.repository.CommentRepository;
 import kopo.poly.repository.entity.CommentEntity;
-import kopo.poly.repository.entity.UserInfoEntity;
 import kopo.poly.service.ICommentService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
-import kopo.poly.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,7 +46,7 @@ public class CommentService implements ICommentService {
     @Override
     public int updateComment(CommentDTO pDTO) throws Exception {
 
-        log.info(this.getClass().getName() + ".updateUserInfo Start!");
+        log.info(this.getClass().getName() + ".updateComment Start!");
 
         Long commentSeq = pDTO.commentSeq();
 
@@ -58,26 +56,23 @@ public class CommentService implements ICommentService {
 
         if(rEntity.isPresent()){
 
-            String userId = pDTO.userId();
-            /*String userName = pDTO.userName();
-            String email = EncryptUtil.encAES128CBC(pDTO.email());
-            String addr1 = pDTO.addr1();
-            String addr2 = pDTO.addr2();
+            String commentContents = pDTO.commentContents();
+            String commentChgId = pDTO.commentChgId();
+            String commentChgDt = pDTO.commentChgDt();
 
-            log.info("userId : " + userId);
-            log.info("userName : " + userName);
-            log.info("email : " + email);
-            log.info("addr1 : " + addr1);
-            log.info("addr2 : " + addr2);
+            log.info("commentSeq : " + commentSeq);
+            log.info("commentContents : " + commentContents);
+            log.info("commentChgId : " + commentChgId);
+            log.info("commentChgDt : " + commentChgDt);
 
-            // 회원정보 DB에 저장
-            commentRepository.updateBoardComments(userId, email,userName,addr1, addr2);*/
+            // 댓글 내용 DB에 저장 Update
+            commentRepository.updateBoardComments(commentSeq, commentContents, commentChgId, commentChgDt);
 
             res = 1;
 
         }
 
-        log.info(this.getClass().getName() + ".updateUserInfo END!");
+        log.info(this.getClass().getName() + ".updateComment END!");
 
         return res;
 

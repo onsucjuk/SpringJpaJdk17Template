@@ -21,6 +21,23 @@ $(document).ready(function () {
 
 })
 
+// 글자 수 체크
+function calBytes(str) {
+    let tcount = 0;
+    let tmpStr = String(str);
+    let strCnt = tmpStr.length;
+    let onechar;
+    for (let i = 0; i < strCnt; i++) {
+        onechar = tmpStr.charAt(i);
+        if (escape(onechar).length > 4) {
+            tcount += 2;
+        } else {
+            tcount += 1;
+        }
+    }
+    return tcount;
+}
+
 //수정하기
 function doEdit() {
     if (session_user_id === user_id) {
@@ -69,6 +86,19 @@ function doDelete() {
 function doCInsert() {
 
     let content = $('textarea[name="content"]').val();
+
+    if (content === "") {
+        alert("댓글 내용을 입력하세요.");
+        cContent.focus();
+        return;
+    }
+
+    if (calBytes(content) > 150) {
+        alert("최대 150Bytes까지 입력 가능합니다.");
+        cContent.focus();
+        return;
+    }
+
     let noticeSeq = document.querySelector('span[name="noticeSeq"]').innerText;
 
     console.log("content : " + content)
@@ -182,7 +212,19 @@ function doCUpdate(commentSeq) {
 
     let commentContentId = 'commentContent' + commentSeq;
     let commentContentElement = document.getElementById(commentContentId);
-    let commentContents = commentContentElement.textContent; // 이전에 있는 텍스트 가져오기
+    let commentContents = commentContentElement.value; // 현재 텍스트 가져오기
+
+    if (commentContents === "") {
+        alert("댓글 내용을 입력하세요.");
+        commentContentElement.focus();
+        return;
+    }
+
+    if (calBytes(commentContents) > 150) {
+        alert("최대 150Bytes까지 입력 가능합니다.");
+        commentContentElement.focus();
+        return;
+    }
 
     console.log("cUserId : " + cUserId)
     console.log("commentSeq : " + commentSeq)

@@ -153,7 +153,7 @@
                     <hr>
                     <div class="comment" th:if="${session.SS_USER_ID}">
                         <label class="block mt-4 text-sm">
-                            <textarea class="block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray comment_inline" name="content" style="height: 60px; width : 750px" rows="3" placeholder="댓글 내용을 입력해주세요."></textarea>
+                            <textarea class="block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray comment_inline" id="cContent" name="content" style="height: 60px; width : 750px" rows="3" placeholder="댓글 내용을 입력해주세요."></textarea>
                                 <div class="px-6 my-4 comment-button comment_inline">
                                     <button
                                             id="btnCInst"
@@ -162,7 +162,7 @@
                                     >
                                         <div class="w-full">
                                             <span class="px-4 py-3 text-sm font-semibold">댓글 쓰기</span>
-                                            <span class="ml-2" aria-hidden="true">*</span>
+                                            <span class="ml-2" aria-hidden="true">+</span>
                                         </div>
                                     </button>
                                 </div>

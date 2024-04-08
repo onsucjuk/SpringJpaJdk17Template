@@ -2,7 +2,6 @@ package kopo.poly.service.impl;
 
 import kopo.poly.dto.MailDTO;
 import kopo.poly.dto.UserInfoDTO;
-import kopo.poly.repository.NoticeRepository;
 import kopo.poly.repository.UserInfoRepository;
 import kopo.poly.repository.entity.UserInfoEntity;
 import kopo.poly.service.IMailService;
@@ -23,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class UserInfoService implements IUserInfoService {
 
     private final UserInfoRepository userInfoRepository;
-    private final NoticeRepository noticeRepository;
     private final IMailService mailService; // 메일 발송을 위한 MailService 자바 객체 가져오기
 
     @Override

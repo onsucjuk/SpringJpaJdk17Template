@@ -4,8 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kopo.poly.dto.CommentDTO;
 import kopo.poly.dto.MsgDTO;
-import kopo.poly.dto.NoticeDTO;
-import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.service.ICommentService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
@@ -166,8 +164,8 @@ public class CommentController {
         CommentDTO pDTO = CommentDTO
                 .builder()
                 .userId(userId)
-                .commentSeq(Long.valueOf(commentSeq))
-                .commentSeq(Long.valueOf(noticeSeq))
+                .commentSeq(Long.parseLong(commentSeq))
+                .noticeSeq(Long.parseLong(noticeSeq))
                 .commentContents(commentContents)
                 .commentChgId(userId)
                 .commentChgDt(chgDt)
@@ -175,18 +173,21 @@ public class CommentController {
 
         int res = commentService.updateComment(pDTO);
 
-        log.info("호윈 정보 수정 결과(res) : " + res);
+        log.info("댓글 수정 결과(res) : " + res);
 
         if (res == 1) {
-            msg = "회원 정보 수정되었습니다..";
+            msg = "댓글 수정되었습니다..";
 
         } else {
 
-            msg = "오류로 인해 회원 정보 수정에 실패했습니다.";
+            msg = "오류로 인해 댓글 수정에 실패했습니다.";
 
         }
 
-        MsgDTO dto = MsgDTO.builder().result(res).msg(msg).build();
+        MsgDTO dto = MsgDTO.builder()
+                .result(res)
+                .msg(msg)
+                .build();
 
         log.info(this.getClass().getName() + ".commentUpdate End!");
 

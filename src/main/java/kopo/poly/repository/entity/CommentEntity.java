@@ -37,6 +37,7 @@ public class CommentEntity {
     @Column(name = "comment_reg_id", updatable = false)
     private String commentRegId;
 
+    @NonNull
     @Column(name = "comment_reg_dt", updatable = false)
     private String commentRegDt;
 
