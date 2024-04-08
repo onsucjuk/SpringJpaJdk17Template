@@ -351,3 +351,11 @@ ul {
 .in_button:hover {
     background-color: #333; /* 호버 시 배경색을 어둡게 변경 */
 }
+
+.comment_inline {
+    display: inline-block;
+}
+
+#btnCIst {
+    margin-top : 0px;
+}

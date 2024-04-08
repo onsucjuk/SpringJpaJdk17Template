@@ -10,6 +10,7 @@
     />
     <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/notice/comment.css">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/init-alpine.js"></script>
@@ -85,7 +86,7 @@
                                 </td>
                                 <td class="td-title-bg">
                                     <div style="float: left;">
-                                        <span class="px-4 py-3 text-sm" th:text="${rDTO.noticeSeq()}"></span>
+                                        <span class="px-4 py-3 text-sm" name = "noticeSeq" th:text="${rDTO.noticeSeq()}"></span>
                                     </div>
                                     <div style="float: left;">
                                         <span class="px-4 py-3" stlye="float: left" th:text="${rDTO.title()}"></span>
@@ -121,7 +122,52 @@
                             </tbody>
                         </table>
                     </div>
+                    <hr>
+                    <h5
+                            class="my-3 text-xl font-semibold text-gray-700 dark:text-gray-200 comment-name"
+                    >
+                        댓글
+                    </h5>
+                    <hr>
+                    <ul id="comments-list" class="comments-list">
+                        <li th:each="dto : ${cList}">
+                            <div class="comment-box" th:id="'comment'+${dto.commentSeq()}">
+                                <div class="comment-head">
+                                    <h6 class="comment-name by-user" name="cUserId" th:text="${dto.userId()}"></h6>
+                                    <div class="commentSeq-invisible" name="commentSeq" th:text="${dto.commentSeq()}"></div>
+                                    <div class="comment-right">
+                                        <span class="func-inline" name="RegDt" th:text="${dto.commentRegDt()}"></span>
+                                        <div  class="func-inline" th:if="${session.SS_USER_ID}==${dto.userId()}">
+                                            <span class="comment_edit" th:id = "'comment_edit'+${dto.commentSeq()}" th:onclick="doCEdit([[${dto.commentSeq()}]])">수정</span>
+                                            <span class="comment-del" th:id = "'comment-del' +${dto.commentSeq()}" th:onclick="doCDel([[${dto.commentSeq()}]])">삭제</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comment-content" th:id = "'commentContent' +${dto.commentSeq()}"  name="commentContent" th:text="${dto.commentContents()}">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
 
+
+                    <hr>
+                    <div class="comment" th:if="${session.SS_USER_ID}">
+                        <label class="block mt-4 text-sm">
+                            <textarea class="block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray comment_inline" name="content" style="height: 60px; width : 750px" rows="3" placeholder="댓글 내용을 입력해주세요."></textarea>
+                                <div class="px-6 my-4 comment-button comment_inline">
+                                    <button
+                                            id="btnCInst"
+                                            class="items-left w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                            type="button"
+                                    >
+                                        <div class="w-full">
+                                            <span class="px-4 py-3 text-sm font-semibold">댓글 쓰기</span>
+                                            <span class="ml-2" aria-hidden="true">*</span>
+                                        </div>
+                                    </button>
+                                </div>
+                        </label>
+                    </div>
 
 
                     <!-- 동작 버튼 3개 -->

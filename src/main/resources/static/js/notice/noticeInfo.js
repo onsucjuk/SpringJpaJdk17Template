@@ -14,6 +14,11 @@ $(document).ready(function () {
     $("#btnList").on("click", function () {
         location.href = "/notice/noticeList"; // 공지사항 리스트 이동
     })
+
+    $("#btnCInst").on("click", function () {
+        doCInsert();
+    })
+
 })
 
 //수정하기
@@ -58,3 +63,161 @@ function doDelete() {
 
     }
 }
+
+
+//댓글 작성
+function doCInsert() {
+
+    let content = $('textarea[name="content"]').val();
+    let noticeSeq = document.querySelector('span[name="noticeSeq"]').innerText;
+
+    console.log("content : " + content)
+    console.log("noticeSeq : " + noticeSeq)
+
+    if (session_user_id) {
+
+            // Ajax 호출해서 글 삭제하기
+            $.ajax({
+                    url: "/comment/commentInsert",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: {"content": content,
+                           "noticeSeq": noticeSeq }, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success:
+                        function (json) { // /notice/noticeDelete 호출이 성공했다면..
+                            alert(json.msg); // 메시지 띄우기
+                            location.reload(); // 공지사항 리스트 이동
+                        }
+                }
+            )
+
+    } else if (session_user_id === "") {
+
+        alert("로그인 하시길 바랍니다.");
+        location.href = "/user/login";
+
+    } else {
+
+        alert("알 수 없는 오류가 발생했습니다.")
+        location.href = "/html/index";
+
+    }
+}
+
+
+//삭제하기
+function doCDel(f) {
+
+    // commentSeq(f)에 따른 div값들 조회
+    let commentBox = document.getElementById('comment' + f);
+
+    // commentBox 내부에서 name이 "cUserId"인 요소 선택 및 값 가져오기
+    let cUserId = commentBox.querySelector('.comment-name[name="cUserId"]').innerText;
+
+
+    console.log("cUserId : " + cUserId)
+    console.log("commentSeq : " + f)
+
+    if (session_user_id === cUserId) {
+        if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
+
+            // Ajax 호출해서 글 삭제하기
+            $.ajax({
+                    url: "/comment/commentDelete",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: {"commentSeq": f}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success:
+                        function (json) { // /comment/commentDelete 호출이 성공했다면..
+                            alert(json.msg); // 메시지 띄우기
+                            location.reload(); // 화면 새로고침
+                        }
+                }
+            )
+        }
+
+    } else if (session_user_id === "") {
+        alert("로그인 하시길 바랍니다.");
+
+    } else {
+        alert("본인이 작성한 댓글만 수정 가능합니다.");
+    }
+}
+
+function doCEdit(commentSeq) {
+    // 해당 댓글의 commentSeq 값을 가져옵니다.
+
+    let editButtonId = 'comment_edit' + commentSeq;
+    let delButtonId = 'comment-del' + commentSeq;
+
+    // 수정 버튼을 "수정하기"로 변경합니다.
+    document.getElementById(editButtonId).innerText = '수정하기';
+    document.getElementById(editButtonId).setAttribute('onclick', 'doCUpdate(' + commentSeq + ')');
+
+    // 삭제 버튼을 "취소"로 변경합니다.
+    document.getElementById(delButtonId).innerText = '취소';
+    document.getElementById(delButtonId).setAttribute('onclick', 'doCancel()');
+
+    // 댓글 내용(id="'commentContent' +${dto.commentSeq()}")을 textarea로 변경합니다.
+    let commentContentId = 'commentContent' + commentSeq;
+    let commentContentElement = document.getElementById(commentContentId);
+    let commentText = commentContentElement.textContent; // 이전에 있는 텍스트 가져오기
+    let textareaElement = document.createElement('textarea'); // 새로운 textarea 요소 생성
+    textareaElement.value = commentText; // textarea에 이전 텍스트를 설정
+    textareaElement.setAttribute('id', commentContentId); // textarea에 id 설정
+    textareaElement.setAttribute('name', 'commentContent'); // textarea에 name 설정
+    textareaElement.style.width = '100%'; // textarea에 width: 100% 스타일 설정
+    commentContentElement.parentNode.replaceChild(textareaElement, commentContentElement); // 기존 댓글 내용 요소를 textarea로 교체
+
+}
+
+function doCUpdate(commentSeq) {
+
+    let noticeSeq = nSeq;
+    // commentSeq(f)에 따른 div값들 조회
+    let commentBox = document.getElementById('comment' + commentSeq);
+
+    // commentBox 내부에서 name이 "cUserId"인 요소 선택 및 값 가져오기
+    let cUserId = commentBox.querySelector('.comment-name[name="cUserId"]').innerText;
+
+    let commentContentId = 'commentContent' + commentSeq;
+    let commentContentElement = document.getElementById(commentContentId);
+    let commentContents = commentContentElement.textContent; // 이전에 있는 텍스트 가져오기
+
+    console.log("cUserId : " + cUserId)
+    console.log("commentSeq : " + commentSeq)
+    console.log("commentContents : " + commentContents)
+
+    if (session_user_id === cUserId) {
+        if (confirm("작성한 댓글을 수정하시겠습니까?")) {
+
+            // Ajax 호출해서 글 삭제하기
+            $.ajax({
+                    url: "/comment/commentUpdate",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: {"commentSeq": commentSeq,
+                           "noticeSeq": noticeSeq,
+                           "commentContents" : commentContents}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success:
+                        function (json) { // /comment/commentDelete 호출이 성공했다면..
+                            alert(json.msg); // 메시지 띄우기
+                            location.reload(); // 화면 새로고침
+                        }
+                }
+            )
+        }
+
+    } else if (session_user_id === "") {
+        alert("로그인 하시길 바랍니다.");
+
+    } else {
+        alert("본인이 작성한 댓글만 수정 가능합니다.");
+    }
+
+}
+
+function doCancel(commentSeq) {
+    location.reload();
+}
+
