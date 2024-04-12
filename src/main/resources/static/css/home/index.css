@@ -132,18 +132,21 @@ ul {
 /* Home cards */
 .home-cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     margin-bottom: 40px;
 }
 
 .home-cards img {
-    width: 100%;
+    width: 40%;
+    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 20px;
 }
 
 .home-cards h3 {
-    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-bottom: 20px;
 }
 
 .home-cards a {
@@ -352,8 +355,41 @@ ul {
     background-color: #333; /* 호버 시 배경색을 어둡게 변경 */
 }
 
-.comment_inline {
-    display: inline-block;
+.subContent {
+    color: gray;
+    margin-bottom: 20px;
+}
+
+.imgDiv {
+    margin : 10px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* 외곽선의 음영 설정 */
+    border-radius: 8px;
+}
+
+.imgDivTop {
+    margin-top: 10px;
+}
+
+.imgText {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 이미지의 너비를 조절하여 왼쪽에 정렬 */
+.comment_inline img {
+    width: 33%; /* 이미지가 왼쪽 50%만 차지하도록 설정 */
+}
+
+/* 텍스트의 스타일 조정 */
+.indutyList {
+    margin-left : 5px;
+    width: 65%; /* 텍스트가 오른쪽 50%만 차지하도록 설정 */
+    text-align: left; /* 가운데 정렬 */
+}
+
+.indutyNm {
+    font-size: large;
+    font-weight: bolder;
 }
 
 #btnCIst {

@@ -13,16 +13,25 @@ public record SeoulSiMarketDTO(
         String seoulLocationCd, // 지역코드
         String seoulLocationNm, // 지역이름
         String indutyCd, // 업종코드
-        String indusyNm, // 업종명
-        Long monthSales, // 당월매출금액
-        Long maleSales, // 남성매출금액
-        Long femaleSales, // 여성매출금액
-        Long age10Sales, // 10대 매출금액
-        Long age20Sales, // 20대 매출금액
-        Long age30Sales, // 30대 매출금액
-        Long age40Sales, // 40대 매출금액
-        Long age50Sales, // 50대 매출금액
-        Long age60Sales // 60대 이상 매출금액
+        String indutyNm, // 업종명
+        String monthSales, // 당월매출금액
+        double maleSales, // 남성매출금액
+        double femaleSales, // 여성매출금액
+        double age10Sales, // 10대 매출금액
+        double age20Sales, // 20대 매출금액
+        double age30Sales, // 30대 매출금액
+        double age40Sales, // 40대 매출금액
+        double age50Sales, // 50대 매출금액
+        double age60Sales, // 60대 이상 매출금액
+        long salesDiff, // 매출액 증가량
+        String salesRate, // 매출액 증가율
+
+        int closeStoreCount, // 폐업수
+
+        int closeStoreRate, // 폐업률
+
+        Long storeCount //점포수
+
 
 ) {
 }

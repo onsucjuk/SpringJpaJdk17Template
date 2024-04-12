@@ -1,6 +1,5 @@
 package kopo.poly.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.service.ISiMarketService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 
 @Slf4j
@@ -20,11 +21,13 @@ public class SeoulSiController {
     private final ISiMarketService siMarketService;
 
     @GetMapping(value = "test")
-    public String test(HttpServletRequest request, ModelMap model) throws Exception {
+    public String test(ModelMap model) throws Exception {
 
-        SeoulSiMarketDTO rDTO = siMarketService.getSiMarketRes();
+        int rank = 10;
 
-        model.addAttribute("rDTO", rDTO);
+        List<SeoulSiMarketDTO> rList = siMarketService.getSiMarketRes(rank);
+
+        model.addAttribute("rList", rList);
 
         return "market/test";
     }

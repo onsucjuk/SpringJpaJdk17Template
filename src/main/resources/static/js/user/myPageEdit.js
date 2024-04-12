@@ -49,7 +49,7 @@ function doEdit() {
         f.userName.focus();
         return;
     }
-
+/*
     if (f.email.value === "") {
         alert("이메일을 입력하시기 바랍니다.");
         f.email.focus();
@@ -60,6 +60,7 @@ function doEdit() {
         f.email.focus();
         return;
     }
+*/
 
     if (f.addr1.value === "") {
         alert("주소를 입력하시기 바랍니다.");

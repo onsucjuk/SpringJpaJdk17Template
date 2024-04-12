@@ -16,6 +16,8 @@ public interface IUserInfoService {
 
     UserInfoDTO sendEmailAuth(UserInfoDTO pDTO) throws Exception;
 
+    UserInfoDTO sendSignUpEmailAuth(UserInfoDTO pDTO) throws Exception;
+
     // 아이디, 비밀번호 찾기에 활용
     int searchUserIdOrPasswordPro(UserInfoDTO pDTO) throws Exception;
 

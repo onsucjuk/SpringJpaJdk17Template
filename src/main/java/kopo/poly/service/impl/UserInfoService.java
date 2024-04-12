@@ -204,6 +204,51 @@ public class UserInfoService implements IUserInfoService {
         return res;
     }
 
+    /**
+     * 회원가입 이메일 인증 보내기
+     **/
+    @Override
+    public UserInfoDTO sendSignUpEmailAuth(UserInfoDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".sendSignUpEmailAuth Start!");
+
+            String existsYn = pDTO.existsYn();;
+
+
+            int authNumber = ThreadLocalRandom.current().nextInt(100000,1000000);
+
+            log.info("authNumber : " + authNumber);
+
+            // 인증번호 발송 로직
+            MailDTO dto = MailDTO.builder()
+                    .title("비밀번호 변경 이메일 확인 인증번호 발송 메일")
+                    .contents("인증번호는 " + authNumber + "입니다.")
+                    .toMail(EncryptUtil.decAES128CBC(pDTO.email()))
+                    .build();
+
+            log.info("dto Title : " + dto.title());
+            log.info("dto contents : " + dto.contents());
+            log.info("dto toMail : " + dto.toMail());
+
+            mailService.doSendMail(dto); // 메일 발송
+
+            //메일 변수값 초기화
+            dto = null;
+
+            pDTO = UserInfoDTO.builder()
+                    .authNumber(authNumber)
+                    .existsYn(existsYn)
+                    .build(); // 인증번호를 결과값에 넣어주기
+
+
+        log.info(this.getClass().getName() + ".sendSignUpEmailAuth End!");
+
+        return pDTO;
+    }
+
+    /**
+     * 비밀번호 찾기, 이메일 변경 이메일 인증 보내기
+     **/
     @Override
     public UserInfoDTO sendEmailAuth(UserInfoDTO pDTO) throws Exception {
 

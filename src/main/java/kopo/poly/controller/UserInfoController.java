@@ -379,6 +379,40 @@ public class UserInfoController {
         return rDTO;
     }
 
+    @ResponseBody
+    @PostMapping(value = "signUpEmailExists")
+    public UserInfoDTO signUpEmailExists(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + ".signUpEmailExists Start!");
+
+        String email = CmmUtil.nvl(request.getParameter("email")); // 이메일
+
+        log.info("email : " + email);
+
+        UserInfoDTO pDTO = UserInfoDTO.builder()
+                .email(EncryptUtil.encAES128CBC(email))
+                .build();
+
+        //이메일을 통해 중복된 이메일인지 조회
+        UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getEmailExists(pDTO))
+                .orElseGet(() -> UserInfoDTO.builder().build());
+
+        String existsYn = rDTO.existsYn();
+
+        log.info("existsYn : " + existsYn);
+
+        if (existsYn == "N") {
+
+            //이메일을 통해 중복된 이메일인지 조회
+            rDTO = Optional.ofNullable(userInfoService.sendSignUpEmailAuth(pDTO))
+                    .orElseGet(() -> UserInfoDTO.builder().build());
+
+        }
+
+        log.info(this.getClass().getName() + ".signUpEmailExists End!");
+
+        return rDTO;
+    }
+
     /**
      *
      * ##################################################################################

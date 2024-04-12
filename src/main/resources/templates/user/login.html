@@ -7,6 +7,9 @@
     <script type="text/javascript" src="/js/user/login.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/user/login.css">
+    <script type="text/javascript">
+        let emailAuthNumber = /*[[${emailAuthNumber}]]*/ "";
+    </script>
 </head>
 <body>
     <div id="back">
@@ -39,9 +42,23 @@
                             <label for="password2" class="form-label">비밀번호 확인</label>
                             <input id="password2" type="password" name="password2">
                         </div>
-                        <div class="form-element form-stack">
+                        <!--<div class="form-element form-stack">
                             <label for="email" class="form-label">이메일</label>
                             <input id="email" type="email" name="email">
+                        </div>-->
+                        <div class="form-element form-stack">
+                            <label for="email" class="form-label">이메일</label>
+                            <div class="inlineContents">
+                                <input class="in_input" id="email" type="email" name="email">
+                                <button class="in_button signup" id="btnEmail" >인증번호 발송</button>
+                            </div>
+                        </div>
+                        <div class="form-element form-stack">
+                            <label for="authNumber" class="form-label">인증번호 확인</label>
+                            <div class="inlineContents">
+                                <input class="in_input" id="authNumber" type="text" name="authNumber">
+                                <button class="in_button signup" id="btnAuth" >인증번호 확인</button>
+                            </div>
                         </div>
                         <div class="form-element form-stack">
                             <label for="addr1" class="form-label">주소</label>

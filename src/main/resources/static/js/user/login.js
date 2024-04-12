@@ -25,6 +25,17 @@ $(document).ready(function(){
         doSubmit(f);
     })
 
+    $("#btnEmail").on("click", function () {
+        emailExists(f)
+
+    })
+
+    $("#btnAuth").on("click", function () {
+
+        checkAuth(f)
+
+    })
+
     /*#########*/
     /*  로그인  */
     /*#########*/
@@ -124,6 +135,72 @@ function userIdExists(f) {
     })
 }
 
+
+function emailExists(f) {
+
+    if (f.email.value === ""){
+        alert("이메일을 입력하세요.");
+        f.email.focus();
+        return;
+    }
+
+    $.ajax({
+            url: "/user/signUpEmailExists",
+            type: "post",
+            dataType: "JSON",
+            data: $("#form-signup").serialize(),
+            success: function (json) {
+                if(json.existsYn === "Y") {
+                    alert("이미 가입된 이메일 주소가 존재합니다.");
+                    f.email.focus();
+                } else {
+                    alert("이메일로 인증번호가 발송되었습니다. \n받은 메일의 인증번호를 입력하기 바랍니다.");
+                    emailAuthNumber = json.authNumber;
+                }
+            }
+        }
+    )
+}
+
+function checkAuth(f) {
+
+    if (f.userId.value === "") {
+        alert("아이디를 입력하세요.");
+        f.userId.focus();
+        return;
+    }
+
+    if (f.userName.value === "") {
+        alert("이름을 입력하세요.");
+        f.userName.focus();
+        return;
+    }
+
+    if (f.email.value === "") {
+        alert("이메일을 입력하세요.");
+        f.email.focus();
+        return;
+    }
+
+    if (f.authNumber.value === "") {
+        alert("인증번호를 입력해주세요.");
+        f.authNumber.focus();
+        return;
+    }
+    else if (f.authNumber.value != emailAuthNumber) {
+        alert("이메일 인증번호가 일치하지 않습니다.");
+        emailCheck = "Y"
+        f.authNumber.focus();
+        return;
+
+    }
+    else {
+        alert("인증번호가 확인되었습니다.");
+        emailCheck = "N";
+    }
+
+}
+
 function kakaoPost(f) {
 
     new daum.Postcode({
@@ -179,6 +256,12 @@ function doSubmit(f) {
     if (f.email.value === "") {
         alert("이메일을 입력하세요.");
         f.email.focus();
+        return;
+    }
+
+    if (emailCheck !== "N") {
+        alert("이메일 인증번호 확인해주세요.");
+        f.authNumber.focus();
         return;
     }
 
