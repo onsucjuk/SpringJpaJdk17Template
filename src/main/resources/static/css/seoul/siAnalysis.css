@@ -1,0 +1,114 @@
+.dataView {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    margin-bottom: 40px;
+}
+
+.dataView dataContent {
+    width: 40%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    overflow-y: auto;
+}
+
+.dataView map {
+    width: 55%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+.dataContent h3 {
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.dataView a {
+    display: inline-block;
+    padding-top: 10px;
+    color: #0067b8;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.dataView a:hover i {
+    margin-left: 10px;
+}
+
+#siAnalysisTitle {
+    margin: 25px 0px 10px 0px;
+}
+
+.bodyContent {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.sortList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2px;
+    margin-bottom: 40px;
+    max-width: 330px;
+}
+
+.indutySort {
+    border-radius: 5px;
+    text-align: center; /* 내용을 가로로 중앙 정렬합니다. */
+    padding: 5px;
+    background-color: #E0E5E8;
+}
+
+.indutySort img {
+    width : 80%;
+    height: 70%;
+    display: block;
+    margin: 0 auto;
+}
+
+.indutyList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2px;
+    margin-bottom: 40px;
+}
+
+.indutySort {
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    background-color: #E0E5E8;
+    cursor: pointer;
+}
+
+.indutySort.clicked {
+    background-color: #B0C4DE; /* 클릭된 요소의 배경색 변경 */
+}
+
+.indutySort img {
+    width : 80%;
+    height: 70%;
+    display: block;
+    margin: 0 auto;
+}
+
+.listSort {
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    background-color: #E0E5E8;
+    cursor: pointer;
+}
+
+.listSort.clicked {
+    background-color: #B0C4DE; /* 클릭된 요소의 배경색 변경 */
+}
+
+.listSort img {
+    width : 80%;
+    height: 70%;
+    display: block;
+    margin: 0 auto;
+}

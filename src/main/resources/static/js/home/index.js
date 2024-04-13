@@ -5,7 +5,7 @@ $(document).ready(function () {
     })
 
     $("#btnBnav, #btnBnav1, #btnBnav2").on("click", function () {
-        location.href = "/seoul/SiAnalysis";
+        location.href = "/seoul/siAnalysis";
     })
 
 

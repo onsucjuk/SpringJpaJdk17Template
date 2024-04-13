@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>서울시 시장 분석</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/siAnalysis.css">
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="/assets/js/init-alpine.js"></script>
+    <script src="/js/seoul/siAnalysis.js"></script>
+    <script src="/js/home/nav.js"></script>
+</head>
+<body>
+<div class="container">
+    <nav class="main-nav">
+        <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+
+        <ul class="right-menu">
+
+            <ul class="main-menu">
+                <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
+                <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
+                <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+            </ul>
+
+            <p th:if="${session.SS_USER_ID}">
+                <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
+                </button>
+            </p>
+
+            <li th:unless="${session.SS_USER_ID}">
+                <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
+            </li>
+
+        </ul>
+    </nav>
+    <div class = "bodyContent">
+    <h3 id="siAnalysisTitle">서울시 시장 현황</h3>
+
+    <div class="dataView">
+        <!-- 전체 컨텐츠-->
+        <div class="dataContent">
+            <!-- 나중에 클릭시 이벤트 추가 예정-->
+            <!--<select id="guSelect" onchange="chageData()">-->
+            <div>
+                <p class="inlineContens selectText">자치구 선택
+                    <select class="inlineContens" id="guSelect">
+                        <option value="서울 전체">서울 전체</option>
+                        <option value="강남구">강남구</option>
+                        <option value="강동구">강동구</option>
+                        <option value="강북구">강북구</option>
+                        <option value="강서구">강서구</option>
+                        <option value="관악구">관악구</option>
+                        <option value="광진구">광진구</option>
+                        <option value="구로구">구로구</option>
+                        <option value="금천구">금천구</option>
+                        <option value="노원구">노원구</option>
+                        <option value="도봉구">도봉구</option>
+                        <option value="동대문구">동대문구</option>
+                        <option value="동작구">동작구</option>
+                        <option value="마포구">마포구</option>
+                        <option value="서대문구">서대문구</option>
+                        <option value="서초구">서초구</option>
+                        <option value="성동구">성동구</option>
+                        <option value="성북구">성북구</option>
+                        <option value="송파구">송파구</option>
+                        <option value="양천구">양천구</option>
+                        <option value="영등포구">영등포구</option>
+                        <option value="용산구">용산구</option>
+                        <option value="은평구">은평구</option>
+                        <option value="종로구">종로구</option>
+                        <option value="중구">중구</option>
+                        <option value="중랑구">중랑구</option>
+                    </select>
+                </p>
+            </div>
+
+            <p class="selectText">업종 선택</p>
+            <div class="sortList">
+                <div class="listSort" id="defaultListClicked">
+                    <img src="/img/seoul/sales.png" alt="all"/>
+                    매출액
+                </div>
+                <div class="listSort">
+                    <img src="/img/seoul/store.png" alt="all"/>
+                    점포수
+                </div>
+                <div class="listSort">
+                    <img src="/img/seoul/close.png" alt="all"/>
+                    폐업수
+                </div>
+            </div>
+
+            <table class="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr
+                                class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                        >
+                            <th class="px-4 py-3 td-title-bg">순위</th>
+                            <th class="px-4 py-3 td-title-bg">업종명</th>
+                            <th class="px-4 py-3 td-title-bg">매출액</th>
+                            <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
+                        </tr>
+                    </thead>
+                    <tbody
+                            class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+                    >
+                        <tr th:each="dto, iter : ${rSalesList}" class="text-gray-700 dark:text-gray-400 tr-bg"
+                        >
+
+                            <td class="px-4 py-3 seq" th:text="${iter.index+1}">
+                            </td>
+
+                            <td class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
+                            </td>
+
+                            <td class="px-4 py-3 seq" th:text="${dto.monthSales()}">
+                            </td>
+
+                            <td class="px-4 py-3 seq" th:text="'(' + ${dto.salesDiff()} + ')' + ${dto.salesRate()} + '% up !'">
+                            </td>
+
+                        </tr>
+                    </tbody>
+            </table>
+
+
+            <p class="selectText">업종 선택</p>
+            <div class="indutyList">
+                <div class="indutySort" id="defaultIndutyClicked">
+                    <img src="/img/seoul/all.png" alt="all"/>
+                    전체
+                </div>
+                <div class="indutySort">
+                    <img src="/img/seoul/food.png" alt="all"/>
+                    외식업
+                </div>
+                <div class="indutySort">
+                    <img src="/img/seoul/service.png" alt="all"/>
+                    서비스업
+                </div>
+                <div class="indutySort">
+                    <img src="/img/seoul/retail.png" alt="all"/>
+                    소매업
+                </div>
+            </div>
+
+            <button
+                    id="btnIndutyAnalysis"
+                    class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button"
+            >
+                <div class="w-full">
+                    <span class="px-4 py-3 text-sm font-semibold">업종 분석 하기</span>
+                    <span class="ml-2" aria-hidden="true"></span>
+                </div>
+
+            </button>
+
+        </div>
+
+        <!-- 맵 표기 컨텐츠-->
+        <div class="map" id ="map_div">
+            나중에 맵 추가 예정
+        </div>
+    </div>
+    <!--<table class="w-full whitespace-no-wrap">
+        <thead>
+        <tr
+                class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+        >
+            <th class="px-4 py-3 td-title-bg">업종명</th>
+            <th class="px-4 py-3 td-title-bg">업종코드</th>
+            <th class="px-4 py-3 td-title-bg">점포수</th>
+            <th class="px-4 py-3 td-title-bg">점포수 증가율</th>
+        </tr>
+        </thead>
+        <tbody
+                class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+        >
+        <tr th:each="dto : ${rStoreList}" class="text-gray-700 dark:text-gray-400 tr-bg"
+        >
+
+            <td class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
+            </td>
+
+            <td class="px-4 py-3 seq" th:text="${dto.indutyCd()}">
+            </td>
+
+            <td class="px-4 py-3 seq" th:text="${dto.storeCount()}">
+            </td>
+
+            <td class="px-4 py-3 seq" th:text="'(' + ${dto.storeDiff()} + ')' + ${dto.storeRate()} + '% up !'">
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="w-full whitespace-no-wrap">
+        <thead>
+        <tr
+                class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+        >
+            <th class="px-4 py-3 td-title-bg">업종명</th>
+            <th class="px-4 py-3 td-title-bg">업종코드</th>
+            <th class="px-4 py-3 td-title-bg">폐업수</th>
+            <th class="px-4 py-3 td-title-bg">폐업수 증가율</th>
+        </tr>
+        </thead>
+        <tbody
+                class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+        >
+        <tr th:each="dto : ${rStoreCloseList}" class="text-gray-700 dark:text-gray-400 tr-bg"
+        >
+
+            <td class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
+            </td>
+
+            <td class="px-4 py-3 seq" th:text="${dto.indutyCd()}">
+            </td>
+
+            <td class="px-4 py-3 seq" th:text="${dto.closeStoreCount()}">
+            </td>
+
+            <td class="px-4 py-3 seq" th:text="'(' + ${dto.closeStoreDiff()} + ')' + ${dto.closeStoreRate()} + '% up !'">
+            </td>
+
+        </tr>
+        </tbody>
+    </table>-->
+    </div>
+</div>
+</body>
+</html>

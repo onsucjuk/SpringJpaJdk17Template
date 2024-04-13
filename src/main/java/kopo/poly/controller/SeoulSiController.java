@@ -20,7 +20,7 @@ public class SeoulSiController {
 
     private final ISiMarketService siMarketService;
 
-    @GetMapping(value = "SiAnalysis")
+    @GetMapping(value = "siAnalysis")
     public String test(ModelMap model) throws Exception {
 
         int rank = 10;
@@ -33,7 +33,7 @@ public class SeoulSiController {
         model.addAttribute("rStoreList", rStoreList);
         model.addAttribute("rStoreCloseList", rStoreCloseList);
 
-        return "seoul/SiAnalysis";
+        return "seoul/siAnalysis";
     }
 
 }
