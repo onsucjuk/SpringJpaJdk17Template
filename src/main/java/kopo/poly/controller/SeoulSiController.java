@@ -20,16 +20,20 @@ public class SeoulSiController {
 
     private final ISiMarketService siMarketService;
 
-    @GetMapping(value = "test")
+    @GetMapping(value = "SiAnalysis")
     public String test(ModelMap model) throws Exception {
 
         int rank = 10;
 
-        List<SeoulSiMarketDTO> rList = siMarketService.getSiMarketRes(rank);
+        List<SeoulSiMarketDTO> rSalesList = siMarketService.getSiMarketRes(rank);
+        List<SeoulSiMarketDTO> rStoreList = siMarketService.getSiStoreRes(rank);
+        List<SeoulSiMarketDTO> rStoreCloseList = siMarketService.getSiStoreCloseRes(rank);
 
-        model.addAttribute("rList", rList);
+        model.addAttribute("rSalesList", rSalesList);
+        model.addAttribute("rStoreList", rStoreList);
+        model.addAttribute("rStoreCloseList", rStoreCloseList);
 
-        return "market/test";
+        return "seoul/SiAnalysis";
     }
 
 }

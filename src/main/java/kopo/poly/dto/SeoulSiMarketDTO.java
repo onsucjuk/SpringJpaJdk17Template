@@ -23,14 +23,16 @@ public record SeoulSiMarketDTO(
         double age40Sales, // 40대 매출금액
         double age50Sales, // 50대 매출금액
         double age60Sales, // 60대 이상 매출금액
-        long salesDiff, // 매출액 증가량
+
+
+        double salesDiff, // 매출액 증가량
         String salesRate, // 매출액 증가율
-
-        int closeStoreCount, // 폐업수
-
-        int closeStoreRate, // 폐업률
-
-        Long storeCount //점포수
+        double storeCount, //점포수
+        double storeDiff, //점포수 증가량
+        String storeRate, // 점포수 증가율
+        double closeStoreCount, // 폐업수
+        double closeStoreDiff, // 폐업수 증가량
+        String closeStoreRate // 폐업수 증가률
 
 
 ) {

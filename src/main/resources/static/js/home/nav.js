@@ -4,7 +4,7 @@ $(document).ready(function () {
     })
 
     $("#btnBnav").on("click", function () {
-        location.href = "/Bnav/SiAnalysis";
+        location.href = "/seoul/SiAnalysis";
     })
 
 
