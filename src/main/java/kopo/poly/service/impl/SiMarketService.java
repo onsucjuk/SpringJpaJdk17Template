@@ -27,8 +27,6 @@ public class SiMarketService implements ISiMarketService {
         requestHeader.put("Content-Type", "application/json");
         requestHeader.put("appkey", apiKey);
 
-        log.info("appKey : " + apiKey);
-
         return requestHeader;
     }
 
@@ -106,86 +104,86 @@ public class SiMarketService implements ISiMarketService {
      *
      */
     @Override
-    public List<SeoulSiMarketDTO> getSiMarketRes(int rank) throws Exception {
+    public List<SeoulSiMarketDTO> getSiMarketRes(int rank, String preYear, String recYear) throws Exception {
 
         log.info(this.getClass().getName() + ".SeoulSiMarketDTO Start!");
 
-        // 넘겨줄 Data20233
+        // 넘겨줄 Data
         List<Map<String, Object>> tData = new ArrayList<>();
 
-        // 가져온 매출 데이터에서 20233분기 데이터 필터
-        List<Map<String, Object>> fMarket20233 = getSiDataByYearAndData("20233", marketData);
+        // 가져온 매출 데이터에서 이번분기 데이터 필터
+        List<Map<String, Object>> fMarketRec = getSiDataByYearAndData(recYear, marketData);
 
-        // 가져온 매출 데이터에서 20232분기 데이터 필터
-        List<Map<String, Object>> fMarket20232 = getSiDataByYearAndData("20232", marketData);
+        // 가져온 매출 데이터에서 이전분기 데이터 필터
+        List<Map<String, Object>> fMarketPre = getSiDataByYearAndData(preYear, marketData);
 
-        // 가져온 점포 데이터에서 20233분기 데이터 필터
-        List<Map<String, Object>> fStore20233 = getSiDataByYearAndData("20233", storeData);
+        // 가져온 점포 데이터에서 이번분기 데이터 필터
+        List<Map<String, Object>> fStoreRec = getSiDataByYearAndData(recYear, storeData);
 
-        // 가져온 점포 데이터에서 20232분기 데이터 필터
-        List<Map<String, Object>> fStore20232 = getSiDataByYearAndData("20232", storeData);
+        // 가져온 점포 데이터에서 이전분기 데이터 필터
+        List<Map<String, Object>> fStorePre = getSiDataByYearAndData(preYear, storeData);
 
-        for ( int j = 0; j < fMarket20233.size(); j++) {
+        for ( int j = 0; j < fMarketRec.size(); j++) {
 
-            // 2023년 3분기 매출액 데이터
+            // 2023년 기준년도 매출액 데이터
             // j 횟수 돌리는 데이터 jData
-            Map<String, Object> jData = fMarket20233.get(j);
+            Map<String, Object> jData = fMarketRec.get(j);
             String jIndutyCdNm = (String) jData.get("SVC_INDUTY_CD_NM");
             String jIndutyCd = (String) jData.get("SVC_INDUTY_CD");
             double jSelng = (double) jData.get("THSMON_SELNG_AMT");
 
-            log.info("3분기 업종명 : " + jIndutyCdNm);
-            log.info("3분기 매출액 : " + jSelng);
+            log.info("기준년도 업종명 : " + jIndutyCdNm);
+            log.info("기준년도 매출액 : " + jSelng);
 
-            // 가져온 데이터에서 2분기에서 3분기 산업 이름 기준으로 데이터 가져오기
-            List<Map<String, Object>> kData20232 = fMarket20232.stream()
+            // 가져온 데이터에서 비교년도에서 기준년도 산업 이름 기준으로 데이터 가져오기
+            List<Map<String, Object>> kDataPre = fMarketPre.stream()
                     .filter(item -> jIndutyCdNm.equals(item.get("SVC_INDUTY_CD_NM")))
                     .collect(Collectors.toList());
 
-            // 가져온 점포 데이터에서 3분기에서 3분기 산업 이름 기준으로 데이터 가져오기
-            List<Map<String, Object>> kStore20233 = fStore20233.stream()
+            // 가져온 점포 데이터에서 기준년도에서 기준년도 산업 이름 기준으로 데이터 가져오기
+            List<Map<String, Object>> kStoreRec = fStoreRec.stream()
                     .filter(item -> jIndutyCdNm.equals(item.get("SVC_INDUTY_CD_NM")))
                     .collect(Collectors.toList());
 
-            // 가져온 점포 데이터에서 2분기에서 3분기 산업 이름 기준으로 데이터 가져오기
-            List<Map<String, Object>> kStore20232 = fStore20232.stream()
+            // 가져온 점포 데이터에서 비교년도에서 기준년도 산업 이름 기준으로 데이터 가져오기
+            List<Map<String, Object>> kStorePre = fStorePre.stream()
                     .filter(item -> jIndutyCdNm.equals(item.get("SVC_INDUTY_CD_NM")))
                     .collect(Collectors.toList());
 
-            // 업종명으로 분류된 2분기 데이터 매출액
+            // 업종명으로 분류된 비교년도 데이터 매출액
             double kSelng = 0;
 
-            for (Map<String, Object> item : kData20232) {
+            for (Map<String, Object> item : kDataPre) {
 
                 kSelng= (double) item.get("THSMON_SELNG_AMT");
 
             }
 
-            /*log.info("2분기 매출액 :" + kSelng);*/
+            /*log.info("비교년도 매출액 :" + kSelng);*/
 
-            // 3분기 데이터 점포수, 폐업수, 폐업률
+            // 기준년도 데이터 점포수, 폐업수, 폐업률
             double jSimilrIndutyStorCo = 0;
 
-            for (Map<String, Object> item : kStore20233) {
+            for (Map<String, Object> item : kStoreRec) {
 
                 jSimilrIndutyStorCo = (double) item.get("SIMILR_INDUTY_STOR_CO");
 
             }
 
-            /*log.info("3분기 점포수 :" + jSimilrIndutyStorCo);*/
+            /*log.info("기준년도 점포수 :" + jSimilrIndutyStorCo);*/
 
-            // 2분기 데이터 점포수, 폐업수, 폐업률
+            // 비교년도 데이터 점포수, 폐업수, 폐업률
             double kSimilrIndutyStorCo = 0;
 
-            for (Map<String, Object> item : kStore20232) {
+            for (Map<String, Object> item : kStorePre) {
 
                 kSimilrIndutyStorCo = (double) item.get("SIMILR_INDUTY_STOR_CO");
 
             }
 
-            /*log.info("2분기 점포수 :" + kSimilrIndutyStorCo);*/
+            /*log.info("비교년도 점포수 :" + kSimilrIndutyStorCo);*/
 
-            // 점포당 매출액 3분기 jSales, 2분기 kSales 1만 단위
+            // 점포당 매출액 기준년도 jSales, 비교년도 kSales 1만 단위
             double jSales = (jSelng / jSimilrIndutyStorCo) / 10000;
             double kSales = (kSelng / kSimilrIndutyStorCo) / 10000;
 
@@ -196,7 +194,7 @@ public class SiMarketService implements ISiMarketService {
             double salesRate = salesDiff / kSales;
 
             /*log.info(jIndutyCdNm + "매출액 차이 : " + salesDiff);
-            log.info("2분기 점포당 매출액 : " + kSales);
+            log.info("비교년도 점포당 매출액 : " + kSales);
             log.info(jIndutyCdNm + "매출액 증가률 : " + salesRate);*/
 
             // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
@@ -225,7 +223,7 @@ public class SiMarketService implements ISiMarketService {
         for (Map<String, Object> data : topSalesRate) {
 
             double monthSalesDouble = (double)data.get("monthSales");
-            String monthSales = df.format(monthSalesDouble);
+            String fMonthSales = df.format(monthSalesDouble);
             String indutyCd = (String)data.get("indutyCd");
             String indutyNm = (String)data.get("indusyNm");
 
@@ -236,14 +234,13 @@ public class SiMarketService implements ISiMarketService {
             long salesDiff = (long)data.get("salesDiff");
 
             log.info("Top"+ rank + " Data 데이터");
-            log.info("monthSales : " + monthSales);
+            log.info("fMonthSales : " + fMonthSales);
             log.info("indutyCd : " + indutyCd);
             log.info("indutyNm : " +indutyNm);
             log.info("salesRate : " + salesRate);
             log.info("salesDiff : " + salesDiff);
-
             SeoulSiMarketDTO seoulMarketDTO = SeoulSiMarketDTO.builder()
-                    .monthSales(monthSales)
+                    .fMonthSales(fMonthSales)
                     .indutyCd(indutyCd)
                     .indutyNm(indutyNm)
                     .salesRate(salesRate)
@@ -265,61 +262,61 @@ public class SiMarketService implements ISiMarketService {
      *
      */
     @Override
-    public List<SeoulSiMarketDTO> getSiStoreRes(int rank) throws Exception {
+    public List<SeoulSiMarketDTO> getSiStoreRes(int rank, String preYear, String recYear) throws Exception {
 
         log.info(this.getClass().getName() + ".getSiStoreRes Start!");
 
-        // 넘겨줄 Data20233
+        // 넘겨줄 Data
         List<Map<String, Object>> tData = new ArrayList<>();
 
 
-        // 가져온 점포 데이터에서 20233분기 데이터 필터
-        List<Map<String, Object>> fStore20233 = getSiDataByYearAndData("20233", storeData);
+        // 가져온 점포 데이터에서 이번분기 데이터 필터
+        List<Map<String, Object>> fStoreRec = getSiDataByYearAndData(recYear, storeData);
 
-        // 가져온 점포 데이터에서 20232분기 데이터 필터
-        List<Map<String, Object>> fStore20232 = getSiDataByYearAndData("20232", storeData);
+        // 가져온 점포 데이터에서 이전분기 데이터 필터
+        List<Map<String, Object>> fStorePre = getSiDataByYearAndData(preYear, storeData);
 
-        for ( int j = 0; j < fStore20233.size(); j++) {
+        for ( int j = 0; j < fStoreRec.size(); j++) {
 
-            // 2023년 3분기 점포수 데이터
+            // 2023년 기준년도 점포수 데이터
             // j 횟수 돌리는 데이터 jData
-            Map<String, Object> jData = fStore20233.get(j);
+            Map<String, Object> jData = fStoreRec.get(j);
             String jIndutyCdNm = (String) jData.get("SVC_INDUTY_CD_NM");
             String jIndutyCd = (String) jData.get("SVC_INDUTY_CD");
             double jSimilrIndutyStorCo = (double) jData.get("SIMILR_INDUTY_STOR_CO");
 
-            log.info("3분기 업종명 : " + jIndutyCdNm);
-            log.info("3분기 점포수 : " + jSimilrIndutyStorCo);
+            log.info("기준년도 업종명 : " + jIndutyCdNm);
+            log.info("기준년도 점포수 : " + jSimilrIndutyStorCo);
 
-            // 가져온 점포 데이터에서 2분기에서 3분기 산업 이름 기준으로 데이터 가져오기
-            List<Map<String, Object>> kStore20232 = fStore20232.stream()
+            // 가져온 점포 데이터에서 비교년도에서 기준년도 산업 이름 기준으로 데이터 가져오기
+            List<Map<String, Object>> kStorePre = fStorePre.stream()
                     .filter(item -> jIndutyCdNm.equals(item.get("SVC_INDUTY_CD_NM")))
                     .collect(Collectors.toList());
 
-            /*log.info("3분기 점포수 :" + jSimilrIndutyStorCo);*/
+            /*log.info("기준년도 점포수 :" + jSimilrIndutyStorCo);*/
 
-            // 2분기 데이터 점포수, 폐업수, 폐업률
+            // 비교년도 데이터 점포수, 폐업수, 폐업률
             double kSimilrIndutyStorCo = 0;
 
-            for (Map<String, Object> item : kStore20232) {
+            for (Map<String, Object> item : kStorePre) {
 
                 kSimilrIndutyStorCo = (double) item.get("SIMILR_INDUTY_STOR_CO");
 
             }
 
-            /*log.info("2분기 점포수 :" + kSimilrIndutyStorCo);*/
+            /*log.info("비교년도 점포수 :" + kSimilrIndutyStorCo);*/
 
-            // 점포수 증가량 : 3분기 점포수 - 2분기 점포수
+            // 점포수 증가량 : 기준년도 점포수 - 비교년도 점포수
             double storeDiff = (jSimilrIndutyStorCo - kSimilrIndutyStorCo);
 
             // 점포 수 상승률
             double storeRate = storeDiff / kSimilrIndutyStorCo;
 
             /*log.info(jIndutyCdNm + "매출액 차이 : " + salesDiff);
-            log.info("2분기 점포당 매출액 : " + kSales);
+            log.info("비교년도 점포당 매출액 : " + kSales);
             log.info(jIndutyCdNm + "매출액 증가률 : " + salesRate);*/
 
-            // 3분기 기준 데이터
+            // 기준년도 기준 데이터
             // 필요한 값 업종명, 업종코드, 점포수, 점포수 증가량, 증가율
             Map<String, Object> inputData = new HashMap<>();
             inputData.put("indutyCd", jIndutyCd);
@@ -378,61 +375,61 @@ public class SiMarketService implements ISiMarketService {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getSiStoreCloseRes(int rank) throws Exception {
+    public List<SeoulSiMarketDTO> getSiStoreCloseRes(int rank, String preYear, String recYear) throws Exception {
 
         log.info(this.getClass().getName() + ".getSiStoreCloseRes Start!");
 
-        // 넘겨줄 Data20233
+        // 넘겨줄 Data
         List<Map<String, Object>> tData = new ArrayList<>();
 
 
-        // 가져온 점포 데이터에서 20233분기 데이터 필터
-        List<Map<String, Object>> fStore20233 = getSiDataByYearAndData("20233", storeData);
+        // 가져온 점포 데이터에서 이번분기 데이터 필터
+        List<Map<String, Object>> fStoreRec = getSiDataByYearAndData(recYear, storeData);
 
-        // 가져온 점포 데이터에서 20232분기 데이터 필터
-        List<Map<String, Object>> fStore20232 = getSiDataByYearAndData("20232", storeData);
+        // 가져온 점포 데이터에서 이전분기 데이터 필터
+        List<Map<String, Object>> fStorePre = getSiDataByYearAndData(preYear, storeData);
 
-        for ( int j = 0; j < fStore20233.size(); j++) {
+        for ( int j = 0; j < fStoreRec.size(); j++) {
 
-            // 2023년 3분기 폐업수 데이터
+            // 2023년 기준년도 폐업수 데이터
             // j 횟수 돌리는 데이터 jData
-            Map<String, Object> jData = fStore20233.get(j);
+            Map<String, Object> jData = fStoreRec.get(j);
             String jIndutyCdNm = (String) jData.get("SVC_INDUTY_CD_NM");
             String jIndutyCd = (String) jData.get("SVC_INDUTY_CD");
             double jClsStoreCo = (double) jData.get("CLSBIZ_STOR_CO");
 
-            log.info("3분기 업종명 : " + jIndutyCdNm);
-            log.info("3분기 폐업수 : " + jClsStoreCo);
+            log.info("기준년도 업종명 : " + jIndutyCdNm);
+            log.info("기준년도 폐업수 : " + jClsStoreCo);
 
-            // 가져온 점포 데이터에서 2분기에서 3분기 산업 이름 기준으로 데이터 가져오기
-            List<Map<String, Object>> kStore20232 = fStore20232.stream()
+            // 가져온 점포 데이터에서 비교년도에서 기준년도 산업 이름 기준으로 데이터 가져오기
+            List<Map<String, Object>> kStorePre = fStorePre.stream()
                     .filter(item -> jIndutyCdNm.equals(item.get("SVC_INDUTY_CD_NM")))
                     .collect(Collectors.toList());
 
-            /*log.info("3분기 점포수 :" + jSimilrIndutyStorCo);*/
+            /*log.info("기준년도 점포수 :" + jSimilrIndutyStorCo);*/
 
-            // 2분기 데이터 점포수, 폐업수, 폐업률
+            // 비교년도 데이터 점포수, 폐업수, 폐업률
             double kClsStoreCo = 0;
 
-            for (Map<String, Object> item : kStore20232) {
+            for (Map<String, Object> item : kStorePre) {
 
                 kClsStoreCo = (double) item.get("CLSBIZ_STOR_CO");
 
             }
 
-            /*log.info("2분기 점포수 :" + kSimilrIndutyStorCo);*/
+            /*log.info("비교년도 점포수 :" + kSimilrIndutyStorCo);*/
 
-            // 점포수 증가량 : 3분기 점포수 - 2분기 점포수
+            // 점포수 증가량 : 기준년도 점포수 - 비교년도 점포수
             double closeStoreDiff = (jClsStoreCo - kClsStoreCo);
 
             // 점포 수 상승률
             double closeStoreRate = closeStoreDiff / kClsStoreCo;
 
             /*log.info(jIndutyCdNm + "매출액 차이 : " + salesDiff);
-            log.info("2분기 점포당 매출액 : " + kSales);
+            log.info("비교년도 점포당 매출액 : " + kSales);
             log.info(jIndutyCdNm + "매출액 증가률 : " + salesRate);*/
 
-            // 3분기 기준 데이터
+            // 기준년도 기준 데이터
             // 필요한 값 업종명, 업종코드, 점포수, 점포수 증가량, 증가율
             Map<String, Object> inputData = new HashMap<>();
             inputData.put("indutyCd", jIndutyCd);

@@ -1,3 +1,6 @@
+table {
+    max-width : 460px;
+}
 .dataView {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -6,7 +9,8 @@
 }
 
 .dataView dataContent {
-    width: 40%;
+    width: 33%;
+    max-width : 500px;
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 20px;
@@ -14,7 +18,7 @@
 }
 
 .dataView map {
-    width: 55%;
+    width: 65%;
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 20px;
@@ -112,3 +116,56 @@
     display: block;
     margin: 0 auto;
 }
+
+/*로딩 스피너*/
+.spinner-container {
+    position: relative;
+}
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #6d7bff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.indutySelectList {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2px;
+    margin-bottom: 40px;
+    max-width: 80%;
+    display: none;
+}
+
+.indutySelectSort {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #E0E5E8;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* 글자들을 가운데 정렬 */
+}
+
+.indutySelectSort.clicked {
+
+    background-color: #B0C4DE;
+    color: #ffffff;
+
+}
+

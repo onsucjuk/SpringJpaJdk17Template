@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript">
-
     </script>
 </head>
 <body>
@@ -43,19 +42,21 @@
         </ul>
     </nav>
 
+    <hr id="mainTopLine">
     <!-- Showcase -->
     <header class="showcase">
         <h2>당신의 사업을 시작해보세요.</h2>
         <p>Business Navigator, Navigate You!</p>
-        <a id="Bnav1" class="btn">
+        <a id="btnBnav1" class="btn">
             Go! BNav!
         </a>
     </header>
+    <hr id="mainMiddleLine">
 
     <h1> 뜨는 업종 Top3</h1>
     <p class="subContent">전분기 대비 매출액 상승률 (만 단위)</p>
     <!-- Home cards 1 -->
-    <section class="home-cards">
+    <section class="home-cards" id="btnBnav2">
         <div class = "imgDiv" th:each="dto, iter : ${rList}">
             <h3 class = "imgDivTop" th:text="'Top' + ${iter.index+1}"></h3>
             <div class="imgText">
@@ -64,7 +65,7 @@
                 <img class="comment_inline" th:if="${dto.indutyCd()=='CS300004'}" src="/img/index/phone.png" alt="phone" />
                 <div class="comment_inline indutyList">
                     <p class="indutyNm" th:text="${dto.indutyNm()}"></p>
-                    <p th:text="${dto.monthSales()} + '(' + ${dto.salesDiff()} + ')'"></p>
+                    <p th:text="${dto.fMonthSales()} + '(' + ${dto.salesDiff()} + ')'"></p>
                     <p>
                         <strong th:text="${dto.salesRate()} + '% up !'"></strong>
                     </p>

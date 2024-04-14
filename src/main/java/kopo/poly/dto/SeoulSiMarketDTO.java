@@ -14,7 +14,8 @@ public record SeoulSiMarketDTO(
         String seoulLocationNm, // 지역이름
         String indutyCd, // 업종코드
         String indutyNm, // 업종명
-        String monthSales, // 당월매출금액
+        double monthSales, // 당월매출금액
+        String fMonthSales, // 당월매출금액 소숫점2째 자리까지 표기
         double maleSales, // 남성매출금액
         double femaleSales, // 여성매출금액
         double age10Sales, // 10대 매출금액

@@ -25,8 +25,12 @@ public class IndexController {
         log.info(this.getClass().getName() + ".html/index Start!");
 
         int rank = 3;
+    // 전분기
+        String preYear = "20232";
+        // 이번분기
+        String recYear = "20233";
 
-        List<SeoulSiMarketDTO> rList = siMarketService.getSiMarketRes(rank);
+        List<SeoulSiMarketDTO> rList = siMarketService.getSiMarketRes(rank, preYear, recYear);
 
         model.addAttribute("rList", rList);
 

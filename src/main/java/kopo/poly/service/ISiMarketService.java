@@ -11,9 +11,9 @@ public interface ISiMarketService {
     String marketData = "VwsmMegaSelngW";
     String storeData = "VwsmMegaStorW";
 
-    List<SeoulSiMarketDTO> getSiMarketRes(int rank) throws Exception;
-    List<SeoulSiMarketDTO> getSiStoreRes(int rank) throws Exception;
-    List<SeoulSiMarketDTO> getSiStoreCloseRes(int rank) throws Exception;
+    List<SeoulSiMarketDTO> getSiMarketRes(int rank, String preYear, String recYear) throws Exception;
+    List<SeoulSiMarketDTO> getSiStoreRes(int rank, String preYear, String recYear) throws Exception;
+    List<SeoulSiMarketDTO> getSiStoreCloseRes(int rank, String preYear, String recYear) throws Exception;
 
     List<Map<String, Object>> getSiDataByYearAndData(String year, String data) throws Exception;
 
