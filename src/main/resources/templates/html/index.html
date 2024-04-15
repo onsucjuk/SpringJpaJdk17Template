@@ -51,7 +51,7 @@
             Go! BNav!
         </a>
     </header>
-    <hr id="mainMiddleLine">
+    <hr class="mainMiddleLine">
 
     <h1> 뜨는 업종 Top3</h1>
     <p class="subContent">전분기 대비 매출액 상승률 (만 단위)</p>
@@ -75,7 +75,7 @@
     </section>
 
     <!-- Xbox -->
-    <section class="xbox">
+    <!--<section class="xbox">
         <div class="content">
             <h2>Xbox Game Pass Ultimate</h2>
             <p>Xbox Game Pass Ultimate Xbox Live Gold and over 100 high-quality
@@ -85,9 +85,22 @@
                 Join Now <i class="fas fa-chevron-right"></i>
             </a>
         </div>
+    </section>-->
+
+    <hr class="mainMiddleLine">
+
+    <h1> 창업 정보 유튜브 </h1>
+    <p class="subContent">최신 추천 영상 Top3 </p>
+    <!-- Home cards 1 -->
+    <section class="home-cards">
+        <div class = "imgDiv" th:each="dto : ${yList}">
+            <iframe class="video" id="ytplayer" type="text/html" width="100%" height="100%"
+                    th:src="'https://www.youtube.com/embed/'+${dto.videoId()}"
+                    frameborder="0" allowfullscreen></iframe>
+        </div>
     </section>
 
-    <!-- Home cards 2 -->
+    <!-- 일단 주석 처리
     <section class="home-cards">
         <div>
             <img src="https://i.ibb.co/zVqhWn2/card5.png" alt="" />
@@ -123,8 +136,8 @@
             <a href="#">Get Started <i class="fas fa-chevron-right"></i></a>
         </div>
     </section>
-
-    <!-- Carbon -->
+    -->
+    <!--
     <section class="carbon dark">
         <div class="content">
             <h2>Commiting To Carbon Negative</h2>
@@ -135,8 +148,8 @@
             </a>
         </div>
     </section>
-
-    <!-- Follow -->
+    -->
+    <!-- Follow
     <section class="follow">
         <p>Follow Microsoft</p>
         <a href="https://facebook.com">
@@ -149,8 +162,10 @@
             <img src="https://i.ibb.co/b30HMhR/social-linkedin.png" alt="Linkedin">
         </a>
     </section>
+     -->
 </div>
-<!-- Links -->
+
+<!-- Links-->
 <section class="links">
     <div class="links-inner">
         <ul>

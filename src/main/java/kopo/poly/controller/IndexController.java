@@ -1,7 +1,9 @@
 package kopo.poly.controller;
 
 import kopo.poly.dto.SeoulSiMarketDTO;
+import kopo.poly.dto.YoutubeDTO;
 import kopo.poly.service.ISiMarketService;
+import kopo.poly.service.IYoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import java.util.List;
 public class IndexController {
 
     private final ISiMarketService siMarketService;
+    private final IYoutubeService youtubeService;
 
     @GetMapping(value = "index")
     public String goIndex(ModelMap model) throws Exception {
@@ -31,8 +34,10 @@ public class IndexController {
         String recYear = "20233";
 
         List<SeoulSiMarketDTO> rList = siMarketService.getSiMarketRes(rank, preYear, recYear);
+        List<YoutubeDTO> yList = youtubeService.getYoutueInfo();
 
         model.addAttribute("rList", rList);
+        model.addAttribute("yList", yList);
 
         log.info(this.getClass().getName() + ".html/index End!");
 

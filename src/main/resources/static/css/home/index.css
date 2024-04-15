@@ -345,8 +345,9 @@ ul {
 
 }
 
-#mainMiddleLine {
+.mainMiddleLine {
 
+    margin-top: 15px;
     margin-bottom: 30px;
 
 }
@@ -424,4 +425,28 @@ select {
 }
 .inlineContents {
     display: inline-block;
+}
+
+.youtubeTitle{
+    font-size: large;
+    font-weight: bolder;
+    padding: 10px;
+    margin : 10px 10px 20px 10px;
+}
+
+.youtubeList {
+    margin-left : 5px;
+    width: 65%; /* 텍스트가 오른쪽 50%만 차지하도록 설정 */
+    text-align: left; /* 가운데 정렬 */
+
+}
+
+.indutyListText {
+
+    color : #4e4e4f;
+
+}
+
+.video {
+    height: 360px;
 }
