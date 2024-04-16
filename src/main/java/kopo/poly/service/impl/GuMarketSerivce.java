@@ -28,7 +28,7 @@ public class GuMarketSerivce implements IGuMarketService {
      *
      */
     @Override
-    public List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception {
 
 
             log.info(this.getClass().getName() + ".getGuMarketRes Start!");
@@ -41,20 +41,20 @@ public class GuMarketSerivce implements IGuMarketService {
 
             log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
             // 매출 데이터에서 가져온 이번분기 데이터 리스트
-            List<SeoulSiMarketDTO> recSalesList = guMapper.getGuSalesList(recYear, seoulLocationNm, colNm);
+            List<SeoulSiMarketDTO> recSalesList = guMapper.getGuSalesList(recYear, seoulLocationCd, colNm);
 
             // 매출 데이터에서 가져온 전분기 데이터 리스트
-            List<SeoulSiMarketDTO> preSalesList = guMapper.getGuSalesList(preYear, seoulLocationNm, colNm);
+            List<SeoulSiMarketDTO> preSalesList = guMapper.getGuSalesList(preYear, seoulLocationCd, colNm);
 
 
             //매출액쪽 데이터를 다 가져왔고 점포수 데이터를 가져와야하므로 컬렉션 네임 변경
             colNm = "SEOUL_GU_STORE";
             log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
             // 점포 데이터에서 가져온 이번분기 데이터 리스트
-            List<SeoulSiMarketDTO> recStoreList = guMapper.getGuStoreList(recYear, seoulLocationNm, colNm);
+            List<SeoulSiMarketDTO> recStoreList = guMapper.getGuStoreList(recYear, seoulLocationCd, colNm);
 
             // 점포 데이터에서 가져온 이전분기 데이터 필터
-            List<SeoulSiMarketDTO> preStoreList = guMapper.getGuStoreList(preYear, seoulLocationNm, colNm);
+            List<SeoulSiMarketDTO> preStoreList = guMapper.getGuStoreList(preYear, seoulLocationCd, colNm);
 
             // DecimalFormat 객체 생성 데이터 포맷
             DecimalFormat df = new DecimalFormat("#.##");

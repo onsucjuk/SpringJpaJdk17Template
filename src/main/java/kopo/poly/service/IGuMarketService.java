@@ -11,8 +11,8 @@ public interface IGuMarketService {
      * mongoDB에서 받아온 데이터 가공해서 넘겨주기 (매출액)
      *
      */
-    List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationNm) throws Exception;
-    List<SeoulSiMarketDTO> getGuStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) throws Exception;
-    List<SeoulSiMarketDTO> getGuCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) throws Exception;
+    List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception;
+    List<SeoulSiMarketDTO> getGuStoreRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception;
+    List<SeoulSiMarketDTO> getGuCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception;
 
 }

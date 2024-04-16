@@ -22,7 +22,7 @@ public class GuMapper implements IGuMapper {
     private final MongoTemplate mongodb;
 
     @Override
-    public List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationNm, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception {
 
         log.info(this.getClass().getName() + ".getGuSalesList Start!");
 
@@ -35,7 +35,7 @@ public class GuMapper implements IGuMapper {
         Document query = new Document();
 
         query.append("SEOUL_GU_YEAR", seoulGuYear);
-        query.append("SEOUL_LOCATION_NM", seoulLocationNm);
+        query.append("SEOUL_LOCATION_CD", seoulLocationCd);
 
         Document projection = new Document();
 
@@ -71,7 +71,7 @@ public class GuMapper implements IGuMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationNm, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception {
 
         log.info(this.getClass().getName() + ".getGuStoreList Start!");
 
@@ -84,7 +84,7 @@ public class GuMapper implements IGuMapper {
         Document query = new Document();
 
         query.append("SEOUL_GU_YEAR", seoulGuYear);
-        query.append("SEOUL_LOCATION_NM", seoulLocationNm);
+        query.append("SEOUL_LOCATION_CD", seoulLocationCd);
 
         Document projection = new Document();
 
@@ -120,7 +120,7 @@ public class GuMapper implements IGuMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationNm, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception {
 
         log.info(this.getClass().getName() + ".getGuCloseStoreList Start!");
 
@@ -133,7 +133,7 @@ public class GuMapper implements IGuMapper {
         Document query = new Document();
 
         query.append("SEOUL_GU_YEAR", seoulGuYear);
-        query.append("SEOUL_LOCATION_NM", seoulLocationNm);
+        query.append("SEOUL_LOCATION_CD", seoulLocationCd);
 
         Document projection = new Document();
 

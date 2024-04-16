@@ -67,11 +67,12 @@ public class SeoulSiController {
 
         log.info(this.getClass().getName() + ".siSalesList Start!");
 
-        String seoulLocationNm = CmmUtil.nvl(request.getParameter("selectedValue"));
-        //마지막 글자 "동", "구" 판별
-        String last = seoulLocationNm.substring(seoulLocationNm.length()-1);
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("selectedValue"));
 
-        log.info("seoulLocationNm : " + seoulLocationNm);
+        //판별 길이
+        int length = seoulLocationCd.length();
+
+        log.info("seoulLocationCd : " + seoulLocationCd);
 
         List<SeoulSiMarketDTO> rSalesList = new ArrayList<>();
 
@@ -81,13 +82,13 @@ public class SeoulSiController {
         // 이번분기
         String recYear = "20233";
 
-        if(seoulLocationNm.equals("서울 전체")) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기
+        if(length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
 
             rSalesList = siMarketService.getSiMarketRes(rank, preYear, recYear);
 
-        } else if (last.equals("구")) { // 아니면 구 데이터에서 가져오기 [만들 예정]
+        } else if (length==5) { // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
 
-            rSalesList = guMarketService.getGuMarketRes(rank, preYear, recYear, seoulLocationNm);
+            rSalesList = guMarketService.getGuMarketRes(rank, preYear, recYear, seoulLocationCd);
 
         } else { // 동 아니면 구 [만들 예정]
 
@@ -108,9 +109,9 @@ public class SeoulSiController {
 
         log.info(this.getClass().getName() + ".siStoreList Start!");
 
-        String seoulLocationNm = CmmUtil.nvl(request.getParameter("selectedValue"));
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("selectedValue"));
 
-        log.info("seoulLocationNm : " + seoulLocationNm);
+        log.info("seoulLocationCd : " + seoulLocationCd);
 
         List<SeoulSiMarketDTO> rStoreList = new ArrayList<>();
 
@@ -119,16 +120,16 @@ public class SeoulSiController {
         String preYear = "20232";
         // 이번분기
         String recYear = "20233";
-        //마지막 글자 "동", "구" 판별
-        String last = seoulLocationNm.substring(seoulLocationNm.length()-1);
+        //판별 길이
+        int length = seoulLocationCd.length();
 
-        if(seoulLocationNm.equals("서울 전체")) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기
+        if(length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
 
             rStoreList = siMarketService.getSiStoreRes(rank, preYear, recYear);
 
-        } else if (last.equals("구")) {
+        } else if (length==5) {  // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
 
-            rStoreList = guMarketService.getGuStoreRes(rank, preYear, recYear, seoulLocationNm);
+            rStoreList = guMarketService.getGuStoreRes(rank, preYear, recYear, seoulLocationCd);
 
         } else { // 아니면 동 데이터에서 가져오기 [만들 예정]
 
@@ -150,9 +151,9 @@ public class SeoulSiController {
 
         log.info(this.getClass().getName() + ".siStoreCloseList Start!");
 
-        String seoulLocationNm = CmmUtil.nvl(request.getParameter("selectedValue"));
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("selectedValue"));
 
-        log.info("seoulLocationNm : " + seoulLocationNm);
+        log.info("seoulLocationCd : " + seoulLocationCd);
 
         List<SeoulSiMarketDTO> rStoreCloseList = new ArrayList<>();
 
@@ -161,16 +162,16 @@ public class SeoulSiController {
         String preYear = "20232";
         // 이번분기
         String recYear = "20233";
-        //마지막 글자 "동", "구" 판별
-        String last = seoulLocationNm.substring(seoulLocationNm.length()-1);
+        //판별 길이
+        int length = seoulLocationCd.length();
 
-        if(seoulLocationNm.equals("서울 전체")) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기
+        if(length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
 
             rStoreCloseList = siMarketService.getSiStoreCloseRes(rank, preYear, recYear);
 
-        } else if(last.equals("구")) {
+        } else if (length==5) {  // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
 
-            rStoreCloseList = guMarketService.getGuCloseStoreRes(rank, preYear, recYear, seoulLocationNm);
+            rStoreCloseList = guMarketService.getGuCloseStoreRes(rank, preYear, recYear, seoulLocationCd);
 
         } else { // 아니면 동 데이터에서 가져오기 [만들 예정]
 
