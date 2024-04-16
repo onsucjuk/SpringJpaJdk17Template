@@ -24,7 +24,7 @@ public class GuMarketSerivce implements IGuMarketService {
      * @param rank 최종 정제 후 순위
      * @param preYear 컨트롤러로 보내온 비교년도 데이터
      * @param recYear 컨트롤러로 보내온 기준년도 데이터
-     * @param seoulLocationNm 컨트롤러로 보내온 지역명
+     * @param seoulLocationCd 컨트롤러로 보내온 지역명
      *
      */
     @Override
@@ -333,6 +333,22 @@ public class GuMarketSerivce implements IGuMarketService {
         log.info(this.getClass().getName() + ".getGuStoreCloseRes End!");
 
         return rList;
+    }
+
+    @Override
+    public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd) throws Exception {
+
+        log.info(this.getClass().getName() + ".getGuMarketRes Start!");
+
+        // 구 기준 매출액 MongoDB 컬렉션
+        String colNm = "SEOUL_GU_LATLON";
+
+        log.info(colNm + " 좌표 데이터 가져오기");
+
+        // 매출 데이터에서 가져온 이번분기 데이터 리스트
+        SeoulSiMarketDTO rDTO = guMapper.getGuLatLon(seoulLocationCd, colNm);
+
+        return rDTO;
     }
 
 }

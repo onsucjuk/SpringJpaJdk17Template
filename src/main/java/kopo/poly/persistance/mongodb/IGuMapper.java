@@ -41,4 +41,15 @@ public interface IGuMapper {
      */
 
     List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception;
+
+    /**
+     *
+     * 행정구 코드 기반 좌표 데이터 가져오기
+     *
+     * @param  seoulLocationCd 지역코드
+     * @param  colNm 컬렉션명
+     *
+     */
+
+    SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) throws Exception;
 }

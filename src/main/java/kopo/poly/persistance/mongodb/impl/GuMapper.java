@@ -167,4 +167,48 @@ public class GuMapper implements IGuMapper {
         return rList;
 
     }
+
+    @Override
+    public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) throws Exception {
+
+        log.info(this.getClass().getName() + ".getGuLatLon Start!");
+
+        // 가져와야하는 데이터
+        // 지역코드랑 같은 좌표 데이터
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
+
+        Document query = new Document();
+
+        query.append("SEOUL_LOCATION_CD", seoulLocationCd);
+
+        Document projection = new Document();
+
+        projection.append("LAT", "$LAT");
+        projection.append("LON", "$LON");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+
+            double lat = doc.getDouble("LAT");
+            double lon = doc.getDouble("LON");
+
+            log.info("lat : " + lat + " / lon : " + lon);
+
+                    rDTO = SeoulSiMarketDTO.builder()
+                    .lat(lat)
+                    .lon(lon)
+                    .build();
+
+        }
+
+        log.info(this.getClass().getName() + ".getGuLatLon End!");
+
+        return rDTO;
+    }
 }

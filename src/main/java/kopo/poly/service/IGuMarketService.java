@@ -15,4 +15,6 @@ public interface IGuMarketService {
     List<SeoulSiMarketDTO> getGuStoreRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception;
     List<SeoulSiMarketDTO> getGuCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception;
 
+    SeoulSiMarketDTO getGuLatLon(String seoulLocationCd) throws Exception;
+
 }

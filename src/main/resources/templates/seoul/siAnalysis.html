@@ -14,7 +14,6 @@
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="/assets/js/init-alpine.js"></script>
-    <script type="text/javascript"  th:src="@{/js/seoul/siAnalysis.js}" ></script>
     <script src="/js/home/nav.js"></script>
 </head>
 <body>
@@ -86,7 +85,7 @@
                     </p>
                 </div>
 
-                <p class="selectText">업종 선택</p>
+                <p class="selectText">분석 선택</p>
                 <div class="sortList">
                     <div class="listSort" id="defaultListClicked">
                         <img src="/img/seoul/sales.png" alt="all"/>
@@ -102,7 +101,7 @@
                     </div>
                 </div>
 
-                <table class="w-full whitespace-no-wrap" id = "rankList">
+                <table class="whitespace-no-wrap" id = "rankList">
                         <thead>
                             <tr
                                     class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
@@ -128,7 +127,7 @@
                                 <td class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
                                 </td>
 
-                                <td class="px-4 py-3 seq" th:text="'(' + ${dto.salesDiff()} + ') ' + ${dto.salesRate()} + '% up !'">
+                                <td class="px-4 py-3 seq" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
                                 </td>
 
                             </tr>
@@ -490,4 +489,6 @@
     </div>
 </div>
 </body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=afb7f9da685154e4de522b7c462eddc1"></script>
+<script type="text/javascript"  th:src="@{/js/seoul/siAnalysis.js}" ></script>
 </html>

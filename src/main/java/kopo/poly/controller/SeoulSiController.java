@@ -182,4 +182,34 @@ public class SeoulSiController {
         return rStoreCloseList;
     }
 
+    /**
+     * 위치 좌표 ajax로 넘겨주기
+     */
+    @ResponseBody
+    @PostMapping(value = "getLatLon")
+    public SeoulSiMarketDTO getLatLon(HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".getLatLon Start!");
+
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("selectedValue"));
+
+        log.info("seoulLocationCd : " + seoulLocationCd);
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
+
+        //판별 길이
+        int length = seoulLocationCd.length();
+
+        if (length==5) {  // 아니면 구 데이터에서 가져오기 (구 코드 길이 = 11211 5)
+
+            rDTO = guMarketService.getGuLatLon(seoulLocationCd);
+
+        } else { // 아니면 동 데이터에서 가져오기 [만들 예정]
+
+        }
+
+        log.info(this.getClass().getName() + ".getLatLon End!");
+
+        return rDTO;
+    }
 }

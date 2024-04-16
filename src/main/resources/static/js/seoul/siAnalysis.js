@@ -126,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         //테이블 내용 변경 매커니즘
         makeSiList(nowClickedText);
+        moveMapPoint();
 
     });
 
@@ -186,7 +187,7 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.salesDiff + ') ' + dto.salesRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">${'(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !'}</td>
                                 `;
                     tbody.appendChild(row);
                 }
@@ -236,7 +237,7 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.storeDiff + ') ' + dto.storeRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">${'(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !'}</td>
                                 `;
                     tbody.appendChild(row);
                 }
@@ -285,7 +286,7 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.closeStoreDiff + ') ' + dto.closeStoreRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">${'(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !'}</td>
                                 `;
                     tbody.appendChild(row);
 
@@ -322,3 +323,84 @@ function visibleList(id) {
 
 }
 
+
+function moveMapPoint() {
+
+    // select 요소를 가져옴
+    let selectElement = document.getElementById("guSelect");
+
+    // 선택된 옵션의 값(value)을 가져옴
+    let selectedValue = selectElement.value;
+
+    // 가져온 값 확인
+    console.log("moveMapPoint 선택된 값:", selectedValue);
+
+    // 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
+    if (selectedValue === "11") {
+
+        //서울 중심점(맵 시작 Default 위치)
+        let lat = 37.551914;
+        let lon = 126.991851;
+
+        // 기본 지도로 돌아가기(zoom 7, 서울 중심점)
+        defaultTo(lat, lon);
+
+    }
+
+    else  {
+
+        $.ajax({
+            url : "/seoul/getLatLon",
+            type : "post",
+            dataType: "JSON",
+            data: { "selectedValue": selectedValue },
+            success: function (json) {
+
+                let lat = json.lat;
+                let lon = json.lon;
+
+                console.log("return lat : " + lat);
+                console.log("return lon : " + lon);
+
+                panTo(lat,lon);
+
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request error:", status, error);
+            }
+        })
+
+    }
+
+}
+
+// 지도를 띄우는 코드
+let container = document.getElementById('map_div'); //지도를 담을 영역의 DOM 레퍼런스
+let options = { //지도를 생성할 때 필요한 기본 옵션
+    center: new kakao.maps.LatLng(37.551914, 126.991851), //지도의 중심좌표.
+    level: 7 //지도의 레벨(확대, 축소 정도)
+};
+
+let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+function panTo(lat, lon) {
+    // 이동할 위도 경도 위치를 생성합니다
+    let moveLatLon = new kakao.maps.LatLng(lat, lon);
+
+    map.setLevel(6);
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+
+}
+
+function defaultTo(lat, lon) {
+    // 이동할 위도 경도 위치를 생성합니다
+    let moveLatLon = new kakao.maps.LatLng(lat, lon);
+
+    map.setLevel(7);
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+
+}

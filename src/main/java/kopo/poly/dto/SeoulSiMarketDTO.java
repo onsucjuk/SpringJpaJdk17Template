@@ -33,7 +33,10 @@ public record SeoulSiMarketDTO(
         String storeRate, // 점포수 증가율
         double closeStoreCount, // 폐업수
         double closeStoreDiff, // 폐업수 증가량
-        String closeStoreRate // 폐업수 증가률
+        String closeStoreRate, // 폐업수 증가률
+
+        double lat, // 위도
+        double lon // 경도
 
 
 ) {
