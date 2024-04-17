@@ -2,6 +2,7 @@ package kopo.poly.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kopo.poly.dto.MsgDTO;
 import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.service.IGuMarketService;
 import kopo.poly.service.ISiMarketService;
@@ -212,4 +213,88 @@ public class SeoulSiController {
 
         return rDTO;
     }
+
+
+    /**
+     * ###################################################################################################
+     *
+     *
+     *                                  구 기준 업종 분석 페이지 관련 컨트롤러
+     *
+     *
+     * ###################################################################################################
+     * */
+
+    @ResponseBody
+    @PostMapping(value = "setIndutyInfo")
+    public MsgDTO setIndutyInfo(HttpServletRequest request, HttpSession session) throws Exception {
+
+        int res = 0;
+
+        String indutySort = CmmUtil.nvl(request.getParameter("indudySort"));
+        String indutySelected = CmmUtil.nvl(request.getParameter("indutySelected"));
+
+        log.info("indutySort : " + indutySort);
+        log.info("indutySelected : " + indutySelected);
+
+        if (indutySort.length()>0) {
+
+            session.setAttribute("SS_INDUTY_SORT", indutySort);
+            session.setAttribute("SS_INDUTY_NM", indutySelected);
+
+            res = 1;
+        }
+
+        log.info("setIndutyInfo res : " + res);
+
+        MsgDTO pDTO = MsgDTO.builder()
+                .result(res)
+                .build();
+
+        return pDTO;
+    }
+
+    @GetMapping(value = "indutyAnalysis")
+    public String dongMarketAnalysis(HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".indutyAnalysis Start!");
+
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("selectedValue"));
+        String indudySort = CmmUtil.nvl(request.getParameter("indudySort"));
+
+        log.info("seoulLocationCd : " + seoulLocationCd);
+        log.info("indudySort : " + indudySort);
+
+        //판별 길이
+        int length = seoulLocationCd.length();
+
+        // 순위
+        int rank = 10;
+        // 전분기
+        String preYear = "20232";
+        // 이번분기
+        String recYear = "20233";
+        //판별 길이
+
+        List<SeoulSiMarketDTO> rSalesList = new ArrayList<>();
+
+        if (length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
+
+            rSalesList = siMarketService.getSiMarketRes(rank, preYear, recYear);
+
+        }
+
+        else if (length==5) {  // 아니면 구 데이터에서 가져오기 (구 코드 길이 = 11211 5)
+
+            rSalesList = guMarketService.getGuMarketRes(rank, preYear, recYear, seoulLocationCd);
+
+        } else { // 아니면 동 데이터에서 가져오기 [만들 예정]
+
+        }
+
+        log.info(this.getClass().getName() + ".indutyAnalysis End!");
+
+        return "seoul/indutyAnalysis";
+    }
+
 }

@@ -316,21 +316,41 @@ function makeSiList(nowClickedText) {
 
 function indutyAnalysis() {
 
-    let indudySort = document.querySelector(".indutySort.clicked").textContent.trim();;
-    let indutySelected = document.querySelector(".indutySelectSort.clicked").textContent.trim();
+    let indudySort = document.querySelector(".indutySort.clicked").textContent.trim();
+    let indutySelected = "";
+
+    if (indudySort=="전체") { // 업종 분류가 전체면 선택된 업종도 "전체"
+
+        indutySelected = "전체";
+
+    } else { // 나머지 경우[외식업, 서비스업, 소매업 클릭되어있음) 선택된 업종명
+
+        indutySelected = document.querySelector(".indutySelectSort.clicked").textContent.trim();
+
+    }
 
     console.log("선택된 대분류 업종 : " + indudySort);
     console.log("선택된 업종 분석 : " + indutySelected);
 
     $.ajax({
-        url : "/seoul/dongMarketAnalysis",
+        url : "/seoul/setIndutyInfo",
         type : "post",
         dataType: "JSON",
         data: { "indudySort" : indudySort,
                 "indutySelected" : indutySelected},
-        error: function(xhr, status, error) {
-            console.error("AJAX request error:", status, error);
-        }
+        success:
+            function (json) { // 호출이 성공했다면..
+
+                if (json.result > 0) {
+
+                location.href = "/seoul/indutyAnalysis"; // 공지사항 리스트 이동
+
+                } else {
+
+                    alert("알 수 없는 문제가 발생했습니다. 다시 시도해주세요.");
+
+                }
+            }
     })
 
 }
@@ -408,7 +428,7 @@ function moveMapPoint() {
 let container = document.getElementById('map_div'); //지도를 담을 영역의 DOM 레퍼런스
 let options = { //지도를 생성할 때 필요한 기본 옵션
     center: new kakao.maps.LatLng(37.551914, 126.991851), //지도의 중심좌표.
-    level: 7 //지도의 레벨(확대, 축소 정도)
+    level: 9 //지도의 레벨(확대, 축소 정도)
 };
 
 let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -417,7 +437,7 @@ function panTo(lat, lon) {
     // 이동할 위도 경도 위치를 생성합니다
     let moveLatLon = new kakao.maps.LatLng(lat, lon);
 
-    map.setLevel(6);
+    map.setLevel(7);
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);
@@ -428,7 +448,7 @@ function defaultTo(lat, lon) {
     // 이동할 위도 경도 위치를 생성합니다
     let moveLatLon = new kakao.maps.LatLng(lat, lon);
 
-    map.setLevel(7);
+    map.setLevel(9);
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);

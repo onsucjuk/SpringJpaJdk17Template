@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>서울시 업종 분석</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/siAnalysis.css">
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="/assets/js/init-alpine.js"></script>
+    <script src="/js/home/nav.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="menu-btn">
+        <i style="font-size:24px" class="fa">&#xf0c9;</i>
+    </div>
+    <nav class="main-nav">
+        <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+
+        <ul class="right-menu" style="margin-top: 22px;">
+
+            <ul class="main-menu">
+                <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
+                <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
+                <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+            </ul>
+
+            <p th:if="${session.SS_USER_ID}">
+                <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
+                </button>
+            </p>
+
+            <li th:unless="${session.SS_USER_ID}">
+                <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
+            </li>
+
+        </ul>
+    </nav>
+    <hr id="mainTopLine">
+    <div class = "bodyContent">
+        <h3 id="siAnalysisTitle">서울 업종 분석</h3>
+
+        <div class="dataView">
+            <!-- 전체 컨텐츠-->
+            <div class="dataContent">
+                <div class="selectedInduty">
+                    <spna>외식업 > 제과점</spna>
+                </div>
+                <!-- 나중에 클릭시 이벤트 추가 예정-->
+                <!--<select id="guSelect" onchange="chageData()">-->
+                <div>
+                    <p class="inlineContens selectText">자치구 선택
+                        <select class="inlineContens selectBox" id="guSelect">
+                            <option value="11">서울 전체</option>
+                            <option value="11680">강남구</option>
+                            <option value="11740">강동구</option>
+                            <option value="11305">강북구</option>
+                            <option value="11500">강서구</option>
+                            <option value="11620">관악구</option>
+                            <option value="11215">광진구</option>
+                            <option value="11530">구로구</option>
+                            <option value="11545">금천구</option>
+                            <option value="11350">노원구</option>
+                            <option value="11320">도봉구</option>
+                            <option value="11230">동대문구</option>
+                            <option value="11590">동작구</option>
+                            <option value="11440">마포구</option>
+                            <option value="11410">서대문구</option>
+                            <option value="11650">서초구</option>
+                            <option value="11200">성동구</option>
+                            <option value="11290">성북구</option>
+                            <option value="11710">송파구</option>
+                            <option value="11470">양천구</option>
+                            <option value="11560">영등포구</option>
+                            <option value="11170">용산구</option>
+                            <option value="11380">은평구</option>
+                            <option value="11110">종로구</option>
+                            <option value="11140">중구</option>
+                            <option value="11260">중랑구</option>
+                        </select>
+                    </p>
+                </div>
+
+                <p class="selectText">분석 선택</p>
+                <div class="sortList">
+                    <div class="listSort" id="defaultListClicked">
+                        <img src="/img/seoul/sales.png" alt="all"/>
+                        매출액
+                    </div>
+                    <div class="listSort">
+                        <img src="/img/seoul/store.png" alt="all"/>
+                        점포수
+                    </div>
+                    <div class="listSort">
+                        <img src="/img/seoul/close.png" alt="all"/>
+                        폐업수
+                    </div>
+                </div>
+
+                <table class="whitespace-no-wrap" id = "rankList">
+                        <thead>
+                            <tr
+                                    class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                            >
+                                <th class="px-4 py-3 td-title-bg">순위</th>
+                                <th class="px-4 py-3 td-title-bg">업종명</th>
+                                <th class="px-4 py-3 td-title-bg">매출액</th>
+                                <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
+                            </tr>
+                        </thead>
+                        <tbody
+                                class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+                        >
+                            <tr th:each="dto, iter : ${rSalesList}" class="text-gray-700 dark:text-gray-400 tr-bg"
+                            >
+
+                                <td class="px-4 py-3 seq" th:text="${iter.index+1}">
+                                </td>
+
+                                <td class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
+                                </td>
+
+                                <td class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
+                                </td>
+
+                                <td class="px-4 py-3 seq" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
+                                </td>
+
+                            </tr>
+                        </tbody>
+                </table>
+
+
+                <p class="selectText">업종 선택</p>
+                <div class="indutyList">
+                    <div class="indutySort" id="defaultIndutyClicked">
+                        <img src="/img/seoul/all.png" alt="all"/>
+                        전체
+                    </div>
+                    <div class="indutySort">
+                        <img src="/img/seoul/food.png" alt="all"/>
+                        외식업
+                    </div>
+                    <div class="indutySort">
+                        <img src="/img/seoul/service.png" alt="all"/>
+                        서비스업
+                    </div>
+                    <div class="indutySort">
+                        <img src="/img/seoul/retail.png" alt="all"/>
+                        소매업
+                    </div>
+                </div>
+
+                <!-- 요식업 리스트 -->
+                <div class="indutySelectList" id="foodInduty">
+                    <div class="indutySelectSort">
+                        한식음식점
+                    </div>
+                    <div class="indutySelectSort">
+                        중식음식점
+                    </div>
+                    <div class="indutySelectSort">
+                        일식음식점
+                    </div>
+                    <div class="indutySelectSort">
+                        양식음식점
+                    </div>
+                    <div class="indutySelectSort">
+                        제과점
+                    </div>
+                    <div class="indutySelectSort">
+                        패스트푸드점
+                    </div>
+                    <div class="indutySelectSort">
+                        치킨전문점
+                    </div>
+                    <div class="indutySelectSort">
+                        분식전문점
+                    </div>
+                    <div class="indutySelectSort">
+                        호프-간이주점
+                    </div>
+                    <div class="indutySelectSort">
+                        커피-음료
+                    </div>
+                </div>
+
+                <!-- 서비스업 리스트 -->
+                <div class="indutySelectList" id="serviceInduty">
+                    <div class="indutySelectSort">
+                        일반교습학원
+                    </div>
+                    <div class="indutySelectSort">
+                        외국어학원
+                    </div>
+                    <div class="indutySelectSort">
+                        예술학원
+                    </div>
+                    <div class="indutySelectSort">
+                        컴퓨터학원
+                    </div>
+                    <div class="indutySelectSort">
+                        스포츠 강습
+                    </div>
+                    <div class="indutySelectSort">
+                        일반의원
+                    </div>
+                    <div class="indutySelectSort">
+                        치과의원
+                    </div>
+                    <div class="indutySelectSort">
+                        한의원
+                    </div>
+                    <div class="indutySelectSort">
+                        동물의원
+                    </div>
+                    <div class="indutySelectSort">
+                        변호사사무소
+                    </div>
+                    <div class="indutySelectSort">
+                        변리사사무소
+                    </div>
+                    <div class="indutySelectSort">
+                        법무사사무소
+                    </div>
+                    <div class="indutySelectSort">
+                        기타법무서비스
+                    </div>
+                    <div class="indutySelectSort">
+                        회계사사무소
+                    </div>
+                    <div class="indutySelectSort">
+                        세무사사무소
+                    </div>
+                    <div class="indutySelectSort">
+                        당구장
+                    </div>
+                    <div class="indutySelectSort">
+                        골프연습장
+                    </div>
+                    <div class="indutySelectSort">
+                        볼링장
+                    </div>
+                    <div class="indutySelectSort">
+                        PC방
+                    </div>
+                    <div class="indutySelectSort">
+                        전자게임장
+                    </div>
+                    <div class="indutySelectSort">
+                        기타오락장
+                    </div>
+                    <div class="indutySelectSort">
+                        복권방
+                    </div>
+                    <div class="indutySelectSort">
+                        통신기기수리
+                    </div>
+                    <div class="indutySelectSort">
+                        스포츠클럽
+                    </div>
+                    <div class="indutySelectSort">
+                        자동차수리
+                    </div>
+                    <div class="indutySelectSort">
+                        자동차미용
+                    </div>
+                    <div class="indutySelectSort">
+                        모터사이클수리
+                    </div>
+                    <div class="indutySelectSort">
+                        미용실
+                    </div>
+                    <div class="indutySelectSort">
+                        네일숍
+                    </div>
+                    <div class="indutySelectSort">
+                        피부관리실
+                    </div>
+                    <div class="indutySelectSort">
+                        세탁소
+                    </div>
+                    <div class="indutySelectSort">
+                        가전제품수리
+                    </div>
+                    <div class="indutySelectSort">
+                        부동산중개업
+                    </div>
+                    <div class="indutySelectSort">
+                        여관
+                    </div>
+                    <div class="indutySelectSort">
+                        게스트하우스
+                    </div>
+                    <div class="indutySelectSort">
+                        고시원
+                    </div>
+                    <div class="indutySelectSort">
+                        노래방
+                    </div>
+                    <div class="indutySelectSort">
+                        독서실
+                    </div>
+                    <div class="indutySelectSort">
+                        DVD방
+                    </div>
+                    <div class="indutySelectSort">
+                        녹음실
+                    </div>
+                    <div class="indutySelectSort">
+                        사진관
+                    </div>
+                    <div class="indutySelectSort">
+                        통번역서비스
+                    </div>
+                    <div class="indutySelectSort">
+                        건축물청소
+                    </div>
+                    <div class="indutySelectSort">
+                        여행사
+                    </div>
+                    <div class="indutySelectSort">
+                        비디오/서적임대
+                    </div>
+                    <div class="indutySelectSort">
+                        의류임대
+                    </div>
+                    <div class="indutySelectSort">
+                        가정용품임대
+                    </div>
+                </div>
+
+                <!-- 소매업 리스트 -->
+                <div class="indutySelectList" id="retailInduty">
+                    <div class="indutySelectSort">
+                        슈퍼마켓
+                    </div>
+                    <div class="indutySelectSort">
+                        편의점
+                    </div>
+                    <div class="indutySelectSort">
+                        컴퓨터및주변장치판매
+                    </div>
+                    <div class="indutySelectSort">
+                        핸드폰
+                    </div>
+                    <div class="indutySelectSort">
+                        주류도매
+                    </div>
+                    <div class="indutySelectSort">
+                        미곡판매
+                    </div>
+                    <div class="indutySelectSort">
+                        육류판매
+                    </div>
+                    <div class="indutySelectSort">
+                        수산물판매
+                    </div>
+                    <div class="indutySelectSort">
+                        청과상
+                    </div>
+                    <div class="indutySelectSort">
+                        반찬가게
+                    </div>
+                    <div class="indutySelectSort">
+                        일반의류
+                    </div>
+                    <div class="indutySelectSort">
+                        한복점
+                    </div>
+                    <div class="indutySelectSort">
+                        유아의류
+                    </div>
+                    <div class="indutySelectSort">
+                        신발
+                    </div>
+                    <div class="indutySelectSort">
+                        가방
+                    </div>
+                    <div class="indutySelectSort">
+                        안경
+                    </div>
+                    <div class="indutySelectSort">
+                        시계및귀금속
+                    </div>
+                    <div class="indutySelectSort">
+                        의약품
+                    </div>
+                    <div class="indutySelectSort">
+                        의료기기
+                    </div>
+                    <div class="indutySelectSort">
+                        서적
+                    </div>
+                    <div class="indutySelectSort">
+                        문구
+                    </div>
+                    <div class="indutySelectSort">
+                        화장품
+                    </div>
+                    <div class="indutySelectSort">
+                        미용재료
+                    </div>
+                    <div class="indutySelectSort">
+                        운동/경기용품
+                    </div>
+                    <div class="indutySelectSort">
+                        자전거및기타운동송장비
+                    </div>
+                    <div class="indutySelectSort">
+                        완구
+                    </div>
+                    <div class="indutySelectSort">
+                        섬유제품
+                    </div>
+                    <div class="indutySelectSort">
+                        화초
+                    </div>
+                    <div class="indutySelectSort">
+                        애완동물
+                    </div>
+                    <div class="indutySelectSort">
+                        중고가구
+                    </div>
+                    <div class="indutySelectSort">
+                        가구
+                    </div>
+                    <div class="indutySelectSort">
+                        가전제품
+                    </div>
+                    <div class="indutySelectSort">
+                        철물점
+                    </div>
+                    <div class="indutySelectSort">
+                        악기
+                    </div>
+                    <div class="indutySelectSort">
+                        인테리어
+                    </div>
+                    <div class="indutySelectSort">
+                        조명용품
+                    </div>
+                    <div class="indutySelectSort">
+                        중고차판매
+                    </div>
+                    <div class="indutySelectSort">
+                        중고차부품
+                    </div>
+                    <div class="indutySelectSort">
+                        모터사이클및부품
+                    </div>
+                    <div class="indutySelectSort">
+                        재생용품 판매점
+                    </div>
+                    <div class="indutySelectSort">
+                        예술품
+                    </div>
+                    <div class="indutySelectSort">
+                        주유수
+                    </div>
+                    <div class="indutySelectSort">
+                        전자상거래업
+                    </div>
+                </div>
+
+                <button
+                        id="btnIndutyAnalysis"
+                        class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                        type="button"
+                >
+                    <div class="w-full">
+                        <span class="px-4 py-3 text-sm font-semibold">업종 분석 하기</span>
+                        <span class="ml-2" aria-hidden="true"></span>
+                    </div>
+
+                </button>
+
+            </div>
+
+            <!-- 맵 표기 컨텐츠-->
+            <div class="map" id ="map_div">
+                나중에 맵 추가 예정
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=afb7f9da685154e4de522b7c462eddc1"></script>
+<script type="text/javascript"  th:src="@{/js/seoul/siAnalysis.js}" ></script>
+</html>
