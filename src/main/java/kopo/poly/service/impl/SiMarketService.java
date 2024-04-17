@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,11 +35,12 @@ public class SiMarketService implements ISiMarketService {
     String marketData  = ISiMarketService.marketData;
     String storeData  = ISiMarketService.storeData;
 
-    //
+
     @Override
     public List<Map<String, Object>> getSiDataByYearAndData(String year, String data) throws Exception {
 
         log.info(this.getClass().getName() + ".getSiInfoByYearAndData Start!");
+
 
         // API Index Number(요청인자) 1000회까지 호출 가능
         int start = 1;
@@ -56,9 +58,11 @@ public class SiMarketService implements ISiMarketService {
 
             String json = NetworkUtil.get(ISiMarketService.apiURL + apiParam, this.setSiMarketInfo());
 
-            /*System.out.print("json : " + json);*/
+            // System.out.print("json : " + json);
 
             Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
+
+
             Map<String, Object> rData = tMap.containsKey(data) ?
                     (Map<String, Object>) tMap.get(data) : new HashMap<>();
 
@@ -93,6 +97,7 @@ public class SiMarketService implements ISiMarketService {
                 .collect(Collectors.toList());
 
         log.info(this.getClass().getName() + ".getSiInfoByYearAndData End!");
+
 
         return fData;
 

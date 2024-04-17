@@ -1,3 +1,12 @@
+$(document).ready(function () {
+    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+    $("#btnIndutyAnalysis").on("click", function () {
+
+        indutyAnalysis();
+
+    })
+})
+
 document.addEventListener("DOMContentLoaded", function() {
 
     //select 박스 요소
@@ -302,6 +311,27 @@ function makeSiList(nowClickedText) {
         })
 
     }
+
+}
+
+function indutyAnalysis() {
+
+    let indudySort = document.querySelector(".indutySort.clicked").textContent.trim();;
+    let indutySelected = document.querySelector(".indutySelectSort.clicked").textContent.trim();
+
+    console.log("선택된 대분류 업종 : " + indudySort);
+    console.log("선택된 업종 분석 : " + indutySelected);
+
+    $.ajax({
+        url : "/seoul/dongMarketAnalysis",
+        type : "post",
+        dataType: "JSON",
+        data: { "indudySort" : indudySort,
+                "indutySelected" : indutySelected},
+        error: function(xhr, status, error) {
+            console.error("AJAX request error:", status, error);
+        }
+    })
 
 }
 
