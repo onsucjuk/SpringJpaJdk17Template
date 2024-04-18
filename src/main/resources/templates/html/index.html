@@ -41,39 +41,39 @@
 
         </ul>
     </nav>
-
-    <hr id="mainTopLine">
     <!-- Showcase -->
-    <header class="showcase">
-        <h2>당신의 사업을 시작해보세요.</h2>
-        <p>Business Navigator, Navigate You!</p>
-        <a id="btnBnav1" class="btn">
-            Go! BNav!
-        </a>
-    </header>
-    <hr class="mainMiddleLine">
+    <div class="chatch" id = "mainTopLine">
+        <header class="showcase">
+                <h2>당신의 사업을 시작해보세요.</h2>
+                <p>Business Navigator, Navigate You!</p>
+                <a id="btnBnav1" class="btn">
+                    Go! BNav!
+                </a>
+        </header>
+    </div>
 
-    <h1> 뜨는 업종 Top3</h1>
-    <p class="subContent">전분기 대비 매출액 상승률 (만 단위)</p>
-    <!-- Home cards 1 -->
-    <section class="home-cards" id="btnBnav2">
-        <div class = "imgDiv" th:each="dto, iter : ${rList}">
-            <h3 class = "imgDivTop" th:text="'Top' + ${iter.index+1}"></h3>
-            <div class="imgText">
-                <img class="comment_inline" th:if="${dto.indutyCd()=='CS300009'}" src="/img/index/fruit.png" alt="fruit" />
-                <img class="comment_inline" th:if="${dto.indutyCd()=='CS200019'}" src="/img/index/pc.png" alt="pc" />
-                <img class="comment_inline" th:if="${dto.indutyCd()=='CS300004'}" src="/img/index/phone.png" alt="phone" />
-                <div class="comment_inline indutyList">
-                    <p class="indutyNm" th:text="${dto.indutyNm()}"></p>
-                    <p th:text="${dto.fMonthSales()} + '(' + ${dto.salesDiff()} + ')'"></p>
-                    <p>
-                        <strong th:text="${dto.salesRate()} + '% up !'"></strong>
-                    </p>
+    <div class="chatch mainMiddleLine">
+        <h1> 뜨는 업종 Top3</h1>
+        <p class="subContent">전분기 대비 매출액 상승률 (만 단위)</p>
+        <!-- Home cards 1 -->
+        <section class="home-cards" id="btnBnav2">
+            <div class = "imgDiv" th:each="dto, iter : ${rList}">
+                <h3 class = "imgDivTop" th:text="'Top' + ${iter.index+1}"></h3>
+                <div class="imgText">
+                    <img class="comment_inline" th:if="${dto.indutyCd()=='CS300009'}" src="/img/index/fruit.png" alt="fruit" />
+                    <img class="comment_inline" th:if="${dto.indutyCd()=='CS200019'}" src="/img/index/pc.png" alt="pc" />
+                    <img class="comment_inline" th:if="${dto.indutyCd()=='CS300004'}" src="/img/index/phone.png" alt="phone" />
+                    <div class="comment_inline indutyList">
+                        <p class="indutyNm" th:text="${dto.indutyNm()}"></p>
+                        <p th:text="${dto.fMonthSales()} + '(' + ${dto.salesDiff()} + ')'"></p>
+                        <p>
+                            <strong th:text="${dto.salesRate()} + '% up !'"></strong>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
+        </section>
+    </div>
     <!-- Xbox -->
     <!--<section class="xbox">
         <div class="content">
@@ -87,18 +87,20 @@
         </div>
     </section>-->
 
-    <hr class="mainMiddleLine">
+    <div class="chatch mainMiddleLine">
 
-    <h1> 창업 정보 유튜브 </h1>
-    <p class="subContent">최신 추천 영상 Top3 </p>
-    <!-- Home cards 1 -->
-    <section class="home-cards">
-        <div class = "imgDiv" th:each="dto : ${yList}">
-            <iframe class="video" id="ytplayer" type="text/html" width="100%" height="100%"
-                    th:src="'https://www.youtube.com/embed/'+${dto.videoId()}"
-                    frameborder="0" allowfullscreen></iframe>
-        </div>
-    </section>
+        <h1> 창업 정보 유튜브 </h1>
+        <p class="subContent">최신 추천 영상 Top3 </p>
+        <!-- Home cards 1 -->
+        <section class="home-cards">
+            <div class = "imgDiv" th:each="dto : ${yList}">
+                <iframe class="video" id="ytplayer" type="text/html" width="100%" height="100%"
+                        th:src="'https://www.youtube.com/embed/'+${dto.videoId()}"
+                        frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+    </div>
 
     <!-- 일단 주석 처리
     <section class="home-cards">

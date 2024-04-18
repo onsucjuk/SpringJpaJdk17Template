@@ -451,3 +451,10 @@ select {
     height: 360px;
 }
 
+.chatch {
+
+    border : 1px solid #dadcdf;
+    border-radius: 5px;
+    padding: 21px 20px 18px;
+
+}
