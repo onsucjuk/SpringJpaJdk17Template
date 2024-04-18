@@ -11,6 +11,7 @@
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
     <link rel="stylesheet" type="text/css" href="/css/seoul/siAnalysis.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/indutyAnalysis.css">
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="/assets/js/init-alpine.js"></script>
@@ -51,8 +52,10 @@
         <div class="dataView">
             <!-- 전체 컨텐츠-->
             <div class="dataContent">
-                <div class="selectedInduty">
-                    <spna>외식업 > 제과점</spna>
+                <div class="selectedInduty" th:onclick="back([[${session.SS_INDUTY_SORT}]], [[${session.SS_INDUTY_NM}]])">
+                    <p class="textInline" th:text="${session.SS_INDUTY_SORT}"></p>
+                    <p class="textInline sign"> > </p>
+                    <p  class="textInline" th:text="${session.SS_INDUTY_NM}"></p>
                 </div>
                 <!-- 나중에 클릭시 이벤트 추가 예정-->
                 <!--<select id="guSelect" onchange="chageData()">-->
@@ -494,5 +497,5 @@
 </div>
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=afb7f9da685154e4de522b7c462eddc1"></script>
-<script type="text/javascript"  th:src="@{/js/seoul/siAnalysis.js}" ></script>
+<script type="text/javascript"  th:src="@{/js/seoul/indutyAnalysis.js}" ></script>
 </html>

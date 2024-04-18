@@ -1,0 +1,14 @@
+.textInline {
+
+    display: inline-block;
+    font-weight: bold;
+    font-family: 'Nunito', sans-serif;
+    color : #808080;
+
+}
+
+.textInline .sign {
+
+    text-shadow: 0 0 4px rgba(0,0,0,0.5); /* 그림자 추가 */
+
+}
