@@ -2,7 +2,6 @@ package kopo.poly.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import kopo.poly.dto.MsgDTO;
 import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.service.IGuMarketService;
 import kopo.poly.service.ISiMarketService;
@@ -224,35 +223,6 @@ public class SeoulSiController {
      *
      * ###################################################################################################
      * */
-
-    @ResponseBody
-    @PostMapping(value = "setIndutyInfo")
-    public MsgDTO setIndutyInfo(HttpServletRequest request, HttpSession session) throws Exception {
-
-        int res = 0;
-
-        String indutySort = CmmUtil.nvl(request.getParameter("indudySort"));
-        String indutySelected = CmmUtil.nvl(request.getParameter("indutySelected"));
-
-        log.info("indutySort : " + indutySort);
-        log.info("indutySelected : " + indutySelected);
-
-        if (indutySort.length()>0) {
-
-            session.setAttribute("SS_INDUTY_SORT", indutySort);
-            session.setAttribute("SS_INDUTY_NM", indutySelected);
-
-            res = 1;
-        }
-
-        log.info("setIndutyInfo res : " + res);
-
-        MsgDTO pDTO = MsgDTO.builder()
-                .result(res)
-                .build();
-
-        return pDTO;
-    }
 
     @GetMapping(value = "indutyAnalysis")
     public String dongMarketAnalysis(HttpServletRequest request) throws Exception {

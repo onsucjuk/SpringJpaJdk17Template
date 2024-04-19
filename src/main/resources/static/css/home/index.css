@@ -458,3 +458,10 @@ select {
     padding: 21px 20px 18px;
 
 }
+
+.inlineButton {
+
+    display: inline-block;
+    margin-right: 10px;
+
+}
