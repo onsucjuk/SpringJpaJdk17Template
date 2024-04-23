@@ -796,6 +796,23 @@ function makeInduList(nowClickedText){
     let selectElement = document.getElementById("InduGuSelect");
     let selectedValue = "";
 
+    // 선택된 업종 가져오기
+    let indutySort = document.getElementById("indutySortSelected");
+    let indutyName = document.getElementById("indutyNameSelected");
+    let indutyNameValue = "";
+    let indutySortValue = indutySort.innerText;
+
+    if (indutyName) { // 소분류 업종의 값이 있다면 추가 없으면 ""
+
+        indutyNameValue = indutyName.innerText;
+
+    }
+
+    console.log("대분류 업종 : " + indutySortValue + " 소분류 업종 : " + indutyNameValue)
+
+
+
+
     if (selectElement) {
 
         // 선택된 옵션의 값(value)을 가져옴
@@ -810,6 +827,162 @@ function makeInduList(nowClickedText){
     thead.innerHTML = "";
     // 테이블 내용 초기화
     tbody.innerHTML = "";
+
+    // 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
+    if (nowClickedText === "매출액") {
+
+        // 로딩 스피너 추가
+        const spinner = document.createElement("div");
+        spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
+        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+
+        // 기본값이 매출액이므로 리로드
+        $.ajax({
+            url : "/seoul/guSalesList",
+            type : "post",
+            dataType: "JSON",
+            data: { "selectedValue": selectedValue,
+                    "indutySortValue" : indutySortValue,
+                    "indutyNameValue" : indutyNameValue},
+            success: function (json) {
+
+                let rSalesList = json;
+
+                thead.innerHTML = `
+                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3 td-title-bg">순위</th>
+                            <th class="px-4 py-3 td-title-bg">지역명</th>
+                            <th class="px-4 py-3 td-title-bg">매출액</th>
+                            <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
+                            </tr>
+                            `;
+                // 예시 데이터 로드 및 채우기
+                for (let i = 0; i < rSalesList.length; i++) {
+                    let dto = rSalesList[i];
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                                <td class="px-4 py-3 seq">${i + 1}</td>
+                                <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
+                                <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
+                                <td class="px-4 py-3 seq">${'(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !'}</td>
+                                `;
+                    tbody.appendChild(row);
+                }
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request error:", status, error);
+            },
+            complete: function () {
+                // AJAX 요청이 완료된 후에 로딩 스피너 삭제
+                spinner.remove();
+            }
+
+        })
+    }
+
+    else if (nowClickedText === "점포수") {
+
+        // 로딩 스피너 추가
+        const spinner = document.createElement("div");
+        spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
+        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+
+        $.ajax({
+            url : "/seoul/guStoreList",
+            type : "post",
+            dataType: "JSON",
+            data: { "selectedValue": selectedValue,
+                    "indutySortValue" : indutySortValue,
+                    "indutyNameValue" : indutyNameValue },
+            success: function (json) {
+
+                let rStoreList = json;
+
+                thead.innerHTML = `
+                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3 td-title-bg">순위</th>
+                            <th class="px-4 py-3 td-title-bg">업종명</th>
+                            <th class="px-4 py-3 td-title-bg">점포수</th>
+                            <th class="px-4 py-3 td-title-bg">점포수 증가율</th>
+                            </tr>
+                            `;
+                // 예시 데이터 로드 및 채우기
+                for (let i = 0; i < rStoreList.length; i++) {
+                    let dto = rStoreList[i];
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                                <td class="px-4 py-3 seq">${i + 1}</td>
+                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
+                                <td class="px-4 py-3 seq">${dto.storeCount}개</td>
+                                <td class="px-4 py-3 seq">${'(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !'}</td>
+                                `;
+                    tbody.appendChild(row);
+                }
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request error:", status, error);
+            },
+            complete: function () {
+                // AJAX 요청이 완료된 후에 로딩 스피너 삭제
+                spinner.remove();
+            }
+
+        })
+
+    } else { // 나머지는 주고객층 하나
+
+        // 로딩 스피너 추가
+        const spinner = document.createElement("div");
+        spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
+        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+
+        $.ajax({
+            url: "/seoul/guStoreCloseList",
+            type: "post",
+            dataType: "JSON",
+            data: { "selectedValue": selectedValue,
+                    "indutySortValue" : indutySortValue,
+                    "indutyNameValue" : indutyNameValue },
+            success: function (json) {
+
+                let rStoreCloseList = json;
+
+                thead.innerHTML = `
+                                <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                    <th class="px-4 py-3 td-title-bg">순위</th>
+                                    <th class="px-4 py-3 td-title-bg">업종명</th>
+                                    <th class="px-4 py-3 td-title-bg">폐업수</th>
+                                    <th class="px-4 py-3 td-title-bg">폐업수 증가율</th>
+                                </tr>
+                            `;
+                // 예시 데이터 로드 및 채우기
+                for (let i = 0; i < rStoreCloseList.length; i++) {
+                    let dto = rStoreCloseList[i];
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                                <td class="px-4 py-3 seq">${i + 1}</td>
+                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
+                                <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
+                                <td class="px-4 py-3 seq">${'(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !'}</td>
+                                `;
+                    tbody.appendChild(row);
+
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request error:", status, error);
+            },
+            complete: function () {
+                // AJAX 요청이 완료된 후에 로딩 스피너 삭제
+                spinner.remove();
+            }
+        })
+
+    }
 
 }
 

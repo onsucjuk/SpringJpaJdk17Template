@@ -16,7 +16,7 @@ public interface IGuMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd,  String colNm) throws Exception;
 
     /**
      *
