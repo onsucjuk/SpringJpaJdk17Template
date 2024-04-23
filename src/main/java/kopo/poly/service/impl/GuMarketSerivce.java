@@ -141,7 +141,11 @@ public class GuMarketSerivce implements IGuMarketService {
             Collections.sort(rList, salesRateComparator);
 
             // rList에서 rank 이외의 요소를 모두 삭제
+        if(rList.size()>10) {
+
             rList.subList(rank, rList.size()).clear();
+
+        }
 
             log.info(this.getClass().getName() + ".getGuMarketRes End!");
 
@@ -238,7 +242,11 @@ public class GuMarketSerivce implements IGuMarketService {
         Collections.sort(rList, storeRateComparator);
 
         // rList에서 rank 이외의 요소를 모두 삭제
-        rList.subList(rank, rList.size()).clear();
+        if(rList.size()>10) {
+
+            rList.subList(rank, rList.size()).clear();
+
+        }
 
         log.info(this.getClass().getName() + ".getGuStoreRes End!");
 
@@ -328,7 +336,11 @@ public class GuMarketSerivce implements IGuMarketService {
         Collections.sort(rList, closeStoreRateComparator);
 
         // rList에서 rank 이외의 요소를 모두 삭제
-        rList.subList(rank, rList.size()).clear();
+        if(rList.size()>10) {
+
+            rList.subList(rank, rList.size()).clear();
+
+        }
 
         log.info(this.getClass().getName() + ".getGuStoreCloseRes End!");
 

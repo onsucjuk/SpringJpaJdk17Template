@@ -94,7 +94,7 @@ public class DongMarketService implements IDongMarketService {
             if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
 
                 recSalesList = dongMapper.getDongSalesByLocationCdAndName(recYear, seoulLocationCd, indutyName, colNm);
-                preSalesList = dongMapper.getDongStoreByLocationCdAndName(preYear, seoulLocationCd, indutyName, colNm);
+                preSalesList = dongMapper.getDongSalesByLocationCdAndName(preYear, seoulLocationCd, indutyName, colNm);
 
             } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
 
@@ -227,7 +227,11 @@ public class DongMarketService implements IDongMarketService {
         Collections.sort(rList, salesRateComparator);
 
         // rList에서 rank 이외의 요소를 모두 삭제
-        rList.subList(rank, rList.size()).clear();
+        if(rList.size()>10) {
+
+            rList.subList(rank, rList.size()).clear();
+
+        }
 
         log.info(this.getClass().getName() + ".getGuMarketRes End!");
 

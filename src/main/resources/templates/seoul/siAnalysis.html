@@ -106,6 +106,10 @@
                     </div>
                 </div>
 
+                <div class="subContent">
+                    <p> 전분기 대비 분석</p>
+                </div>
+
                 <table class="whitespace-no-wrap" id = "rankList">
                         <thead>
                             <tr
@@ -132,7 +136,8 @@
                                 <td class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
                                 </td>
 
-                                <td class="px-4 py-3 seq" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
+                                <td class="px-4 py-3 seq" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
+                                <td class="px-4 py-3 seq" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
                                 </td>
 
                             </tr>

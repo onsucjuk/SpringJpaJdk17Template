@@ -348,6 +348,11 @@ public class DongMapper implements IDongMapper {
 
         Document query = new Document();
 
+        log.info("seoulDongYear : " + seoulDongYear);
+        log.info("locationCd : " + locationCd);
+        log.info("indutyName : " + indutyName);
+        log.info("colNm : " + colNm);
+
         query.append("SEOUL_DONG_YEAR", seoulDongYear);
         query.append("INDUTY_NM", indutyName);
         query.append("SEOUL_LOCATION_CD", new Document("$regex", "^" + locationCd));

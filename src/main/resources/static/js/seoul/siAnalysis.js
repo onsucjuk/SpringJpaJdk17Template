@@ -233,7 +233,10 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">
+                                ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
+                                '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down'}
+                                </td>
                                 `;
                     tbody.appendChild(row);
                 }
@@ -283,7 +286,10 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">
+                                ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+                                '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down'}
+                                </td>
                                 `;
                     tbody.appendChild(row);
                 }
@@ -332,7 +338,11 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">
+                                <td class="px-4 py-3 seq">
+                                ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
+                                '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down'}
+                                </td>
                                 `;
                     tbody.appendChild(row);
 
@@ -864,7 +874,10 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
                                 <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">
+                                ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
+                                '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down'}
+                                </td>
                                 `;
                     tbody.appendChild(row);
                 }
@@ -916,7 +929,10 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">
+                                ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+                                '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down'}
+                                </td>
                                 `;
                     tbody.appendChild(row);
                 }
@@ -967,7 +983,10 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !'}</td>
+                                <td class="px-4 py-3 seq">
+                                ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
+                                '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down'}
+                                </td>
                                 `;
                     tbody.appendChild(row);
 

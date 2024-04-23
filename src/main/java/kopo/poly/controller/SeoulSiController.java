@@ -247,7 +247,7 @@ public class SeoulSiController {
 
             indutySort = "";
 
-        } else if (indutySort.equals("서비스업")) {
+        } else if (indutySort.equals("외식업")) {
 
             indutySort = "CS1";
 
@@ -255,7 +255,7 @@ public class SeoulSiController {
 
             indutySort = "CS2";
 
-        } else {
+        } else if (indutySort.equals("소매업")) {
 
             indutySort = "CS3";
 
