@@ -312,14 +312,18 @@ public class DongMarketService implements IDongMarketService {
             for (SeoulSiMarketDTO dto : preStoreList) {
                 if (dto.seoulLocationNm().equals(seoulLocationNm)) {
 
-                    preStoreCo = dto.storeCount();
+                    if(dto.storeCount()>=0) {
 
-                    break;
+                        preStoreCo = dto.storeCount();
+
+                        break;
+                    }
+
                 }
             }
 
             // 점포수 상승량
-            long storeDiff = Math.round(recStoreCo - preStoreCo);
+            double storeDiff = recStoreCo - preStoreCo;
 
             // 점포 상승률
             double tStoreRate = 0;

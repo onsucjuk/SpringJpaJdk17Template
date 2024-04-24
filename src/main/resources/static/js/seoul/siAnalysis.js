@@ -929,8 +929,8 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
                                 <td class="px-4 py-3 seq">
-                                ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                                '(0 개) ' + dto.storeRate + '% down'}
+                                ${dto.storeRate > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+                                '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -968,10 +968,10 @@ function makeInduList(nowClickedText){
 
                 thead.innerHTML = `
                                 <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                    <th class="px-4 py-3 td-title-bg">순위</th>
-                                    <th class="px-4 py-3 td-title-bg">업종명</th>
-                                    <th class="px-4 py-3 td-title-bg">폐업수</th>
-                                    <th class="px-4 py-3 td-title-bg">폐업수 증가율</th>
+                                    <th class="px-4 py-3 td-title-bg">나이대</th>
+                                    <th class="px-4 py-3 td-title-bg">지역명</th>
+                                    <th class="px-4 py-3 td-title-bg">매출액</th>
+                                    <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
                                 </tr>
                             `;
                 // 예시 데이터 로드 및 채우기
@@ -979,12 +979,12 @@ function makeInduList(nowClickedText){
                     let dto = rStoreCloseList[i];
                     let row = document.createElement("tr");
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
-                                <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
+                                <td class="px-4 py-3 seq">${(i + 1) * 10 + '대'}</td>
+                                <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
+                                <td class="px-4 py-3 seq">${dto['age' + ((i + 1) * 10) + 'Sales']}만</td>
                                 <td class="px-4 py-3 seq">
-                                ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
-                                '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down'}
+                                ${dto['age' + ((i + 1) * 10) + 'Sales'] > 0 ? '(' + dto['age' + ((i + 1) * 10) + 'SalesDiff'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '% up !' :
+                                '(' + dto['age' + ((i + 1) * 10) + 'SalesDiff'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '% down'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
