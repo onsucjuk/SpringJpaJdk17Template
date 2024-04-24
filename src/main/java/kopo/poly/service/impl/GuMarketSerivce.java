@@ -108,11 +108,31 @@ public class GuMarketSerivce implements IGuMarketService {
                 // 점포당 매출액 증가량 1만 단위
                 long salesDiff = Math.round(rSales - pSales);
 
+
                 // 점포당 매출액 상승률
-                double saleRate = salesDiff / pSales;
+                double saleRate = 0;
+
+                if (pSales>0) {
+
+                    saleRate = salesDiff / pSales;
+
+                }
+
+                if(saleRate==0) {
+
+                    salesDiff = 0;
+
+                }
 
                 // 매출액 상승률을 %로 계산하여 소수점 두 자리까지 표시
                 double salesRatePercent = saleRate * 100;
+
+                if(salesRatePercent>3000){
+
+                    continue;
+
+                }
+
                 String salesRate = df.format(salesRatePercent);
 
                 // 매출액 형식 포맷
@@ -215,6 +235,12 @@ public class GuMarketSerivce implements IGuMarketService {
 
             }
 
+            if(tStoreRate==0) {
+
+                storeDiff = 0;
+
+            }
+
             // 점포수 상승률을 %로 계산하여 소수점 두 자리까지 표시
             double storeRatePercent = tStoreRate * 100;
             String storeRate = df.format(storeRatePercent);
@@ -305,6 +331,12 @@ public class GuMarketSerivce implements IGuMarketService {
             if(preCloseStoreCo > 0) {
 
                 tCloseStoreRate = closeStoreDiff / preCloseStoreCo;
+
+            }
+
+            if(tCloseStoreRate==0) {
+
+                closeStoreDiff = 0;
 
             }
 

@@ -199,12 +199,30 @@ public class DongMarketService implements IDongMarketService {
 
             }
 
+            if (saleRate == 0) {
+
+                salesDiff = 0;
+
+            }
+
             // 매출액 상승률을 %로 계산하여 소수점 두 자리까지 표시
             double salesRatePercent = saleRate * 100;
+
+            // 너무 편차가 크면 패스(표본 오류)
+            if(salesRatePercent > 3000) {
+
+                continue;
+
+            }
+
             String salesRate = df.format(salesRatePercent);
 
             // 매출액 형식 포맷
             String fMonthSales = df.format(rSales);
+            // 지역명 표시 형식 변경
+            // CSV파일 ?로 구분
+            // ? -> . 으로 변경
+            seoulLocationNm = seoulLocationNm.replace("?", ".");
 
             // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
@@ -312,12 +330,8 @@ public class DongMarketService implements IDongMarketService {
             for (SeoulSiMarketDTO dto : preStoreList) {
                 if (dto.seoulLocationNm().equals(seoulLocationNm)) {
 
-                    if(dto.storeCount()>=0) {
-
                         preStoreCo = dto.storeCount();
-
                         break;
-                    }
 
                 }
             }
@@ -333,11 +347,22 @@ public class DongMarketService implements IDongMarketService {
 
             }
 
+            if (tStoreRate == 0) {
+
+                storeDiff = 0;
+
+            }
+
+
             // 매출액 상승률을 %로 계산하여 소수점 두 자리까지 표시
             double storeRatePercent = tStoreRate * 100;
             String storeRate = df.format(storeRatePercent);
+            // 지역명 표시 형식 변경
+            // CSV파일 ?로 구분
+            // ? -> . 으로 변경
+            seoulLocationNm = seoulLocationNm.replace("?", ".");
 
-            // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
+            // 필요한 값 업종명, 업종코드, 점포수, 점포수 증가량, 증가율
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .seoulLocationNm(seoulLocationNm)
                     .storeCount(recStoreCo)

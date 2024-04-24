@@ -221,7 +221,7 @@ function makeSiList(nowClickedText) {
                             <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3 td-title-bg">순위</th>
                             <th class="px-4 py-3 td-title-bg">업종명</th>
-                            <th class="px-4 py-3 td-title-bg">매출액</th>
+                            <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
                             <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
                             </tr>
                             `;
@@ -233,9 +233,10 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq">
+                                <td class="px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
                                 ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
-                                '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down'}
+                                dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
+                                '(0원) 0%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -286,9 +287,10 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq">
+                                <td class="px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
                                 ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                                '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down'}
+                                dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
+                                '0개 ' + dto.storeRate + '%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -338,9 +340,10 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
-                                <td class="px-4 py-3 seq">
-                                ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
-                                '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down'}
+                                <td class="px-4 py-3 seq ${dto.closeStoreDiff > 0 ? 'decrease' : dto.closeStoreDiff < 0 ? 'increase' : 'none'}">
+                                ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up' :
+                                dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down !' :
+                                '0개 ' + dto.closeStoreRate + '%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -861,7 +864,7 @@ function makeInduList(nowClickedText){
                             <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3 td-title-bg">순위</th>
                             <th class="px-4 py-3 td-title-bg">지역명</th>
-                            <th class="px-4 py-3 td-title-bg">매출액</th>
+                            <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
                             <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
                             </tr>
                             `;
@@ -873,9 +876,10 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
                                 <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq">
+                                <td class="px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
                                 ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
-                                '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down'}
+                                dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
+                                '(0원) 0%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -928,9 +932,10 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${i + 1}</td>
                                 <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq">
-                                ${dto.storeRate > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                                '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down'}
+                                <td class="px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
+                                ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+                                dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
+                                '0개 ' + dto.storeRate + '%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -982,7 +987,7 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${(i + 1) * 10 + '대'}</td>
                                 <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
                                 <td class="px-4 py-3 seq">${dto['age' + ((i + 1) * 10) + 'Sales']}만</td>
-                                <td class="px-4 py-3 seq">
+                                <td class="px-4 py-3 seq ${(dto['age' + ((i + 1) * 10) + 'Sales'] > 0) ? ' increase' : (dto['age' + ((i + 1) * 10) + 'Sales'] < 0) ? ' decrease' : 'none'}"> 
                                 ${dto['age' + ((i + 1) * 10) + 'Sales'] > 0 ? '(' + dto['age' + ((i + 1) * 10) + 'SalesDiff'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '% up !' :
                                 '(' + dto['age' + ((i + 1) * 10) + 'SalesDiff'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '% down'}
                                 </td>
@@ -1002,6 +1007,14 @@ function makeInduList(nowClickedText){
 
     }
 
+}
+
+function renderStoreInfo(dto) {
+    return (
+        dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+            dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
+                '0개 ' + dto.storeRate + '%'
+    );
 }
 
 // 종합 분석으로 이동하기

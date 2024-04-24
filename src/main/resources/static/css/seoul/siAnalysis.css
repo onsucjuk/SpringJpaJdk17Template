@@ -175,3 +175,24 @@ table {
     margin-top: 40px;
 
 }
+
+.increase {
+
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(255, 0, 0, 0.5); /* 붉은 빛이 감도는 폰트 음영 */
+
+}
+
+.decrease {
+
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 255, 0.5); /* 푸른 빛이 감도는 폰트 음영 */
+
+}
+
+.none {
+
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(128, 128, 128, 0.5); /* 회색빛이 감도는 폰트 음영 */
+
+}

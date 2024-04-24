@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -189,8 +188,22 @@ public class SiMarketService implements ISiMarketService {
             /*log.info("비교년도 점포수 :" + kSimilrIndutyStorCo);*/
 
             // 점포당 매출액 기준년도 jSales, 비교년도 kSales 1만 단위
-            double jSales = (jSelng / jSimilrIndutyStorCo) / 10000;
-            double kSales = (kSelng / kSimilrIndutyStorCo) / 10000;
+            double jSales = 0;
+
+            if(jSimilrIndutyStorCo>0) {
+
+                jSales = (jSelng / jSimilrIndutyStorCo) / 10000;
+
+            }
+            double kSales = 0;
+
+            if(jSimilrIndutyStorCo>0) {
+
+                kSales = (kSelng / kSimilrIndutyStorCo) / 10000;
+
+            }
+
+
 
             // 점포당 매출액 증가량 1만 단위
             long salesDiff = Math.round(jSales - kSales);
@@ -201,6 +214,16 @@ public class SiMarketService implements ISiMarketService {
             /*log.info(jIndutyCdNm + "매출액 차이 : " + salesDiff);
             log.info("비교년도 점포당 매출액 : " + kSales);
             log.info(jIndutyCdNm + "매출액 증가률 : " + salesRate);*/
+
+            if (salesRate == 0) {
+
+                salesDiff = 0;
+
+            } else if (salesRate > 30) {
+
+                continue;
+
+            }
 
             // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
             Map<String, Object> inputData = new HashMap<>();

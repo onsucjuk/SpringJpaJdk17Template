@@ -117,7 +117,7 @@
                             >
                                 <th class="px-4 py-3 td-title-bg">순위</th>
                                 <th class="px-4 py-3 td-title-bg">업종명</th>
-                                <th class="px-4 py-3 td-title-bg">매출액</th>
+                                <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
                                 <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
                             </tr>
                         </thead>
@@ -136,8 +136,9 @@
                                 <td class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
                                 </td>
 
-                                <td class="px-4 py-3 seq" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
-                                <td class="px-4 py-3 seq" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
+                                <td class="px-4 py-3 seq increase" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
+                                <td class="px-4 py-3 seq decrease" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
+                                <td class="px-4 py-3 seq none" th:unless="${dto.salesDiff() != 0}" th:text="'(0만) 0%'">
                                 </td>
 
                             </tr>
