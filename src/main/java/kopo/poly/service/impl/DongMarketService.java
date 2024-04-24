@@ -35,6 +35,8 @@ public class DongMarketService implements IDongMarketService {
     @Override
     public List<SeoulSiMarketDTO> getDongMarketRes(int rank, String preYear, String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception {
 
+        log.info(this.getClass().getName() + ".getDongMarketRes Start!");
+
         int length = seoulLocationCd.length();
         String colNm = "SEOUL_DONG_MARKET";
         // 넘겨줄 rList
@@ -233,7 +235,7 @@ public class DongMarketService implements IDongMarketService {
 
         }
 
-        log.info(this.getClass().getName() + ".getGuMarketRes End!");
+        log.info(this.getClass().getName() + ".getDongMarketRes End!");
 
         return rList;
 
@@ -241,7 +243,129 @@ public class DongMarketService implements IDongMarketService {
 
     @Override
     public List<SeoulSiMarketDTO> getDongStoreRes(int rank, String preYear, String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception {
-        return null;
+
+        log.info(this.getClass().getName() + ".getDongStoreRes Start!");
+
+        int length = seoulLocationCd.length();
+        String colNm = "SEOUL_DONG_STORE";
+        // 넘겨줄 rList
+        List<SeoulSiMarketDTO> rList = new ArrayList<>();
+
+        // 점포수 결과값 받아올 List
+        List<SeoulSiMarketDTO> recStoreList = new ArrayList<>();
+        List<SeoulSiMarketDTO> preStoreList = new ArrayList<>();
+
+        log.info("Dong Service seoulLocationCd length : " + length);
+        log.info("Dong indutySort : " + indutySort);
+        log.info("Dong indutyName : " + indutyName);
+        log.info(colNm + "' 데이터 가져오기");
+
+        if(length==2) { // 11(서울 전체)
+
+            if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
+
+                // 점포 데이터에서 가져온 이번분기 데이터 리스트
+                recStoreList = dongMapper.getDongStoreAllByName(recYear, indutyName, colNm);
+
+                // 점포 데이터에서 가져온 이전분기 데이터 필터
+                preStoreList = dongMapper.getDongStoreAllByName(preYear, indutyName, colNm);
+
+
+            } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
+
+                recStoreList = dongMapper.getDongStoreAllBySort(recYear, indutySort, colNm);
+                preStoreList = dongMapper.getDongStoreAllBySort(preYear, indutySort, colNm);
+
+            }
+
+        } else { // 구 기준 데이터
+
+            if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
+
+                // 점포 데이터에서 가져온 이번분기 데이터 리스트
+                recStoreList = dongMapper.getDongStoreByLocationCdAndName(recYear, seoulLocationCd, indutyName, colNm);
+
+                // 점포 데이터에서 가져온 이전분기 데이터 필터
+                preStoreList = dongMapper.getDongStoreByLocationCdAndName(preYear, seoulLocationCd, indutyName, colNm);
+
+
+            } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
+
+                recStoreList = dongMapper.getDongStoreByLocationCdAndSort(recYear, seoulLocationCd, indutySort, colNm);
+                preStoreList = dongMapper.getDongStoreByLocationCdAndSort(preYear, seoulLocationCd, indutySort, colNm);
+
+            }
+
+        }
+
+        // DecimalFormat 객체 생성 데이터 포맷
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        for ( int j = 0; j < recStoreList.size(); j++) {
+
+            SeoulSiMarketDTO recDTO = recStoreList.get(j);
+            double recStoreCo = recDTO.storeCount();
+            String seoulLocationNm = recDTO.seoulLocationNm();
+
+            // 가져온 점포 데이터에서 비교년도에서 기준년도 지역명 기준으로 데이터 가져오기
+            double preStoreCo = 0;
+            for (SeoulSiMarketDTO dto : preStoreList) {
+                if (dto.seoulLocationNm().equals(seoulLocationNm)) {
+
+                    preStoreCo = dto.storeCount();
+
+                    break;
+                }
+            }
+
+            // 점포수 상승량
+            long storeDiff = Math.round(recStoreCo - preStoreCo);
+
+            // 점포 상승률
+            double tStoreRate = 0;
+            if (preStoreCo > 0) {
+
+                tStoreRate = storeDiff / preStoreCo;
+
+            }
+
+            // 매출액 상승률을 %로 계산하여 소수점 두 자리까지 표시
+            double storeRatePercent = tStoreRate * 100;
+            String storeRate = df.format(storeRatePercent);
+
+            // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationNm(seoulLocationNm)
+                    .storeCount(recStoreCo)
+                    .storeDiff(storeDiff)
+                    .storeRate(storeRate)
+                    .build();
+
+            // 리스트에 추가
+            rList.add(pDTO);
+        }
+
+        // rList 매출액 증가률 기준으로 높은 순서로 정렬
+        Comparator<SeoulSiMarketDTO> storeRateComparator = (dto1, dto2) -> {
+            double storeRate1 = Double.parseDouble(dto1.storeRate());
+            double storeRate2 = Double.parseDouble(dto2.storeRate());
+            return Double.compare(storeRate2, storeRate1); // 내림차순 정렬
+        };
+
+        // rList를 salesRate 기준으로 정렬
+        Collections.sort(rList, storeRateComparator);
+
+        // rList에서 rank 이외의 요소를 모두 삭제
+        if(rList.size()>10) {
+
+            rList.subList(rank, rList.size()).clear();
+
+        }
+
+        log.info(this.getClass().getName() + ".getDongStoreRes End!");
+
+        return rList;
+
     }
 
     @Override

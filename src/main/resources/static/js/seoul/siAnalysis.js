@@ -339,7 +339,6 @@ function makeSiList(nowClickedText) {
                                 <td class="px-4 py-3 seq">${dto.indutyNm}</td>
                                 <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
                                 <td class="px-4 py-3 seq">
-                                <td class="px-4 py-3 seq">
                                 ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
                                 '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down'}
                                 </td>
@@ -916,7 +915,7 @@ function makeInduList(nowClickedText){
                 thead.innerHTML = `
                             <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3 td-title-bg">순위</th>
-                            <th class="px-4 py-3 td-title-bg">업종명</th>
+                            <th class="px-4 py-3 td-title-bg">지역명</th>
                             <th class="px-4 py-3 td-title-bg">점포수</th>
                             <th class="px-4 py-3 td-title-bg">점포수 증가율</th>
                             </tr>
@@ -927,11 +926,11 @@ function makeInduList(nowClickedText){
                     let row = document.createElement("tr");
                     row.innerHTML = `
                                 <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
+                                <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
                                 <td class="px-4 py-3 seq">
                                 ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                                '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down'}
+                                '(0 개) ' + dto.storeRate + '% down'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
