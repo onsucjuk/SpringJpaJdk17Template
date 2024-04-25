@@ -42,6 +42,12 @@ public class DongMapper implements IDongMapper {
         projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
         projection.append("_id", 0);
 
 
@@ -54,13 +60,26 @@ public class DongMapper implements IDongMapper {
             String seoulLocationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
 
             log.info("seoulLocationCd : " + seoulLocationCd + "seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
+            log.info("salesSort : " + age10Sales + "," + age20Sales + "," + age30Sales + "," + age40Sales + "," + age50Sales + "," + age60Sales + ",");
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .seoulLocationCd(seoulLocationCd)
                     .seoulLocationNm(seoulLocationNm)
                     .monthSales(monthSales)
+                    .age10Sales(age10Sales)
+                    .age20Sales(age20Sales)
+                    .age30Sales(age30Sales)
+                    .age40Sales(age40Sales)
+                    .age50Sales(age50Sales)
+                    .age60Sales(age60Sales)
                     .build();
 
             rList.add(pDTO);
@@ -94,6 +113,12 @@ public class DongMapper implements IDongMapper {
         projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
         projection.append("_id", 0);
 
 
@@ -107,13 +132,26 @@ public class DongMapper implements IDongMapper {
             String seoulLocationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
 
             log.info("seoulLocationCd : " + seoulLocationCd + "seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
+            log.info("salesSort : " + age10Sales + "," + age20Sales + "," + age30Sales + "," + age40Sales + "," + age50Sales + "," + age60Sales + ",");
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .seoulLocationCd(seoulLocationCd)
                     .seoulLocationNm(seoulLocationNm)
                     .monthSales(monthSales)
+                    .age10Sales(age10Sales)
+                    .age20Sales(age20Sales)
+                    .age30Sales(age30Sales)
+                    .age40Sales(age40Sales)
+                    .age50Sales(age50Sales)
+                    .age60Sales(age60Sales)
                     .build();
 
             rList.add(pDTO);
@@ -250,6 +288,12 @@ public class DongMapper implements IDongMapper {
         projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
         projection.append("_id", 0);
 
 
@@ -262,6 +306,12 @@ public class DongMapper implements IDongMapper {
             String seoulLocationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
 
             log.info("seoulLocationCd : " + seoulLocationCd + "seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
 
@@ -269,6 +319,12 @@ public class DongMapper implements IDongMapper {
                     .seoulLocationCd(seoulLocationCd)
                     .seoulLocationNm(seoulLocationNm)
                     .monthSales(monthSales)
+                    .age10Sales(age10Sales)
+                    .age20Sales(age20Sales)
+                    .age30Sales(age30Sales)
+                    .age40Sales(age40Sales)
+                    .age50Sales(age50Sales)
+                    .age60Sales(age60Sales)
                     .build();
 
             rList.add(pDTO);
@@ -304,6 +360,12 @@ public class DongMapper implements IDongMapper {
         projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
         projection.append("_id", 0);
 
 
@@ -317,6 +379,12 @@ public class DongMapper implements IDongMapper {
             String seoulLocationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
 
             log.info("seoulLocationCd : " + seoulLocationCd + "seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
 
@@ -324,6 +392,12 @@ public class DongMapper implements IDongMapper {
                     .seoulLocationCd(seoulLocationCd)
                     .seoulLocationNm(seoulLocationNm)
                     .monthSales(monthSales)
+                    .age10Sales(age10Sales)
+                    .age20Sales(age20Sales)
+                    .age30Sales(age30Sales)
+                    .age40Sales(age40Sales)
+                    .age50Sales(age50Sales)
+                    .age60Sales(age60Sales)
                     .build();
 
             rList.add(pDTO);

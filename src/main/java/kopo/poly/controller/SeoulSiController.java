@@ -331,4 +331,54 @@ public class SeoulSiController {
         return rStoreList;
     }
 
+    /**
+     * 점포 데이터 ajax로 넘겨주기
+     */
+    @ResponseBody
+    @PostMapping(value = "guCustomerList")
+    public List<SeoulSiMarketDTO> guCustomerList(HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".guCustomerList Start!");
+
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("selectedValue"));
+        String indutySort = CmmUtil.nvl(request.getParameter("indutySortValue"));
+        String indutyName = CmmUtil.nvl(request.getParameter("indutyNameValue"));
+
+        log.info("seoulLocationCd : " + seoulLocationCd);
+        log.info("indutySort : " + indutySort);
+        log.info("indutyName : " + indutyName);
+
+        if (indutySort.equals("전체")) {
+
+            indutySort = "";
+
+        } else if (indutySort.equals("외식업")) {
+
+            indutySort = "CS1";
+
+        } else if (indutySort.equals("서비스업")) {
+
+            indutySort = "CS2";
+
+        } else if (indutySort.equals("소매업")) {
+
+            indutySort = "CS3";
+
+        }
+
+        log.info("Changed indutySort : " + indutySort);
+
+        List<SeoulSiMarketDTO> rStoreList = new ArrayList<>();
+
+        // 이번분기
+        String recYear = "20233";
+        //판별 길이
+
+        rStoreList = dongMarketService.getDongCustomerRes(recYear, seoulLocationCd, indutySort, indutyName);
+
+        log.info(this.getClass().getName() + ".guCustomerList End!");
+
+        return rStoreList;
+    }
+
 }

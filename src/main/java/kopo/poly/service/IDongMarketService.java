@@ -13,7 +13,7 @@ public interface IDongMarketService {
      */
     List<SeoulSiMarketDTO> getDongMarketRes(int rank, String preYear, String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception;
     List<SeoulSiMarketDTO> getDongStoreRes(int rank, String preYear, String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception;
-    List<SeoulSiMarketDTO> getDongCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception;
+    List<SeoulSiMarketDTO> getDongCustomerRes(String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception;
 
     SeoulSiMarketDTO getDongLatLon(String seoulLocationCd) throws Exception;
 

@@ -797,7 +797,7 @@ function addDataHead(indudySort, indutySelected, temp) {
 
 // 업종 분석 테이블 만들기
 // makeSiList 참고하기!!
-function makeInduList(nowClickedText){
+function makeInduList(nowClickedText) {
 
     // 테이블 내용 변경
     let rankList = document.getElementById("rankList");
@@ -821,8 +821,6 @@ function makeInduList(nowClickedText){
     }
 
     console.log("대분류 업종 : " + indutySortValue + " 소분류 업종 : " + indutyNameValue)
-
-
 
 
     if (selectElement) {
@@ -850,12 +848,14 @@ function makeInduList(nowClickedText){
 
         // 기본값이 매출액이므로 리로드
         $.ajax({
-            url : "/seoul/guSalesList",
-            type : "post",
+            url: "/seoul/guSalesList",
+            type: "post",
             dataType: "JSON",
-            data: { "selectedValue": selectedValue,
-                    "indutySortValue" : indutySortValue,
-                    "indutyNameValue" : indutyNameValue},
+            data: {
+                "selectedValue": selectedValue,
+                "indutySortValue": indutySortValue,
+                "indutyNameValue": indutyNameValue
+            },
             success: function (json) {
 
                 let rSalesList = json;
@@ -878,8 +878,8 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
                                 <td class="px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
                                 ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
-                                dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
-                                '(0원) 0%'}
+                        dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
+                            '(0원) 0%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -887,7 +887,7 @@ function makeInduList(nowClickedText){
 
 
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
             },
             complete: function () {
@@ -896,9 +896,7 @@ function makeInduList(nowClickedText){
             }
 
         })
-    }
-
-    else if (nowClickedText === "점포수") {
+    } else if (nowClickedText === "점포수") {
 
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
@@ -906,12 +904,14 @@ function makeInduList(nowClickedText){
         tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         $.ajax({
-            url : "/seoul/guStoreList",
-            type : "post",
+            url: "/seoul/guStoreList",
+            type: "post",
             dataType: "JSON",
-            data: { "selectedValue": selectedValue,
-                    "indutySortValue" : indutySortValue,
-                    "indutyNameValue" : indutyNameValue },
+            data: {
+                "selectedValue": selectedValue,
+                "indutySortValue": indutySortValue,
+                "indutyNameValue": indutyNameValue
+            },
             success: function (json) {
 
                 let rStoreList = json;
@@ -934,8 +934,8 @@ function makeInduList(nowClickedText){
                                 <td class="px-4 py-3 seq">${dto.storeCount}개</td>
                                 <td class="px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
                                 ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                                dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
-                                '0개 ' + dto.storeRate + '%'}
+                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
+                            '0개 ' + dto.storeRate + '%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
@@ -943,7 +943,7 @@ function makeInduList(nowClickedText){
 
 
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
             },
             complete: function () {
@@ -961,42 +961,47 @@ function makeInduList(nowClickedText){
         tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         $.ajax({
-            url: "/seoul/guStoreCloseList",
+            url: "/seoul/guCustomerList",
             type: "post",
             dataType: "JSON",
-            data: { "selectedValue": selectedValue,
-                    "indutySortValue" : indutySortValue,
-                    "indutyNameValue" : indutyNameValue },
+            data: {
+                "selectedValue": selectedValue,
+                "indutySortValue": indutySortValue,
+                "indutyNameValue": indutyNameValue
+            },
             success: function (json) {
 
-                let rStoreCloseList = json;
+                let rCustomerList = json;
 
                 thead.innerHTML = `
                                 <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                                     <th class="px-4 py-3 td-title-bg">나이대</th>
                                     <th class="px-4 py-3 td-title-bg">지역명</th>
-                                    <th class="px-4 py-3 td-title-bg">매출액</th>
-                                    <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
+                                    <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
+                                    <th class="px-4 py-3 td-title-bg">주고객층 비율</th>
                                 </tr>
                             `;
                 // 예시 데이터 로드 및 채우기
-                for (let i = 0; i < rStoreCloseList.length; i++) {
-                    let dto = rStoreCloseList[i];
+                for (let i = 0; i < rCustomerList.length; i++) {
+                    let dto = rCustomerList[i];
                     let row = document.createElement("tr");
                     row.innerHTML = `
                                 <td class="px-4 py-3 seq">${(i + 1) * 10 + '대'}</td>
                                 <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
-                                <td class="px-4 py-3 seq">${dto['age' + ((i + 1) * 10) + 'Sales']}만</td>
-                                <td class="px-4 py-3 seq ${(dto['age' + ((i + 1) * 10) + 'Sales'] > 0) ? ' increase' : (dto['age' + ((i + 1) * 10) + 'Sales'] < 0) ? ' decrease' : 'none'}"> 
-                                ${dto['age' + ((i + 1) * 10) + 'Sales'] > 0 ? '(' + dto['age' + ((i + 1) * 10) + 'SalesDiff'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '% up !' :
-                                '(' + dto['age' + ((i + 1) * 10) + 'SalesDiff'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '% down'}
+                                <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
+                                <td class="px-4 py-3 seq none"> 
+                                ${'(' + dto['age' + ((i + 1) * 10) + 'Sale'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '%'}
                                 </td>
                                 `;
                     tbody.appendChild(row);
 
                 }
+
+                //최고 수치에 top속성 부여
+                addClassTop();
+
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
             },
             complete: function () {
@@ -1006,15 +1011,53 @@ function makeInduList(nowClickedText){
         })
 
     }
-
 }
 
-function renderStoreInfo(dto) {
-    return (
-        dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-            dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
-                '0개 ' + dto.storeRate + '%'
-    );
+function addClassTop() {
+    // 테이블 요소를 가져옴
+    let table = document.getElementById("rankList");
+
+    // 최대 비율 초기값 설정
+    let maxPercentage = 0;
+    let maxRow;
+    let maxSales = 0;
+
+    // 테이블의 각 행을 반복
+    let rows = table.getElementsByTagName("tr");
+    for (let i = 1; i < rows.length; i++) {
+        // 현재 행에서 % 값 추출
+        let percentageText = rows[i].querySelector(".none").textContent;
+        let number = percentageText.match(/([\d.]+)만/);
+        let percentageMatch = percentageText.match(/(\d+(\.\d+)?)%/);
+
+        let sales = parseFloat(number[1]);
+        console.log("sales : " + sales);
+        console.log("percentageMatch : " + percentageMatch);
+
+        // 문자열을 부동 소수점 숫자로 변환
+        let percentageValue = parseFloat(percentageMatch[1]);
+
+        // 현재 비율이 최대 비율보다 높으면 최대값 및 해당 행 갱신
+        if (percentageValue > maxPercentage) {
+
+                maxPercentage = percentageValue;
+                maxSales = sales;
+                maxRow = rows[i];
+
+        } else if (percentageValue === maxPercentage) {
+
+            if(sales > maxSales) {
+
+                maxSales = sales;
+                maxRow = rows[i];
+
+            }
+
+        }
+    }
+
+    // 최대 비율을 가진 행에 "top" 클래스 추가
+    maxRow.classList.add("top");
 }
 
 // 종합 분석으로 이동하기

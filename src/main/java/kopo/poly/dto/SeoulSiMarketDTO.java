@@ -25,7 +25,19 @@ public record SeoulSiMarketDTO(
         double age50Sales, // 50대 매출금액
         double age60Sales, // 60대 이상 매출금액
 
-
+        // 형변환된 매출금액
+        String age10Sale, // 10대 매출금액
+        String age20Sale, // 20대 매출금액
+        String age30Sale, // 30대 매출금액
+        String age40Sale, // 40대 매출금액
+        String age50Sale, // 50대 매출금액
+        String age60Sale, // 60대 이상 매출금액
+        String age10SalesRate, // 10대 매출금액
+        String age20SalesRate, // 20대 매출금액
+        String age30SalesRate, // 30대 매출금액
+        String age40SalesRate, // 40대 매출금액
+        String age50SalesRate, // 50대 매출금액
+        String age60SalesRate, // 60대 이상 매출금액
         double salesDiff, // 매출액 증가량
         String salesRate, // 매출액 증가율
         double storeCount, //점포수

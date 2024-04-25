@@ -196,3 +196,9 @@ table {
     text-shadow: 2px 2px 5px rgba(128, 128, 128, 0.5); /* 회색빛이 감도는 폰트 음영 */
 
 }
+
+.top {
+
+    box-shadow: 2px 3px 5px rgba(255, 0, 0, 0.4);
+
+}

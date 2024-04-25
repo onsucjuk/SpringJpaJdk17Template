@@ -174,7 +174,7 @@ public class DongMarketService implements IDongMarketService {
 
             double pSales = 0;
 
-            if (recStoreCo > 0) {
+            if (preStoreCo > 0) {
 
                 pSales = (preSales / preStoreCo) / 10000;
 
@@ -398,8 +398,269 @@ public class DongMarketService implements IDongMarketService {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception {
-        return null;
+    public List<SeoulSiMarketDTO> getDongCustomerRes(String recYear, String seoulLocationCd, String indutySort, String indutyName) throws Exception {
+
+        log.info(this.getClass().getName() + ".getDongCustomerRes Start!");
+
+        int length = seoulLocationCd.length();
+        String colNm = "SEOUL_DONG_MARKET";
+        // 넘겨줄 rList
+        List<SeoulSiMarketDTO> rList = new ArrayList<>();
+        // 나이대 별 데이터 가공전 임시 리스트
+        List<SeoulSiMarketDTO> tList = new ArrayList<>();
+        // 매출액 결과값 받아올 List
+        List<SeoulSiMarketDTO> recSalesList = new ArrayList<>();
+
+        // 점포수 결과값 받아올 List
+        List<SeoulSiMarketDTO> recStoreList = new ArrayList<>();
+
+
+        log.info("Dong Service seoulLocationCd length : " + length);
+        log.info("Dong indutySort : " + indutySort);
+        log.info("Dong indutyName : " + indutyName);
+
+        if(length==2) { // 11(서울 전체)
+
+            log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
+
+            if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
+
+                recSalesList = dongMapper.getDongSalesAllByName(recYear, indutyName, colNm);
+
+            } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
+
+                recSalesList = dongMapper.getDongSalesAllBySort(recYear, indutySort, colNm);
+            }
+
+            //매출액쪽 데이터를 다 가져왔고 점포수 데이터를 가져와야하므로 컬렉션 네임 변경
+            colNm = "SEOUL_DONG_STORE";
+            log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
+
+            if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
+
+                // 점포 데이터에서 가져온 이번분기 데이터 리스트
+                recStoreList = dongMapper.getDongStoreAllByName(recYear, indutyName, colNm);
+
+            } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
+
+                recStoreList = dongMapper.getDongStoreAllBySort(recYear, indutySort, colNm);
+
+            }
+
+        } else { // 구 기준 데이터
+
+            log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
+
+            if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
+
+                recSalesList = dongMapper.getDongSalesByLocationCdAndName(recYear, seoulLocationCd, indutyName, colNm);
+
+            } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
+
+                recSalesList = dongMapper.getDongSalesByLocationCdAndSort(recYear, seoulLocationCd, indutySort, colNm);
+
+            }
+
+            //매출액쪽 데이터를 다 가져왔고 점포수 데이터를 가져와야하므로 컬렉션 네임 변경
+            colNm = "SEOUL_DONG_STORE";
+            log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
+
+            if(indutyName.length() > 0) { // 소분류가 있다면 indutyName(소분류)와 일치하는 데이터 가져오기
+
+                // 점포 데이터에서 가져온 이번분기 데이터 리스트
+                recStoreList = dongMapper.getDongStoreByLocationCdAndName(recYear, seoulLocationCd, indutyName, colNm);
+
+            } else { // 소분류가 없다면 indutySort(대분류)에 속하는 데이터 가져오기
+
+                recStoreList = dongMapper.getDongStoreByLocationCdAndSort(recYear, seoulLocationCd, indutySort, colNm);
+
+            }
+
+        }
+
+        // DecimalFormat 객체 생성 데이터 포맷
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        for ( int j = 0; j < recSalesList.size(); j++) {
+
+            // 기준년도 매출액 데이터
+            // rec : recent의 약자(최신)
+            SeoulSiMarketDTO recDTO = recSalesList.get(j);
+            String seoulLocationNm = recDTO.seoulLocationNm();
+            double recSales = recDTO.monthSales();
+            double age10Sales = recDTO.age10Sales();
+            double age20Sales = recDTO.age20Sales();
+            double age30Sales = recDTO.age30Sales();
+            double age40Sales = recDTO.age40Sales();
+            double age50Sales = recDTO.age50Sales();
+            double age60Sales = recDTO.age60Sales();
+
+
+            // 가져온 점포 데이터에서 기준년도에서 기준년도 지역명 기준으로 데이터 가져오기
+            double recStoreCo = 0;
+            for (SeoulSiMarketDTO dto : recStoreList) {
+                if (dto.seoulLocationNm().equals(seoulLocationNm)) {
+
+                    recStoreCo = dto.storeCount();
+
+                    break;
+                }
+            }
+
+
+
+            // 점포당 매출액 기준년도 rSales, 비교년도 pSales 1만 단위
+            double rSales = 0;
+            if (recStoreCo > 0) {
+
+                rSales = (recSales / recStoreCo) / 10000;
+
+            }
+
+            // 60대까지 있으니 배열 6개
+            double rAge10Sales = 0;
+            double rAge20Sales = 0;
+            double rAge30Sales = 0;
+            double rAge40Sales = 0;
+            double rAge50Sales = 0;
+            double rAge60Sales = 0;
+
+            // 나이대 별 점포당 매출액
+
+            if (recStoreCo > 0) {
+
+                rAge10Sales = (age10Sales / recStoreCo) / 10000; // 10대 매출액
+                rAge20Sales = (age20Sales / recStoreCo) / 10000; // 20대 매출액
+                rAge30Sales = (age30Sales / recStoreCo) / 10000; // 30대 매출액
+                rAge40Sales = (age40Sales / recStoreCo) / 10000; // 40대 매출액
+                rAge50Sales = (age50Sales / recStoreCo) / 10000; // 50대 매출액
+                rAge60Sales = (age60Sales / recStoreCo) / 10000; // 60대 매출액
+
+            }
+
+            // 점포당 매출액 상승률
+            double tSale10Rate = 0;
+            double tSale20Rate = 0;
+            double tSale30Rate = 0;
+            double tSale40Rate = 0;
+            double tSale50Rate = 0;
+            double tSale60Rate = 0;
+
+            if (rSales > 0) {
+
+                tSale10Rate = rAge10Sales / rSales;
+                tSale20Rate = rAge20Sales / rSales;
+                tSale30Rate = rAge30Sales / rSales;
+                tSale40Rate = rAge40Sales / rSales;
+                tSale50Rate = rAge50Sales / rSales;
+                tSale60Rate = rAge60Sales / rSales;
+
+            }
+
+            // 매출액 상승률을 %로 계산하여 소수점 두 자리까지 표시
+            double tSales10RatePercent = tSale10Rate * 100;
+            double tSales20RatePercent = tSale20Rate * 100;
+            double tSales30RatePercent = tSale30Rate * 100;
+            double tSales40RatePercent = tSale40Rate * 100;
+            double tSales50RatePercent = tSale50Rate * 100;
+            double tSales60RatePercent = tSale60Rate * 100;
+
+
+            String sales10Rate = df.format(tSales10RatePercent);
+            String sales20Rate = df.format(tSales20RatePercent);
+            String sales30Rate = df.format(tSales30RatePercent);
+            String sales40Rate = df.format(tSales40RatePercent);
+            String sales50Rate = df.format(tSales50RatePercent);
+            String sales60Rate = df.format(tSales60RatePercent);
+
+            // 매출액 형식 포맷
+            String fMonthSales = df.format(rSales);
+            String fAge10Sales = df.format(rAge10Sales);
+            String fAge20Sales = df.format(rAge20Sales);
+            String fAge30Sales = df.format(rAge30Sales);
+            String fAge40Sales = df.format(rAge40Sales);
+            String fAge50Sales = df.format(rAge50Sales);
+            String fAge60Sales = df.format(rAge60Sales);
+            // 지역명 표시 형식 변경
+            // CSV파일 ?로 구분
+            // ? -> . 으로 변경
+            seoulLocationNm = seoulLocationNm.replace("?", ".");
+
+            // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationNm(seoulLocationNm)
+                    .fMonthSales(fMonthSales)
+                    .age10Sale(fAge10Sales)
+                    .age20Sale(fAge20Sales)
+                    .age30Sale(fAge30Sales)
+                    .age40Sale(fAge40Sales)
+                    .age50Sale(fAge50Sales)
+                    .age60Sale(fAge60Sales)
+                    .age10SalesRate(sales10Rate)
+                    .age20SalesRate(sales20Rate)
+                    .age30SalesRate(sales30Rate)
+                    .age40SalesRate(sales40Rate)
+                    .age50SalesRate(sales50Rate)
+                    .age60SalesRate(sales60Rate)
+                    .build();
+
+            // 리스트에 추가
+            tList.add(pDTO);
+        }
+
+        // rList 매출액 나이대 별 증가률 기준으로 높은 순서로 정렬 10 ~ 60
+        Comparator<SeoulSiMarketDTO> sales10RateComparator = (dto1, dto2) -> {
+            double SalesRate1 = Double.parseDouble(dto1.age10SalesRate());
+            double SalesRate2 = Double.parseDouble(dto2.age10SalesRate());
+            return Double.compare(SalesRate2, SalesRate1); // 내림차순 정렬
+        };
+
+        Comparator<SeoulSiMarketDTO> sales20RateComparator = (dto1, dto2) -> {
+            double SalesRate1 = Double.parseDouble(dto1.age20SalesRate());
+            double SalesRate2 = Double.parseDouble(dto2.age20SalesRate());
+            return Double.compare(SalesRate2, SalesRate1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> sales30RateComparator = (dto1, dto2) -> {
+            double SalesRate1 = Double.parseDouble(dto1.age30SalesRate());
+            double SalesRate2 = Double.parseDouble(dto2.age30SalesRate());
+            return Double.compare(SalesRate2, SalesRate1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> sales40RateComparator = (dto1, dto2) -> {
+            double SalesRate1 = Double.parseDouble(dto1.age40SalesRate());
+            double SalesRate2 = Double.parseDouble(dto2.age40SalesRate());
+            return Double.compare(SalesRate2, SalesRate1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> sales50RateComparator = (dto1, dto2) -> {
+            double SalesRate1 = Double.parseDouble(dto1.age50SalesRate());
+            double SalesRate2 = Double.parseDouble(dto2.age50SalesRate());
+            return Double.compare(SalesRate2, SalesRate1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> sales60RateComparator = (dto1, dto2) -> {
+            double SalesRate1 = Double.parseDouble(dto1.age60SalesRate());
+            double SalesRate2 = Double.parseDouble(dto2.age60SalesRate());
+            return Double.compare(SalesRate2, SalesRate1); // 내림차순 정렬
+        };
+
+        // 나이대 별 정렬
+        // tList를 sales10Rate~sales60Rate 기준으로 정렬
+        Collections.sort(tList, sales10RateComparator);
+        rList.add(tList.get(0));
+        Collections.sort(tList, sales20RateComparator);
+        rList.add(tList.get(0));
+        Collections.sort(tList, sales30RateComparator);
+        rList.add(tList.get(0));
+        Collections.sort(tList, sales40RateComparator);
+        rList.add(tList.get(0));
+        Collections.sort(tList, sales50RateComparator);
+        rList.add(tList.get(0));
+        Collections.sort(tList, sales60RateComparator);
+        rList.add(tList.get(0));
+
+
+        log.info(this.getClass().getName() + ".getDongCustomerRes End!");
+
+        return rList;
+
     }
 
     @Override
