@@ -138,6 +138,18 @@ function userIdExists(f) {
 
 function emailExists(f) {
 
+    if (f.userId.value === "") {
+        alert("아이디를 입력하세요.");
+        f.userId.focus();
+        return;
+    }
+
+    if (f.userName.value === "") {
+        alert("이름을 입력하세요.");
+        f.userName.focus();
+        return;
+    }
+
     if (f.email.value === ""){
         alert("이메일을 입력하세요.");
         f.email.focus();

@@ -24,3 +24,9 @@ body{
     display: inline-block;
 
 }
+
+.invisibleContents {
+
+    display: none;
+
+}
