@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kopo.poly.dto.CommentDTO;
 import kopo.poly.repository.CommentRepository;
 import kopo.poly.repository.entity.CommentEntity;
+import kopo.poly.repository.entity.CommentPK;
 import kopo.poly.service.ICommentService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
@@ -48,25 +49,52 @@ public class CommentService implements ICommentService {
 
         log.info(this.getClass().getName() + ".updateComment Start!");
 
+        Long noticeSeq = pDTO.noticeSeq();
         Long commentSeq = pDTO.commentSeq();
+
+        CommentPK commentPK = CommentPK.builder()
+                .noticeSeq(noticeSeq)
+                .commentSeq(commentSeq)
+                .build();
 
         int res = 0;
 
-        Optional<CommentEntity> rEntity = commentRepository.findByCommentSeq(commentSeq);
+        Optional<CommentEntity> rEntity = commentRepository.findById(commentPK);
 
         if(rEntity.isPresent()){
 
+            String userId = pDTO.userId();
             String commentContents = pDTO.commentContents();
             String commentChgId = pDTO.commentChgId();
             String commentChgDt = pDTO.commentChgDt();
+            String regId = rEntity.get().getCommentRegId();
+            String regDt = rEntity.get().getCommentRegDt();
 
+            log.info("noticeSeq : " + noticeSeq);
             log.info("commentSeq : " + commentSeq);
+            log.info("userId : " + userId);
             log.info("commentContents : " + commentContents);
             log.info("commentChgId : " + commentChgId);
             log.info("commentChgDt : " + commentChgDt);
 
+            // 공지사항 저장을 위해서는 PK 값은 빌더에 추가하지 않는다.
+            // JPA에 자동 증가 설정을 해놨음
+            CommentEntity pEntity = CommentEntity.builder()
+                    .noticeSeq(noticeSeq)
+                    .commentSeq(commentSeq)
+                    .userId(userId)
+                    .commentContents(commentContents)
+                    .commentRegId(regId)
+                    .commentRegDt(regDt)
+                    .commentChgId(commentChgId)
+                    .commentChgDt(commentChgDt)
+                    .build();
+
             // 댓글 내용 DB에 저장 Update
-            commentRepository.updateBoardComments(commentSeq, commentContents, commentChgId, commentChgDt);
+            commentRepository.save(pEntity);
+
+
+            // commentRepository.updateBoardComments(commentSeq, commentContents, commentChgId, commentChgDt);
 
             res = 1;
 
@@ -84,12 +112,19 @@ public class CommentService implements ICommentService {
 
         log.info(this.getClass().getName() + ".deleteComment Start!");
 
+        Long noticeSeq = pDTO.noticeSeq();
         Long commentSeq = pDTO.commentSeq();
 
-        log.info("noticeSeq : " + commentSeq);
+        log.info("noticeSeq : " + noticeSeq);
+        log.info("commentSeq : " + commentSeq);
 
-        // 데이터 수정하기
-        commentRepository.deleteById(pDTO.commentSeq());
+        CommentPK commentPK = CommentPK.builder()
+                .noticeSeq(noticeSeq)
+                .commentSeq(commentSeq)
+                .build();
+
+        // 데이터 삭제하기
+        commentRepository.deleteById(commentPK);
 
         log.info(this.getClass().getName() + ".deleteComment End!");
 
@@ -103,15 +138,18 @@ public class CommentService implements ICommentService {
         String userId = CmmUtil.nvl(pDTO.userId());
         String contents = CmmUtil.nvl(pDTO.commentContents());
         Long noticeSeq = pDTO.noticeSeq();
+        Long commentSeq = commentRepository.getMaxCommentsSeq(noticeSeq);
 
         log.info("userId : " + userId);
         log.info("contents : " + contents);
         log.info("noticeSeq : " + noticeSeq);
+        log.info("commentSeq : " + commentSeq);
 
         // 공지사항 저장을 위해서는 PK 값은 빌더에 추가하지 않는다.
         // JPA에 자동 증가 설정을 해놨음
         CommentEntity pEntity = CommentEntity.builder()
                 .noticeSeq(noticeSeq)
+                .commentSeq(commentSeq)
                 .userId(userId)
                 .commentContents(contents)
                 .commentRegId(userId)

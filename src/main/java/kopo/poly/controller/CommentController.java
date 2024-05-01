@@ -101,6 +101,8 @@ public class CommentController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
+
+            String noticeSeq = CmmUtil.nvl(request.getParameter("noticeSeq")); // 댓글번호(PK)
             String commentSeq = CmmUtil.nvl(request.getParameter("commentSeq")); // 댓글번호(PK)
 
             /*
@@ -108,12 +110,14 @@ public class CommentController {
              * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
              * ####################################################################################
              */
+            log.info("noticeSeq : " + noticeSeq);
             log.info("commentSeq : " + commentSeq);
 
             /*
              * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
              */
             CommentDTO pDTO = CommentDTO.builder()
+                    .noticeSeq(Long.parseLong(noticeSeq))
                     .commentSeq(Long.parseLong(commentSeq))
                     .build();
 

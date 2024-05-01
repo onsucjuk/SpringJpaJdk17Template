@@ -138,6 +138,9 @@ function doCInsert() {
 //삭제하기
 function doCDel(f) {
 
+    // 게시글 번호
+    let noticeSeq = nSeq;
+
     // commentSeq(f)에 따른 div값들 조회
     let commentBox = document.getElementById('comment' + f);
 
@@ -147,6 +150,7 @@ function doCDel(f) {
 
     console.log("cUserId : " + cUserId)
     console.log("commentSeq : " + f)
+    console.log("noticeSeq : " + nSeq)
 
     if (session_user_id === cUserId) {
         if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
@@ -156,7 +160,8 @@ function doCDel(f) {
                     url: "/comment/commentDelete",
                     type: "post", // 전송방식은 Post
                     dataType: "JSON", // 전송 결과는 JSON으로 받기
-                    data: {"commentSeq": f}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    data: {"commentSeq": f,
+                           "noticeSeq": noticeSeq }, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
                     success:
                         function (json) { // /comment/commentDelete 호출이 성공했다면..
                             alert(json.msg); // 메시지 띄우기

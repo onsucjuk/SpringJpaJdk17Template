@@ -465,3 +465,25 @@ select {
     margin-right: 10px;
 
 }
+
+.commentInline {
+
+    display: inline-block; /* 요소들을 가로로 배치 */
+    vertical-align: middle; /* 요소들을 수직으로 가운데 정렬 */
+    margin: 5px; /* 원하는 간격 설정 */
+
+}
+
+.commentInline textarea {
+
+    display: inline-block; /* 요소들을 가로로 배치 */
+    vertical-align: middle; /* 요소들을 수직으로 가운데 정렬 */
+    margin: 5px; /* 원하는 간격 설정 */
+
+}
+
+.commentLabel {
+
+    text-align: left; /* 내부 요소들을 가운데 정렬 */
+
+}

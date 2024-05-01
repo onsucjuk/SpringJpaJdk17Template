@@ -13,17 +13,19 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Builder
 @Cacheable
+@Data
 @Entity
+@IdClass(CommentPK.class)
 public class CommentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notice_seq")
+    private Long noticeSeq;
+
+
+    @Id
     @Column(name = "comment_seq")
     private Long commentSeq;
-
-    @NonNull
-    @Column(name = "notice_seq", nullable = false)
-    private Long noticeSeq;
 
     @NonNull
     @Column(name = "user_id", nullable = false)
