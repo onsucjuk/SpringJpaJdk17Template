@@ -15,6 +15,7 @@ public class CommentPK implements Serializable {
     private long noticeSeq;
 
     public CommentPK(long commentSeq, long noticeSeq) {
+
         this.commentSeq = commentSeq;
         this.noticeSeq = noticeSeq;
     }

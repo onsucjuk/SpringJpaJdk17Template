@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, CommentPK> {
@@ -54,5 +55,10 @@ public interface CommentRepository extends JpaRepository<CommentEntity, CommentP
             nativeQuery = true)
     int updateBoardComments(Long commentSeq, String commentContents, String commentChgId, String commentChgDt);
 */
+
+
+
+
+
 
 }

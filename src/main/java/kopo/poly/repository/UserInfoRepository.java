@@ -1,6 +1,5 @@
 package kopo.poly.repository;
 
-import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.repository.entity.UserInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,6 +19,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfoEntity, String
 
     // 로그인 (아이디, 비밀번호 확인)
     Optional<UserInfoEntity> findByUserIdAndPassword(String userId, String password);
+    // 아이디, 이름, 이메일로 찾기
     Optional<UserInfoEntity> findByUserIdAndUserNameAndEmail(String userId, String userName, String email);
 
     /**
