@@ -84,11 +84,11 @@ public class SeoulSiController {
         // 이번분기
         String recYear = "20233";
 
-        if(length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
+        if (length == 2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
 
             rSalesList = siMarketService.getSiMarketRes(rank, preYear, recYear);
 
-        } else if (length==5) { // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
+        } else if (length == 5) { // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
 
             rSalesList = guMarketService.getGuMarketRes(rank, preYear, recYear, seoulLocationCd);
 
@@ -125,16 +125,15 @@ public class SeoulSiController {
         //판별 길이
         int length = seoulLocationCd.length();
 
-        if(length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
+        if (length == 2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
 
             rStoreList = siMarketService.getSiStoreRes(rank, preYear, recYear);
 
-        } else if (length==5) {  // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
+        } else if (length == 5) {  // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
 
             rStoreList = guMarketService.getGuStoreRes(rank, preYear, recYear, seoulLocationCd);
 
         } else { // 아니면 동 데이터에서 가져오기 [만들 예정]
-
 
 
         }
@@ -167,11 +166,11 @@ public class SeoulSiController {
         //판별 길이
         int length = seoulLocationCd.length();
 
-        if(length==2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
+        if (length == 2) { // 지역 이름이 서울 전체면 서울시 전체 데이터에서 가져오기 (서울 전체 value = 11)
 
             rStoreCloseList = siMarketService.getSiStoreCloseRes(rank, preYear, recYear);
 
-        } else if (length==5) {  // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
+        } else if (length == 5) {  // 아니면 구 데이터에서 가져오기 [만들 예정] (구 코드 길이 = 11211 5)
 
             rStoreCloseList = guMarketService.getGuCloseStoreRes(rank, preYear, recYear, seoulLocationCd);
 
@@ -202,7 +201,7 @@ public class SeoulSiController {
         //판별 길이
         int length = seoulLocationCd.length();
 
-        if (length==5) {  // 아니면 구 데이터에서 가져오기 (구 코드 길이 = 11211 5)
+        if (length == 5) {  // 아니면 구 데이터에서 가져오기 (구 코드 길이 = 11211 5)
 
             rDTO = guMarketService.getGuLatLon(seoulLocationCd);
 
@@ -381,4 +380,50 @@ public class SeoulSiController {
         return rStoreList;
     }
 
+    /**
+     ############################################################################
+
+     종합 분석
+
+     ############################################################################
+     */
+
+    /**
+     * 게시판 상세보기
+     */
+    @GetMapping(value = "totalAnalysis")
+    public String totalAnalysis(HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".totalAnalysis Start!");
+
+        String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역명
+        String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
+
+        if (induty.equals("외식업")) {
+
+            induty = "CS1";
+
+        } else if (induty.equals("서비스업")) {
+
+            induty = "CS2";
+
+        } else if (induty.equals("소매업")) {
+
+            induty = "CS3";
+
+        } else { // 나머지의 경우 indutyName으로 검색
+
+
+        }
+
+        SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                .indutyNm(induty)
+                .seoulLocationCd(guSelect)
+                .build();
+
+        model.addAttribute("pDTO", pDTO);
+
+        return "seoul/totalAnalysis";
+
+    }
 }

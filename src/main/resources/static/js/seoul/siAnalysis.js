@@ -433,7 +433,7 @@ function indutyAnalysis() {
 
     // select Id 변경 및 event변경
     let selectId = "guSelect";
-    let chgId = "InduGuSelect";
+    let chgId = "induGuSelect";
     chgSelectId(selectId, chgId);
 
     //버튼 변경
@@ -521,7 +521,7 @@ function indutyAnalysis() {
 function seoulMarketback() {
 
     // select 요소를 가져옴
-    let selectedElement = document.getElementById("InduGuSelect");
+    let selectedElement = document.getElementById("induGuSelect");
     // 선택된 옵션의 값(value)을 가져옴
     let selectedValue = selectedElement.value;
     // 가져온 값 확인
@@ -532,7 +532,7 @@ function seoulMarketback() {
     changeTitle(title);
 
     // select Id 변경
-    let selectId = "InduGuSelect";
+    let selectId = "induGuSelect";
     let chgId = "guSelect";
     chgSelectId(selectId, chgId);
 
@@ -805,7 +805,7 @@ function makeInduList(nowClickedText) {
     let tbody = rankList.querySelector("tbody");
 
     // select 요소를 가져옴
-    let selectElement = document.getElementById("InduGuSelect");
+    let selectElement = document.getElementById("induGuSelect");
     let selectedValue = "";
 
     // 선택된 업종 가져오기
@@ -1063,7 +1063,55 @@ function addClassTop() {
 // 종합 분석으로 이동하기
 function goTotalAnalysis() {
 
-    location.href = "/seoul/totalAnalysis";
+    let guValue = document.getElementById("induGuSelect").value
+    let indutySort = document.getElementById("indutySortSelected").innerText;
+    let indutyName = document.getElementById("indutyNameSelected");
+    let induty = "";
+
+    console.log("선택된 구 : " + guValue);
+    console.log("선택된 업종 분류 : " + indutySort);
+    console.log("선택된 업종명 : " + indutyName);
+
+    if (guValue!=null && indutySort!=null) { // 값이 null이 아니라면 실행
+
+        if (guValue === "11") {
+
+            alert("자세한 종합 분석을 위해서 자치구를 선택해주세요.")
+
+            $("#induGuSelect").focus();
+
+            return;
+
+        }
+
+        if (indutySort === "전체") {
+
+            alert("자세한 종합 분석을 위해서 '전체' 대신 업종을 선택해주세요.")
+
+            document.getElementById("indutySortSelected").scrollIntoView();
+
+            return;
+
+        }
+
+        if(indutyName===null) { // 구체적 업종명 없으면 대분류
+
+            induty = indutySort;
+
+        } else { // 있으면 업종명
+
+            induty = indutyName.innerText;
+
+        }
+
+        window.open("/seoul/totalAnalysis?guSelect=" + guValue + "&induty=" + induty, "_blank");
+
+    } else {
+
+        alert("선택된 업종 분류나 지역에 문제가 있습니다. 확인 후 다시 시도해주세요.");
+        $("#indutySortSelected").focus();
+
+    }
 
 }
 
@@ -1137,7 +1185,7 @@ function moveMapPoint() {
 // 나중에 그리기 업데이트 할 것!!
 function moveMapPointAndDraw() {
 
-    let selectElement = document.getElementById("InduGuSelect");
+    let selectElement = document.getElementById("induGuSelect");
     let selectedValue = ""
 
     // 선택된 옵션의 값(value)을 가져옴
