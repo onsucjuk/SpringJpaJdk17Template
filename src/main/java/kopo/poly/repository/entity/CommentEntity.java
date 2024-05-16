@@ -13,7 +13,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Builder
 @Cacheable
-@Data
 @Entity
 @IdClass(CommentPK.class)
 public class CommentEntity {

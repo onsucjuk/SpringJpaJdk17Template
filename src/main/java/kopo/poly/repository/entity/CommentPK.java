@@ -2,13 +2,14 @@ package kopo.poly.repository.entity;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Builder
 @NoArgsConstructor
-@Data
+@Getter
 public class CommentPK implements Serializable {
 
     private long commentSeq;
