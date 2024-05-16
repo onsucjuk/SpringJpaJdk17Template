@@ -398,6 +398,7 @@ public class SeoulSiController {
 
         String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역명
         String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
+        int sort = 0;
 
         if (induty.equals("외식업")) {
 
@@ -413,6 +414,17 @@ public class SeoulSiController {
 
         } else { // 나머지의 경우 indutyName으로 검색
 
+            sort = 1;
+
+        }
+
+        if (sort == 0) { // 업종 대분류 검색
+
+
+
+        } else { // 업종 소분류
+
+
 
         }
 
@@ -422,6 +434,8 @@ public class SeoulSiController {
                 .build();
 
         model.addAttribute("pDTO", pDTO);
+
+        sort = 0; // 초기화
 
         return "seoul/totalAnalysis";
 
