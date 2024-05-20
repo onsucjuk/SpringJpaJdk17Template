@@ -667,4 +667,9 @@ public class DongMarketService implements IDongMarketService {
     public SeoulSiMarketDTO getDongLatLon(String seoulLocationCd) throws Exception {
         return null;
     }
+
+    @Override
+    public List<SeoulSiMarketDTO> getDongMarketLikeIndutyCd(String induty, String guSelect) {
+        return null;
+    }
 }

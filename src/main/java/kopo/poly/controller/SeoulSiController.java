@@ -396,8 +396,16 @@ public class SeoulSiController {
 
         log.info(this.getClass().getName() + ".totalAnalysis Start!");
 
+        List<SeoulSiMarketDTO> seoulList = new ArrayList<>();
+        List<SeoulSiMarketDTO> dongList = new ArrayList<>();
+        List<SeoulSiMarketDTO> guList = new ArrayList<>();
+
         String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역명
         String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
+
+        log.info("guSelect : " + guSelect);
+        log.info("induty : " + induty);
+
         int sort = 0;
 
         if (induty.equals("외식업")) {
@@ -420,7 +428,10 @@ public class SeoulSiController {
 
         if (sort == 0) { // 업종 대분류 검색
 
-
+            // 서울 전체
+            seoulList = siMarketService.getSeoulMarketLikeIndutyCd(induty);
+            dongList = dongMarketService.getDongMarketLikeIndutyCd(induty, guSelect);
+            guList = guMarketService.getGuMarketLikeIndutyCd(induty, guSelect);
 
         } else { // 업종 소분류
 
@@ -428,12 +439,9 @@ public class SeoulSiController {
 
         }
 
-        SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
-                .indutyNm(induty)
-                .seoulLocationCd(guSelect)
-                .build();
-
-        model.addAttribute("pDTO", pDTO);
+        model.addAttribute("seoulList", seoulList);
+        model.addAttribute("dongList", dongList);
+        model.addAttribute("guList", guList);
 
         sort = 0; // 초기화
 

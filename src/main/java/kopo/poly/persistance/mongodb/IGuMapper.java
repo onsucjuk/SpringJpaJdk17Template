@@ -52,4 +52,33 @@ public interface IGuMapper {
      */
 
     SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) throws Exception;
+
+    /**
+     *
+     * 연도, 행정구 코드, 업종명 기반 점포수 매출액 조회하기
+     *
+     * @param year 연도
+     * @param induty 업종명
+     * @param  guSelect 지역코드
+     * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+
+    SeoulSiMarketDTO getGuSalesGraph(String year, String induty, String guSelect, String colNm) throws Exception;
+
+    /**
+     *
+     * 연도, 행정구 코드, 업종명 기반 점포수 조회하기
+     *
+     * @param year 연도
+     * @param induty 업종명
+     * @param  guSelect 지역코드
+     * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    SeoulSiMarketDTO getGuStoreGraph(String year, String induty, String guSelect, String colNm) throws Exception;
 }

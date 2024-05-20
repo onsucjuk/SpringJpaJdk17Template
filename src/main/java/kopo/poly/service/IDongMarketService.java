@@ -17,4 +17,6 @@ public interface IDongMarketService {
 
     SeoulSiMarketDTO getDongLatLon(String seoulLocationCd) throws Exception;
 
+    List<SeoulSiMarketDTO> getDongMarketLikeIndutyCd(String induty, String guSelect);
+
 }

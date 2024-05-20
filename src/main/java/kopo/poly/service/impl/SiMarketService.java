@@ -35,8 +35,117 @@ public class SiMarketService implements ISiMarketService {
     String storeData  = ISiMarketService.storeData;
 
 
-    @Override
-    public List<Map<String, Object>> getSiDataByYearAndData(String year, String data) throws Exception {
+    /**
+     * 데이터를 받아서 API 호출
+     *
+     * @param data API명
+     *
+     * @return API 호출 결과 모든 데이터
+     */
+    private List<Map<String, Object>> getSeoulApiList(String data) throws Exception {
+
+        log.info(this.getClass().getName() + ".getSeoulApiList Start!");
+
+
+        // API Index Number(요청인자) 1000회까지 호출 가능
+        int start = 1;
+        int end = start + 999;
+
+        // API 호출 반복 횟수
+        int i = 1;
+
+        List<Map<String, Object>> rContents = new ArrayList<>();
+
+
+        while(true) {
+
+            String apiParam = "/" + apiKey + "/" + "json" + "/" + data + "/" + start + "/" + end;
+
+            String json = NetworkUtil.get(ISiMarketService.apiURL + apiParam, this.setSiMarketInfo());
+
+            // System.out.print("json : " + json);
+
+            Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
+
+
+            Map<String, Object> rData = tMap.containsKey(data) ?
+                    (Map<String, Object>) tMap.get(data) : new HashMap<>();
+
+            if(rData.isEmpty()) { // 호출 데이터가 없으면 변수값 초기화 후 종료
+
+                i = 1;
+                start = 1;
+                end = start + 999;
+
+                break;
+            } else {
+
+                Map<String, Object> tData = (Map<String, Object>) tMap.get(data);
+                List<Map<String, Object>> tContents = (List<Map<String, Object>>) tData.get("row");
+
+                rContents.addAll(tContents);
+
+                log.info(data + "API " + i + "Times Data Count : " +tContents.size());
+
+                start = end+1;
+                end = start + 999;
+                i++;
+
+            }
+        }
+
+        log.info(data + "API Count : " + rContents.size());
+        log.info(this.getClass().getName() + ".getSeoulApiList End!");
+
+        return rContents;
+    }
+
+    /**
+     * 데이터를 받아서 연도별로 가공
+     *
+     * @param year 연도
+     * @param rContents 데이터
+     *
+     * @return 연도가 같은 데이터 축출
+     */
+    private List<Map<String, Object>> sortByYear(List<Map<String, Object>> rContents,String year) throws Exception{
+
+        List<Map<String, Object>> fData = rContents.stream()
+                .filter(item -> year.equals(item.get("STDR_YYQU_CD")))
+                .collect(Collectors.toList());
+
+        return fData;
+
+    }
+
+    /**
+     * 데이터를 받아서 연도별로 가공
+     *
+     * @param indutyCd 연도
+     * @param rContents 데이터
+     *
+     * @return 연도가 같은 데이터 축출
+     */
+    private List<Map<String, Object>> sortByIndutyCd(List<Map<String, Object>> rContents,String indutyCd) throws Exception{
+
+        List<Map<String, Object>> fData = rContents.stream()
+                .filter(item -> item.get("SVC_INDUTY_CD") != null && item.get("SVC_INDUTY_CD").toString().contains(indutyCd))
+                .collect(Collectors.toList());
+
+        return fData;
+
+    }
+
+    /**
+     * 연도와 데이터를 받아서 API 호출
+     *
+     * @param year 년도
+     * @param data API명
+     *
+     * @return API 호출 결과 가공 데이터
+     *
+     */
+    private List<Map<String, Object>> getSiDataByYearAndData(String year, String data) throws Exception {
 
         log.info(this.getClass().getName() + ".getSiInfoByYearAndData Start!");
 
@@ -101,6 +210,58 @@ public class SiMarketService implements ISiMarketService {
         return fData;
 
     }
+
+
+    @Override
+    public List<SeoulSiMarketDTO> getSeoulMarketLikeIndutyCd(String indutyCd) throws Exception {
+
+        log.info(this.getClass().getName() + ".getSeoulMarketList Start!");
+
+        log.info("indutyCd : " + indutyCd);
+
+
+        List<SeoulSiMarketDTO> rList = new ArrayList<>();
+        List<String> yearList = new ArrayList<>(Arrays.asList("20221", "20222", "20223", "20224", "20231", "20232", "20233"));
+
+        // 매출액 전체 데이터
+        List<Map<String, Object>> rMarketContents = getSeoulApiList(marketData);
+        // 점포수 전체 데이터
+        List<Map<String, Object>> rStoreContents = getSeoulApiList(storeData);
+
+        // indutyCd 포함하는 데이터 필터
+        List<Map<String, Object>> marketContents = sortByIndutyCd(rMarketContents, indutyCd);
+        // indutyCd 포함하는 데이터 필터
+        List<Map<String, Object>> storeContents = sortByIndutyCd(rStoreContents, indutyCd);
+
+        for(int i = 0; i<yearList.size(); i++) {
+
+            String year = yearList.get(i);
+
+            List<Map<String, Object>> marketYear = sortByYear(marketContents, year);
+            List<Map<String, Object>> storeYear = sortByYear(storeContents, year);
+
+            double market = ((double) marketYear.get(0).get("THSMON_SELNG_AMT"))/10000;
+            double storeCount = (double) storeYear.get(0).get("SIMILR_INDUTY_STOR_CO");
+
+            double marketPerStore = 0;
+
+            if(storeCount > 0) {
+                marketPerStore = market / storeCount;
+            }
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .monthSales(marketPerStore)
+                    .build();
+
+            rList.add(pDTO);
+        }
+
+
+        log.info(this.getClass().getName() + ".getSeoulMarketList End!");
+
+        return rList;
+    }
+
 
     /**
      *

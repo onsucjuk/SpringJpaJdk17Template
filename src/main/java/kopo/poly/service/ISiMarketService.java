@@ -14,8 +14,9 @@ public interface ISiMarketService {
     List<SeoulSiMarketDTO> getSiMarketRes(int rank, String preYear, String recYear) throws Exception;
     List<SeoulSiMarketDTO> getSiStoreRes(int rank, String preYear, String recYear) throws Exception;
     List<SeoulSiMarketDTO> getSiStoreCloseRes(int rank, String preYear, String recYear) throws Exception;
+    List<SeoulSiMarketDTO> getSeoulMarketLikeIndutyCd(String indutyCd) throws Exception;
 
-    List<Map<String, Object>> getSiDataByYearAndData(String year, String data) throws Exception;
+
 
 
 }

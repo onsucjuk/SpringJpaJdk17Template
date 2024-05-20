@@ -1,5 +1,6 @@
 package kopo.poly.service.impl;
 
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.persistance.mongodb.IGuMapper;
 import kopo.poly.service.IGuMarketService;
@@ -393,6 +394,70 @@ public class GuMarketSerivce implements IGuMarketService {
         SeoulSiMarketDTO rDTO = guMapper.getGuLatLon(seoulLocationCd, colNm);
 
         return rDTO;
+    }
+
+
+    /**
+     *
+     *  여기서부터 구 그래프 분석
+     *
+     **/
+
+    @Override
+    public List<SeoulSiMarketDTO> getGuMarketLikeIndutyCd(String induty, String guSelect) throws Exception {
+
+        // 넘겨줄 rList
+        List<SeoulSiMarketDTO> rList = new ArrayList<>();
+
+        log.info("induty : " + induty);
+        log.info("guSelect : " + guSelect);
+
+        List<String> yearList = new ArrayList<>(Arrays.asList("20221", "20222", "20223", "20224", "20231", "20232", "20233"));
+
+        for(int i = 0; i<yearList.size(); i++) {
+
+            // 구 기준 매출액 MongoDB 컬렉션
+            String colNm = "SEOUL_GU_MARKET";
+
+            String year = yearList.get(i);
+
+            log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
+            log.info("year : " + year);
+
+            // 매출 데이터에서 가져온 이번분기 데이터 리스트
+            SeoulSiMarketDTO saleDTO = Optional.ofNullable(guMapper.getGuSalesGraph(year, induty, guSelect, colNm))
+                    .orElseGet(() -> SeoulSiMarketDTO.builder().build());
+
+            //매출액쪽 데이터를 다 가져왔고 점포수 데이터를 가져와야하므로 컬렉션 네임 변경
+            colNm = "SEOUL_GU_STORE";
+            log.info("여기서부터는 '" + colNm + "' 데이터 가져오기");
+
+            // 점포 데이터에서 가져온 이번분기 데이터 리스트
+            SeoulSiMarketDTO storeDTO = Optional.ofNullable(guMapper.getGuStoreGraph(year, induty, guSelect, colNm))
+                    .orElseGet(() -> SeoulSiMarketDTO.builder().build());
+
+            double monthSales = saleDTO.monthSales() / 10000;
+            double storeCount = storeDTO.storeCount();
+
+            double monthSalesPerStore = 0;
+
+            if (storeCount > 0) {
+
+                monthSalesPerStore =  monthSales / storeCount;
+
+            }
+
+            log.info(year + "년도 구 기준 점포당 매출액" + monthSalesPerStore);
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .monthSales(monthSalesPerStore)
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+        return rList;
     }
 
 }
