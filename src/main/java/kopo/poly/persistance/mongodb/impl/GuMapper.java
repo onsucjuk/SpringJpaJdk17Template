@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Slf4j
 @Component
@@ -216,16 +217,19 @@ public class GuMapper implements IGuMapper {
         return rDTO;
     }
 
-    @Override
-    public SeoulSiMarketDTO getGuSalesGraph(String year, String induty, String guSelect, String colNm) throws Exception {
+    /**
+     *
+     *  그래프 기능
+     *
+     */
 
-        log.info(this.getClass().getName() + ".getGuSalesGraph Start!");
+    @Override
+    public SeoulSiMarketDTO getGuSalesGraphLikeInduty(String year, String induty, String guSelect, String colNm) {
+
+        log.info(this.getClass().getName() + ".getGuSalesGraphLikeInduty Start!");
 
         // 가져와야하는 데이터
         // 조건에 일치하는 매출액 조회
-
-        List<SeoulSiMarketDTO> rList = new LinkedList<>();
-        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
 
         Document query = new Document();
 
@@ -244,6 +248,7 @@ public class GuMapper implements IGuMapper {
         MongoCollection<Document> col = mongodb.getCollection(colNm);
         FindIterable<Document> rs = col.find(query).projection(projection);
 
+        double sumMonthSales = 0;
 
         for (Document doc : rs) {
 
@@ -252,41 +257,236 @@ public class GuMapper implements IGuMapper {
 
             log.info("seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
 
-            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
-                    .seoulLocationNm(seoulLocationNm)
-                    .monthSales(monthSales)
-                    .build();
-
-            rList.add(pDTO);
+            sumMonthSales += monthSales;
 
         }
 
-        log.info(this.getClass().getName() + ".getGuSalesGraph End!");
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
+                .monthSales(sumMonthSales)
+                .build();
+
+        log.info(this.getClass().getName() + ".getGuSalesGraphLikeInduty End!");
 
         return  rDTO;
 
     }
 
     @Override
-    public SeoulSiMarketDTO getGuStoreGraph(String year, String induty, String guSelect, String colNm) throws Exception {
+    public SeoulSiMarketDTO getGuStoreGraphLikeInduty(String year, String induty, String guSelect, String colNm) {
 
-        log.info(this.getClass().getName() + ".getGuStoreGraph Start!");
+        log.info(this.getClass().getName() + ".getGuStoreGraphLikeInduty Start!");
 
         // 가져와야하는 데이터
         // 조건에 일치하는 매출액 조회
 
+        Document query = new Document();
+
         // MongoDB 조회 쿼리
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_CD", new Document("$regex", "^" + induty));
+        query.append("SEOUL_LOCATION_CD", guSelect);
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("STORE_COUNT", "$STORE_COUNT");
+        projection.append("_id", 0);
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        double sumStoreCount = 0;
+
+        for (Document doc : rs) {
+
+            String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double storeCount = doc.getDouble("STORE_COUNT");
+
+            log.info("seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount);
+
+            sumStoreCount += storeCount;
+
+        }
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
+                .storeCount(sumStoreCount)
+                .build();
+
+        log.info(this.getClass().getName() + ".getGuStoreGraphLikeInduty End!");
+
+        return  rDTO;
+    }
+
+    @Override
+    public SeoulSiMarketDTO getGuSalesGraphByIndutyNm(String year, String induty, String guSelect, String colNm) {
+
+        log.info(this.getClass().getName() + ".getGuSalesGraphByIndutyNm Start!");
+
+        // 가져와야하는 데이터
+        // 조건에 일치하는 매출액 조회
+
+        Document query = new Document();
+
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_NM", induty);
+        query.append("SEOUL_LOCATION_CD", guSelect);
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        double sumMonthSales = 0;
+
+        for (Document doc : rs) {
+
+            String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double monthSales = doc.getDouble("MONTH_SALES");
+
+            log.info("seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
+
+            sumMonthSales += monthSales;
+
+        }
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
+                .monthSales(sumMonthSales)
+                .build();
+
+        log.info(this.getClass().getName() + ".getGuSalesGraphByIndutyNm End!");
+
+        return  rDTO;
+
+    }
+
+    @Override
+    public SeoulSiMarketDTO getGuStoreGraphByIndutyNm(String year, String induty, String guSelect, String colNm) {
+
+        log.info(this.getClass().getName() + ".getGuStoreGraphByIndutyNm Start!");
+
+        // 가져와야하는 데이터
+        // 조건에 일치하는 매출액 조회
+
+        Document query = new Document();
+
+        // MongoDB 조회 쿼리
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_NM", induty);
+        query.append("SEOUL_LOCATION_CD", guSelect);
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("STORE_COUNT", "$STORE_COUNT");
+        projection.append("_id", 0);
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        double sumStoreCount = 0;
+
+        for (Document doc : rs) {
+
+            String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double storeCount = doc.getDouble("STORE_COUNT");
+
+            log.info("seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount);
+
+            sumStoreCount += storeCount;
+
+        }
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
+                .storeCount(sumStoreCount)
+                .build();
+
+        log.info(this.getClass().getName() + ".getGuStoreGraphByIndutyNm End!");
+
+        return  rDTO;
+    }
+
+    /* 전체 업종 기준 점포당 매출액 */
+
+    @Override
+    public SeoulSiMarketDTO getAllSalesGraph(String year, String colNm) {
+
+        log.info(this.getClass().getName() + ".getAllSalesGraph Start!");
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
+        double monthSales = 0;
+
         List<? extends Bson> pipeline = Arrays.asList(
                 new Document()
                         .append("$match", new Document()
-                                .append("SEOUL_DONG_YEAR", year)
-                                .append("INDUTY_CD", new BsonRegularExpression("^"+induty+".*$", "i"))
-                                .append("SEOUL_LOCATION_CD", guSelect)
+                                .append("SEOUL_GU_YEAR", year)
                         ),
                 new Document()
                         .append("$group", new Document()
                                 .append("_id", new Document()
-                                        .append("INDUTY_NM", "$INDUTY_NM")
+                                        .append("SEOUL_GU_YEAR", "$SEOUL_DONG_YEAR")
+                                )
+                                .append("SUM(MONTH_SALES)", new Document()
+                                        .append("$sum", "$MONTH_SALES")
+                                )
+                        ),
+                new Document()
+                        .append("$project", new Document()
+                                .append("MONTH_SALES", "$SUM(MONTH_SALES)")
+                                .append("_id", 0)
+                        )
+        );
+
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        Document res = col.aggregate(pipeline)
+                .allowDiskUse(true)
+                .first();
+
+
+
+        if(res != null) {
+
+            monthSales = res.getDouble("MONTH_SALES");
+
+            log.info("sum(monthSales) : " + monthSales);
+
+                rDTO = SeoulSiMarketDTO.builder()
+                    .monthSales(monthSales)
+                    .build();
+
+        }
+
+        log.info(this.getClass().getName() + ".getAllSalesGraph End!");
+
+        return rDTO;
+
+    }
+
+    @Override
+    public SeoulSiMarketDTO getAllStoreGraph(String year, String colNm) {
+
+
+        log.info(this.getClass().getName() + ".getAllStoreGraph Start!");
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
+        double storeCount = 0;
+
+        List<? extends Bson> pipeline = Arrays.asList(
+                new Document()
+                        .append("$match", new Document()
+                                .append("SEOUL_GU_YEAR", year)
+                        ),
+                new Document()
+                        .append("$group", new Document()
+                                .append("_id", new Document()
+                                        .append("SEOUL_GU_YEAR", "$SEOUL_DONG_YEAR")
                                 )
                                 .append("SUM(STORE_COUNT)", new Document()
                                         .append("$sum", "$STORE_COUNT")
@@ -294,41 +494,32 @@ public class GuMapper implements IGuMapper {
                         ),
                 new Document()
                         .append("$project", new Document()
-                                .append("indutyNm", "$_id.INDUTY_NM")
-                                .append("storeCount", "$SUM(STORE_COUNT)")
+                                .append("STORE_COUNT", "$SUM(STORE_COUNT)")
                                 .append("_id", 0)
                         )
         );
 
         MongoCollection<Document> col = mongodb.getCollection(colNm);
-        Document doc = col.aggregate(pipeline).allowDiskUse(true).first();
+        Document res = col.aggregate(pipeline)
+                .allowDiskUse(true)
+                .first();
 
+        if(res != null) {
 
-        String indutyNm = "";
-        double storeCount = 0;
+            storeCount = res.getDouble("STORE_COUNT");
 
-        if(doc != null) {
+            log.info("sum(storeCount) : " + storeCount);
 
-            indutyNm = doc.getString("indutyNm");
-            storeCount = doc.getInteger("storeCount", 0);
+            rDTO = SeoulSiMarketDTO.builder()
+                    .storeCount(storeCount)
+                    .build();
+
         }
 
-        log.info("indutyNm : " + indutyNm + "/ sumStoreCount : " + storeCount);
+        log.info(this.getClass().getName() + ".getAllStoreGraph End!");
 
-        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
-                .indutyNm(indutyNm)
-                .storeCount(storeCount)
-                .build();
+        return rDTO;
 
-        storeCount = 0;
-        indutyNm = null;
-        doc = null;
-        col = null;
-        pipeline = null;
-
-        log.info(this.getClass().getName() + ".getGuStoreGraph End!");
-
-        return  rDTO;
     }
 
 }

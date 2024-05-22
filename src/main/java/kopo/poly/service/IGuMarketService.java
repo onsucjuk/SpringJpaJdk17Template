@@ -18,5 +18,8 @@ public interface IGuMarketService {
     SeoulSiMarketDTO getGuLatLon(String seoulLocationCd) throws Exception;
 
     List<SeoulSiMarketDTO> getGuMarketLikeIndutyCd(String induty, String guSelect) throws Exception;
+    List<SeoulSiMarketDTO> getGuMarketIndutyNm(String induty, String guSelect) throws Exception;
+
+    List<SeoulSiMarketDTO> getIndutyMarket() throws Exception;
 
 }

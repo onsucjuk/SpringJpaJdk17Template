@@ -12,11 +12,23 @@
         </td>
     </tr>
 
+    <br>
+
     <tr th:each="dto : ${guList}"
         class="text-gray-700 dark:text-gray-400 tr-bg"
     >
         <td class="px-4 py-3 seq" th:text="${dto.monthSales()}">
         </td>
     </tr>
+
+    <br>
+
+    <tr th:each="dto : ${seoulIndutyList}"
+        class="text-gray-700 dark:text-gray-400 tr-bg"
+    >
+        <td class="px-4 py-3 seq" th:text="${dto.monthSales()}">
+        </td>
+    </tr>
+
 </body>
 </html>

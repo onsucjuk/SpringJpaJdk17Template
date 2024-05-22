@@ -397,8 +397,8 @@ public class SeoulSiController {
         log.info(this.getClass().getName() + ".totalAnalysis Start!");
 
         List<SeoulSiMarketDTO> seoulList = new ArrayList<>();
-        List<SeoulSiMarketDTO> dongList = new ArrayList<>();
         List<SeoulSiMarketDTO> guList = new ArrayList<>();
+        List<SeoulSiMarketDTO> seoulIndutyList = new ArrayList<>();
 
         String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역명
         String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
@@ -430,22 +430,31 @@ public class SeoulSiController {
 
             // 서울 전체
             seoulList = siMarketService.getSeoulMarketLikeIndutyCd(induty);
-            dongList = dongMarketService.getDongMarketLikeIndutyCd(induty, guSelect);
+            // 구
             guList = guMarketService.getGuMarketLikeIndutyCd(induty, guSelect);
+            // 동
+            seoulIndutyList = guMarketService.getIndutyMarket();
 
         } else { // 업종 소분류
 
-
+            // 서울 전체
+            seoulList = siMarketService.getSeoulMarketByIndutyNm(induty);
+            // 구
+            guList = guMarketService.getGuMarketIndutyNm(induty, guSelect);
+            // 동
+            seoulIndutyList = guMarketService.getIndutyMarket();
 
         }
 
         model.addAttribute("seoulList", seoulList);
-        model.addAttribute("dongList", dongList);
         model.addAttribute("guList", guList);
+        model.addAttribute("seoulIndutyList", seoulIndutyList);
+
 
         sort = 0; // 초기화
 
         return "seoul/totalAnalysis";
 
     }
+
 }

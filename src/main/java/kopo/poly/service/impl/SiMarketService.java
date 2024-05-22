@@ -108,7 +108,7 @@ public class SiMarketService implements ISiMarketService {
      *
      * @return 연도가 같은 데이터 축출
      */
-    private List<Map<String, Object>> sortByYear(List<Map<String, Object>> rContents,String year) throws Exception{
+    private List<Map<String, Object>> sortByYear(List<Map<String, Object>> rContents,String year) {
 
         List<Map<String, Object>> fData = rContents.stream()
                 .filter(item -> year.equals(item.get("STDR_YYQU_CD")))
@@ -121,15 +121,33 @@ public class SiMarketService implements ISiMarketService {
     /**
      * 데이터를 받아서 연도별로 가공
      *
-     * @param indutyCd 연도
+     * @param indutyCd 업종코드
      * @param rContents 데이터
      *
      * @return 연도가 같은 데이터 축출
      */
-    private List<Map<String, Object>> sortByIndutyCd(List<Map<String, Object>> rContents,String indutyCd) throws Exception{
+    private List<Map<String, Object>> sortByIndutyCd(List<Map<String, Object>> rContents,String indutyCd) {
 
         List<Map<String, Object>> fData = rContents.stream()
                 .filter(item -> item.get("SVC_INDUTY_CD") != null && item.get("SVC_INDUTY_CD").toString().contains(indutyCd))
+                .collect(Collectors.toList());
+
+        return fData;
+
+    }
+
+    /**
+     * 데이터를 받아서 연도별로 가공
+     *
+     * @param indutyNm 업종명
+     * @param rContents 데이터
+     *
+     * @return 연도가 같은 데이터 축출
+     */
+    private List<Map<String, Object>> sortByIndutyNm(List<Map<String, Object>> rContents,String indutyNm) {
+
+        List<Map<String, Object>> fData = rContents.stream()
+                .filter(item -> item.get("SVC_INDUTY_CD_NM") != null && item.get("SVC_INDUTY_CD_NM").toString().contains(indutyNm))
                 .collect(Collectors.toList());
 
         return fData;
@@ -215,7 +233,7 @@ public class SiMarketService implements ISiMarketService {
     @Override
     public List<SeoulSiMarketDTO> getSeoulMarketLikeIndutyCd(String indutyCd) throws Exception {
 
-        log.info(this.getClass().getName() + ".getSeoulMarketList Start!");
+        log.info(this.getClass().getName() + ".getSeoulMarketLikeIndutyCd Start!");
 
         log.info("indutyCd : " + indutyCd);
 
@@ -257,11 +275,61 @@ public class SiMarketService implements ISiMarketService {
         }
 
 
-        log.info(this.getClass().getName() + ".getSeoulMarketList End!");
+        log.info(this.getClass().getName() + ".getSeoulMarketLikeIndutyCd End!");
 
         return rList;
     }
 
+    @Override
+    public List<SeoulSiMarketDTO> getSeoulMarketByIndutyNm(String indutyNm) throws Exception {
+
+        log.info(this.getClass().getName() + ".getSeoulMarketLikeIndutyCd Start!");
+
+        log.info("indutyNm : " + indutyNm);
+
+
+        List<SeoulSiMarketDTO> rList = new ArrayList<>();
+        List<String> yearList = new ArrayList<>(Arrays.asList("20221", "20222", "20223", "20224", "20231", "20232", "20233"));
+
+        // 매출액 전체 데이터
+        List<Map<String, Object>> rMarketContents = getSeoulApiList(marketData);
+        // 점포수 전체 데이터
+        List<Map<String, Object>> rStoreContents = getSeoulApiList(storeData);
+
+        // indutyCd 포함하는 데이터 필터
+        List<Map<String, Object>> marketContents = sortByIndutyNm(rMarketContents, indutyNm);
+        // indutyCd 포함하는 데이터 필터
+        List<Map<String, Object>> storeContents = sortByIndutyNm(rStoreContents, indutyNm);
+
+        for(int i = 0; i<yearList.size(); i++) {
+
+            String year = yearList.get(i);
+
+            List<Map<String, Object>> marketYear = sortByYear(marketContents, year);
+            List<Map<String, Object>> storeYear = sortByYear(storeContents, year);
+
+            double market = ((double) marketYear.get(0).get("THSMON_SELNG_AMT"))/10000;
+            double storeCount = (double) storeYear.get(0).get("SIMILR_INDUTY_STOR_CO");
+
+            double marketPerStore = 0;
+
+            if(storeCount > 0) {
+                marketPerStore = market / storeCount;
+            }
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .monthSales(marketPerStore)
+                    .build();
+
+            rList.add(pDTO);
+        }
+
+
+        log.info(this.getClass().getName() + ".getSeoulMarketLikeIndutyCd End!");
+
+        return rList;
+
+    }
 
     /**
      *

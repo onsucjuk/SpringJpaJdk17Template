@@ -58,6 +58,35 @@ public interface IGuMapper {
      * 연도, 행정구 코드, 업종명 기반 점포수 매출액 조회하기
      *
      * @param year 연도
+     * @param induty 업종코드
+     * @param  guSelect 지역코드
+     * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+
+    SeoulSiMarketDTO getGuSalesGraphLikeInduty(String year, String induty, String guSelect, String colNm);
+
+    /**
+     *
+     * 연도, 행정구 코드, 업종명 기반 점포수 조회하기
+     *
+     * @param year 연도
+     * @param induty 업종코드
+     * @param  guSelect 지역코드
+     * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    SeoulSiMarketDTO getGuStoreGraphLikeInduty(String year, String induty, String guSelect, String colNm);
+
+    /**
+     *
+     * 연도, 행정구 코드, 업종명 기반 점포수 매출액 조회하기
+     *
+     * @param year 연도
      * @param induty 업종명
      * @param  guSelect 지역코드
      * @param  colNm 컬렉션명
@@ -66,7 +95,7 @@ public interface IGuMapper {
      *
      */
 
-    SeoulSiMarketDTO getGuSalesGraph(String year, String induty, String guSelect, String colNm) throws Exception;
+    SeoulSiMarketDTO getGuSalesGraphByIndutyNm(String year, String induty, String guSelect, String colNm);
 
     /**
      *
@@ -80,5 +109,28 @@ public interface IGuMapper {
      * @return 조회 결과
      *
      */
-    SeoulSiMarketDTO getGuStoreGraph(String year, String induty, String guSelect, String colNm) throws Exception;
+    SeoulSiMarketDTO getGuStoreGraphByIndutyNm(String year, String induty, String guSelect, String colNm);
+
+    /**
+     *
+     * 연도 기준 매출액 합계 조회하기
+     *
+     * @param year 연도
+     *
+     * @return 조회 결과
+     *
+     */
+
+    SeoulSiMarketDTO getAllSalesGraph(String year, String colNm);
+
+    /**
+     *
+     * 연도 기준 점포수 합계 조회하기
+     *
+     * @param year 연도
+     *
+     * @return 조회 결과
+     *
+     */
+    SeoulSiMarketDTO getAllStoreGraph(String year, String colNm);
 }
