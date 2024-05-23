@@ -442,6 +442,7 @@ public class GuMarketSerivce implements IGuMarketService {
 
             double monthSales = saleDTO.monthSales() / 10000;
             double storeCount = storeDTO.storeCount();
+            double closeStoreCount = storeDTO.closeStoreCount();
 
             double monthSalesPerStore = 0;
 
@@ -452,9 +453,13 @@ public class GuMarketSerivce implements IGuMarketService {
             }
 
             log.info(year + "년도 구 기준 점포당 매출액" + monthSalesPerStore);
+            log.info(year + "년도 구 기준 점포수" + storeCount);
+            log.info(year + "년도 구 기준 폐업수" + closeStoreCount);
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .monthSales(monthSalesPerStore)
+                    .storeCount(storeCount)
+                    .closeStoreCount(closeStoreCount)
                     .build();
 
             rList.add(pDTO);
@@ -503,6 +508,7 @@ public class GuMarketSerivce implements IGuMarketService {
 
             double monthSales = saleDTO.monthSales() / 10000;
             double storeCount = storeDTO.storeCount();
+            double closeStoreCount = storeDTO.closeStoreCount();
 
             double monthSalesPerStore = 0;
 
@@ -513,9 +519,13 @@ public class GuMarketSerivce implements IGuMarketService {
             }
 
             log.info(year + "년도 구 기준 점포당 매출액" + monthSalesPerStore);
+            log.info(year + "년도 구 기준 점포수" + storeCount);
+            log.info(year + "년도 구 기준 폐업수" + closeStoreCount);
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .monthSales(monthSalesPerStore)
+                    .storeCount(storeCount)
+                    .closeStoreCount(closeStoreCount)
                     .build();
 
             rList.add(pDTO);

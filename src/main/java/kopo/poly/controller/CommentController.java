@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kopo.poly.dto.CommentDTO;
 import kopo.poly.dto.MsgDTO;
+import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.service.ICommentService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 

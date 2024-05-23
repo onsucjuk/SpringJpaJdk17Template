@@ -3,32 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>종합 분석</title>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // Controller에서 받은 값
+        const seoulList = [[${seoulList}]];
+        const guList = [[${guList}]];
+        
+        /*]]>*/
+    </script>
 </head>
 <body>
+    <div>매출액</div>
+    <div id = "sales" onchange="userIdFunc"></div>
+    <div>점포수</div>
+    <div id = "store"></div>
+    <div>폐업수</div>
+    <div id = "close"></div>
+    <div>서울 전체에서 업종 전체 매출액</div>
     <tr th:each="dto : ${seoulList}"
         class="text-gray-700 dark:text-gray-400 tr-bg"
     >
-        <td class="px-4 py-3 seq" th:text="${dto.monthSales()}">
+        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
         </td>
     </tr>
 
     <br>
 
-    <tr th:each="dto : ${guList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${dto.monthSales()}">
-        </td>
-    </tr>
-
-    <br>
-
+    <div>서울 전체에서의 선택 업종 매출액</div>
     <tr th:each="dto : ${seoulIndutyList}"
         class="text-gray-700 dark:text-gray-400 tr-bg"
     >
-        <td class="px-4 py-3 seq" th:text="${dto.monthSales()}">
+        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
         </td>
     </tr>
 
+    <br>
+
+    <div>선택 지역(구)의 선택 업종 매출액</div>
+    <tr th:each="dto : ${guList}"
+        class="text-gray-700 dark:text-gray-400 tr-bg"
+    >
+        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
+        </td>
+    </tr>
+
+    <div>선택 지역(구)의 선택 업종 점포수</div>
+    <tr th:each="dto : ${guList}"
+        class="text-gray-700 dark:text-gray-400 tr-bg"
+    >
+        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.storeCount(), 1, 2)}">
+        </td>
+    </tr>
+
+    <div>선택 지역(구)의 선택 업종 폐업수</div>
+    <tr th:each="dto : ${guList}"
+        class="text-gray-700 dark:text-gray-400 tr-bg"
+    >
+        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.closeStoreCount(), 1, 2)}">
+        </td>
+    </tr>
 </body>
+<script src="/js/seoul/totalAnalysis.js"></script>
 </html>

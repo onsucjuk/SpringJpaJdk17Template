@@ -290,6 +290,7 @@ public class GuMapper implements IGuMapper {
 
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("STORE_COUNT", "$STORE_COUNT");
+        projection.append("CLOSE_STORE_COUNT", "$CLOSE_STORE_COUNT");
         projection.append("_id", 0);
 
         // 컬렉션 이름이랑 같은 db 데이터 가져오기
@@ -297,20 +298,24 @@ public class GuMapper implements IGuMapper {
         FindIterable<Document> rs = col.find(query).projection(projection);
 
         double sumStoreCount = 0;
+        double sumCloseCount = 0;
 
         for (Document doc : rs) {
 
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double storeCount = doc.getDouble("STORE_COUNT");
+            double closeStoreCount = doc.getDouble("CLOSE_STORE_COUNT");
 
-            log.info("seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount);
+            log.info("seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount + " / closeStoreCount : " + closeStoreCount);
 
             sumStoreCount += storeCount;
+            sumCloseCount += closeStoreCount;
 
         }
 
         SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
                 .storeCount(sumStoreCount)
+                .closeStoreCount(sumCloseCount)
                 .build();
 
         log.info(this.getClass().getName() + ".getGuStoreGraphLikeInduty End!");
@@ -385,6 +390,7 @@ public class GuMapper implements IGuMapper {
 
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("STORE_COUNT", "$STORE_COUNT");
+        projection.append("CLOSE_STORE_COUNT", "$CLOSE_STORE_COUNT");
         projection.append("_id", 0);
 
         // 컬렉션 이름이랑 같은 db 데이터 가져오기
@@ -392,20 +398,25 @@ public class GuMapper implements IGuMapper {
         FindIterable<Document> rs = col.find(query).projection(projection);
 
         double sumStoreCount = 0;
+        double sumCloseCount = 0;
 
         for (Document doc : rs) {
 
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double storeCount = doc.getDouble("STORE_COUNT");
+            double closeStoreCount = doc.getDouble("CLOSE_STORE_COUNT");
 
-            log.info("seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount);
+            log.info("seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount + " / closeStoreCount : " + closeStoreCount);
+
 
             sumStoreCount += storeCount;
+            sumCloseCount += closeStoreCount;
 
         }
 
         SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
                 .storeCount(sumStoreCount)
+                .closeStoreCount(sumCloseCount)
                 .build();
 
         log.info(this.getClass().getName() + ".getGuStoreGraphByIndutyNm End!");

@@ -260,6 +260,10 @@ public class SiMarketService implements ISiMarketService {
 
             double market = ((double) marketYear.get(0).get("THSMON_SELNG_AMT"))/10000;
             double storeCount = (double) storeYear.get(0).get("SIMILR_INDUTY_STOR_CO");
+            double closeStoreCount = (double) storeYear.get(0).get("CLSBIZ_STOR_CO");
+
+            log.info("seoul storeCount : " + storeCount);
+            log.info("seoul closeStoreCount : " + closeStoreCount);
 
             double marketPerStore = 0;
 
@@ -269,6 +273,8 @@ public class SiMarketService implements ISiMarketService {
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .monthSales(marketPerStore)
+                    .storeCount(storeCount)
+                    .closeStoreCount(closeStoreCount)
                     .build();
 
             rList.add(pDTO);
@@ -310,6 +316,10 @@ public class SiMarketService implements ISiMarketService {
 
             double market = ((double) marketYear.get(0).get("THSMON_SELNG_AMT"))/10000;
             double storeCount = (double) storeYear.get(0).get("SIMILR_INDUTY_STOR_CO");
+            double closeStoreCount = (double) storeYear.get(0).get("CLSBIZ_STOR_CO");
+
+            log.info("seoul storeCount : " + storeCount);
+            log.info("seoul closeStoreCount : " + closeStoreCount);
 
             double marketPerStore = 0;
 
@@ -319,6 +329,8 @@ public class SiMarketService implements ISiMarketService {
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .monthSales(marketPerStore)
+                    .storeCount(storeCount)
+                    .closeStoreCount(closeStoreCount)
                     .build();
 
             rList.add(pDTO);
