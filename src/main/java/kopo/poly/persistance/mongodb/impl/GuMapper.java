@@ -241,6 +241,12 @@ public class GuMapper implements IGuMapper {
 
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
         projection.append("_id", 0);
 
 
@@ -249,20 +255,45 @@ public class GuMapper implements IGuMapper {
         FindIterable<Document> rs = col.find(query).projection(projection);
 
         double sumMonthSales = 0;
+        double sumAge10Sales = 0;
+        double sumAge20Sales = 0;
+        double sumAge30Sales = 0;
+        double sumAge40Sales = 0;
+        double sumAge50Sales = 0;
+        double sumAge60Sales = 0;
 
         for (Document doc : rs) {
 
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
 
             log.info("seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
+            log.info("age10Sales : " + age10Sales);
 
             sumMonthSales += monthSales;
+            sumAge10Sales += age10Sales;
+            sumAge20Sales += age20Sales;
+            sumAge30Sales += age30Sales;
+            sumAge40Sales += age40Sales;
+            sumAge50Sales += age50Sales;
+            sumAge60Sales += age60Sales;
 
         }
 
         SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
                 .monthSales(sumMonthSales)
+                .age10Sales(sumAge10Sales)
+                .age20Sales(sumAge20Sales)
+                .age30Sales(sumAge30Sales)
+                .age40Sales(sumAge40Sales)
+                .age50Sales(sumAge50Sales)
+                .age60Sales(sumAge60Sales)
                 .build();
 
         log.info(this.getClass().getName() + ".getGuSalesGraphLikeInduty End!");
@@ -341,6 +372,12 @@ public class GuMapper implements IGuMapper {
 
         projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
         projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
         projection.append("_id", 0);
 
 
@@ -349,20 +386,44 @@ public class GuMapper implements IGuMapper {
         FindIterable<Document> rs = col.find(query).projection(projection);
 
         double sumMonthSales = 0;
+        double sumAge10Sales = 0;
+        double sumAge20Sales = 0;
+        double sumAge30Sales = 0;
+        double sumAge40Sales = 0;
+        double sumAge50Sales = 0;
+        double sumAge60Sales = 0;
 
         for (Document doc : rs) {
 
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
 
             log.info("seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
 
             sumMonthSales += monthSales;
+            sumAge10Sales += age10Sales;
+            sumAge20Sales += age20Sales;
+            sumAge30Sales += age30Sales;
+            sumAge40Sales += age40Sales;
+            sumAge50Sales += age50Sales;
+            sumAge60Sales += age60Sales;
 
         }
 
         SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder()
                 .monthSales(sumMonthSales)
+                .age10Sales(sumAge10Sales)
+                .age20Sales(sumAge20Sales)
+                .age30Sales(sumAge30Sales)
+                .age40Sales(sumAge40Sales)
+                .age50Sales(sumAge50Sales)
+                .age60Sales(sumAge60Sales)
                 .build();
 
         log.info(this.getClass().getName() + ".getGuSalesGraphByIndutyNm End!");

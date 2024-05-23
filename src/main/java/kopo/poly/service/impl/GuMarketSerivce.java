@@ -441,6 +441,9 @@ public class GuMarketSerivce implements IGuMarketService {
                     .orElseGet(() -> SeoulSiMarketDTO.builder().build());
 
             double monthSales = saleDTO.monthSales() / 10000;
+
+            // 여기서부터 나이대 추가해야 함
+
             double storeCount = storeDTO.storeCount();
             double closeStoreCount = storeDTO.closeStoreCount();
 
@@ -507,6 +510,9 @@ public class GuMarketSerivce implements IGuMarketService {
                     .orElseGet(() -> SeoulSiMarketDTO.builder().build());
 
             double monthSales = saleDTO.monthSales() / 10000;
+
+            // 여기서부터 나이대 추가해야 함
+
             double storeCount = storeDTO.storeCount();
             double closeStoreCount = storeDTO.closeStoreCount();
 
