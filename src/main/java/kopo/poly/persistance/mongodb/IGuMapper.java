@@ -16,7 +16,7 @@ public interface IGuMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd,  String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd,  String colNm) ;
 
     /**
      *
@@ -28,7 +28,7 @@ public interface IGuMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationCd, String colNm) ;
 
     /**
      *
@@ -40,7 +40,7 @@ public interface IGuMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationCd, String colNm) ;
 
     /**
      *
@@ -51,7 +51,7 @@ public interface IGuMapper {
      *
      */
 
-    SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) throws Exception;
+    SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) ;
 
     /**
      *
@@ -116,6 +116,7 @@ public interface IGuMapper {
      * 연도 기준 매출액 합계 조회하기
      *
      * @param year 연도
+     * @param  colNm 컬렉션명
      *
      * @return 조회 결과
      *
@@ -128,9 +129,64 @@ public interface IGuMapper {
      * 연도 기준 점포수 합계 조회하기
      *
      * @param year 연도
+     * @param  colNm 컬렉션명
      *
      * @return 조회 결과
      *
      */
     SeoulSiMarketDTO getAllStoreGraph(String year, String colNm);
+
+    /**
+     *
+     * 업종 대분류로 연도별 매출액 지역 비중 조회하기
+     *
+     * @param year 연도
+     * @param indutyNm 업종명
+     * @param colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    List<SeoulSiMarketDTO> getSortedMarketByIndutyNm(String year, String indutyNm, String colNm);
+
+    /**
+     *
+     * 업종 소분류로 연도별 매출액 지역 비중 조회하기
+     *
+     * @param year 연도
+     * @param indutCd 업종코드
+     * @param colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    List<SeoulSiMarketDTO> getSortedMarketByIndutyCd(String year, String indutCd, String colNm);
+
+    /**
+     *
+     * 업종 대분류로 연도별 점포수 지역 비중 조회하기
+     *
+     * @param year 연도
+     * @param indutyNm 업종명
+     * @param colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    List<SeoulSiMarketDTO> getSortedStoreByIndutyNm(String year, String indutyNm, String colNm);
+
+    /**
+     *
+     * 업종 소분류로 연도별 점포수 지역 비중 조회하기
+     *
+     * @param year 연도
+     * @param indutCd 업종코드
+     * @param colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    List<SeoulSiMarketDTO> getSortedStoreByIndutyCd(String year, String indutCd, String colNm);
+
+
 }

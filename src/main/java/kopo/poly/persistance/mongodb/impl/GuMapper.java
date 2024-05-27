@@ -1,6 +1,5 @@
 package kopo.poly.persistance.mongodb.impl;
 
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import kopo.poly.dto.SeoulSiMarketDTO;
@@ -8,7 +7,6 @@ import kopo.poly.persistance.mongodb.IGuMapper;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.BsonRegularExpression;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Slf4j
 @Component
@@ -27,7 +24,7 @@ public class GuMapper implements IGuMapper {
     private final MongoTemplate mongodb;
 
     @Override
-    public List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuSalesList(String seoulGuYear, String seoulLocationCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuSalesList Start!");
 
@@ -76,7 +73,7 @@ public class GuMapper implements IGuMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuStoreList Start!");
 
@@ -125,7 +122,7 @@ public class GuMapper implements IGuMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationCd, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuCloseStoreList(String seoulGuYear, String seoulLocationCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuCloseStoreList Start!");
 
@@ -174,7 +171,7 @@ public class GuMapper implements IGuMapper {
     }
 
     @Override
-    public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) throws Exception {
+    public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuLatLon Start!");
 
@@ -592,6 +589,221 @@ public class GuMapper implements IGuMapper {
 
         return rDTO;
 
+    }
+
+    /* 지역별 매출 비중 */
+
+    @Override
+    public List<SeoulSiMarketDTO> getSortedMarketByIndutyNm(String year, String indutyNm, String colNm) {
+
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm Start!");
+
+        // 가져와야하는 데이터
+        // 년도 , 업종명 기준
+        // 지역명, 지역코드, 매출액
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        Document query = new Document();
+
+        log.info("year : " + year);
+        log.info("indutyNm : " + indutyNm);
+
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_NM", indutyNm);
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+
+            String locationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
+            String locationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double monthSales = doc.getDouble("MONTH_SALES");
+
+            log.info("locationCd : " + locationCd + " / locationNm : " + locationNm + " / monthSales : " + monthSales);
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationCd(locationCd)
+                    .seoulLocationNm(locationNm)
+                    .monthSales(monthSales)
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm End!");
+
+        return rList;
+
+    }
+
+    @Override
+    public List<SeoulSiMarketDTO> getSortedMarketByIndutyCd(String year, String indutCd, String colNm) {
+
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm Start!");
+
+        // 가져와야하는 데이터
+        // 년도 , 업종코드(Like) 기준
+        // 지역명, 지역코드, 매출액
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        Document query = new Document();
+
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_CD", new Document("$regex", "^" +  indutCd));
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+
+            String locationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
+            String locationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double monthSales = doc.getDouble("MONTH_SALES");
+
+            log.info("locationCd : " + locationCd + " / locationNm : " + locationNm + " / monthSales : " + monthSales);
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationCd(locationCd)
+                    .seoulLocationNm(locationNm)
+                    .monthSales(monthSales)
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm End!");
+
+        return rList;
+
+    }
+
+    @Override
+    public List<SeoulSiMarketDTO> getSortedStoreByIndutyNm(String year, String indutyNm, String colNm) {
+
+        log.info(this.getClass().getName() + ".getSortedStoreByIndutyNm Start!");
+
+        // 가져와야하는 데이터
+        // 년도 , 업종명 기준
+        // 지역명, 지역코드, 점포수
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        Document query = new Document();
+
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_NM", indutyNm);
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("STORE_COUNT", "$STORE_COUNT");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+
+            String locationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
+            String locationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double storeCount = doc.getDouble("STORE_COUNT");
+
+            log.info("locationCd : " + locationCd + " / locationNm : " + locationNm + " / monthSales : " + storeCount);
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationCd(locationCd)
+                    .seoulLocationNm(locationNm)
+                    .storeCount(storeCount)
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+
+        log.info(this.getClass().getName() + ".getSortedStoreByIndutyNm End!");
+
+        return rList;
+    }
+
+    @Override
+    public List<SeoulSiMarketDTO> getSortedStoreByIndutyCd(String year, String indutCd, String colNm) {
+
+        log.info(this.getClass().getName() + ".getSortedStoreByIndutyCd Start!");
+
+        // 가져와야하는 데이터
+        // 년도 , 업종코드(Like) 기준
+        // 지역명, 지역코드, 점포수
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        Document query = new Document();
+
+        query.append("SEOUL_GU_YEAR", year);
+        query.append("INDUTY_CD", new Document("$regex", "^" +  indutCd));
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("STORE_COUNT", "$STORE_COUNT");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+
+            String locationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
+            String locationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double storeCount = doc.getDouble("STORE_COUNT");
+
+            log.info("locationCd : " + locationCd + " / locationNm : " + locationNm + " / storeCount : " + storeCount);
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationCd(locationCd)
+                    .seoulLocationNm(locationNm)
+                    .storeCount(storeCount)
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+
+        log.info(this.getClass().getName() + ".getSortedStoreByIndutyCd End!");
+
+        return rList;
     }
 
 }

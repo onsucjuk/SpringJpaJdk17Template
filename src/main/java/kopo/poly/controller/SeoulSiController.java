@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -388,9 +389,6 @@ public class SeoulSiController {
      ############################################################################
      */
 
-    /**
-     * 게시판 상세보기
-     */
     @GetMapping(value = "totalAnalysis")
     public String totalAnalysis(HttpServletRequest request, ModelMap model) throws Exception {
 
@@ -399,12 +397,20 @@ public class SeoulSiController {
         List<SeoulSiMarketDTO> seoulList = new ArrayList<>();
         List<SeoulSiMarketDTO> guList = new ArrayList<>();
         List<SeoulSiMarketDTO> seoulIndutyList = new ArrayList<>();
+        List<SeoulSiMarketDTO> sortedList = new LinkedList<>();
 
-        String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역명
+        String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역코드
+        String guName = CmmUtil.nvl(request.getParameter("guName")); // 지역명
         String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
+
 
         log.info("guSelect : " + guSelect);
         log.info("induty : " + induty);
+
+        SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                .seoulLocationNm(guName)
+                .indutyNm(induty)
+                .build();
 
         int sort = 0;
 
@@ -434,6 +440,8 @@ public class SeoulSiController {
             guList = guMarketService.getGuMarketLikeIndutyCd(induty, guSelect);
             // 동
             seoulIndutyList = guMarketService.getIndutyMarket();
+            // 지역 매출 비중
+            sortedList = guMarketService.getSortedMarketByIndutyCd(induty);
 
         } else { // 업종 소분류
 
@@ -443,12 +451,16 @@ public class SeoulSiController {
             guList = guMarketService.getGuMarketIndutyNm(induty, guSelect);
             // 동
             seoulIndutyList = guMarketService.getIndutyMarket();
+            // 지역 매출 비중
+            sortedList = guMarketService.getSortedMarketByIndutyNm(induty);
 
         }
 
         model.addAttribute("seoulList", seoulList);
         model.addAttribute("guList", guList);
         model.addAttribute("seoulIndutyList", seoulIndutyList);
+        model.addAttribute("sortedList", sortedList);
+        model.addAttribute("pDTO", pDTO);
 
 
         sort = 0; // 초기화

@@ -16,7 +16,7 @@ public interface IDongMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getDongSalesAllByName(String seoulDongYear, String indutyName, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongSalesAllByName(String seoulDongYear, String indutyName, String colNm) ;
 
     /**
      *
@@ -27,7 +27,7 @@ public interface IDongMapper {
      * @param  colNm 컬렉션명
      *
      */
-    List<SeoulSiMarketDTO> getDongSalesAllBySort(String seoulDongYear, String indutySort, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongSalesAllBySort(String seoulDongYear, String indutySort, String colNm) ;
 
     /**
      *
@@ -39,7 +39,7 @@ public interface IDongMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getDongStoreAllByName(String seoulDongYear, String indutyName, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongStoreAllByName(String seoulDongYear, String indutyName, String colNm) ;
 
     /**
      *
@@ -50,7 +50,7 @@ public interface IDongMapper {
      * @param  colNm 컬렉션명
      *
      */
-    List<SeoulSiMarketDTO> getDongStoreAllBySort(String seoulDongYear, String indutySort, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongStoreAllBySort(String seoulDongYear, String indutySort, String colNm) ;
 
 
 
@@ -65,7 +65,7 @@ public interface IDongMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getDongSalesByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongSalesByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) ;
 
     /**
      *
@@ -77,7 +77,7 @@ public interface IDongMapper {
      * @param  colNm 컬렉션명
      *
      */
-    List<SeoulSiMarketDTO> getDongSalesByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongSalesByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) ;
 
     /**
      *
@@ -90,7 +90,7 @@ public interface IDongMapper {
      *
      */
 
-    List<SeoulSiMarketDTO> getDongStoreByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongStoreByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) ;
 
     /**
      *
@@ -102,6 +102,6 @@ public interface IDongMapper {
      * @param  colNm 컬렉션명
      *
      */
-    List<SeoulSiMarketDTO> getDongStoreByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) throws Exception;
+    List<SeoulSiMarketDTO> getDongStoreByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) ;
 
 }

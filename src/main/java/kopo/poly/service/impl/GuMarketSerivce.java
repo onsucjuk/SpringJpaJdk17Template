@@ -1,6 +1,5 @@
 package kopo.poly.service.impl;
 
-import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.persistance.mongodb.IGuMapper;
 import kopo.poly.service.IGuMarketService;
@@ -29,7 +28,7 @@ public class GuMarketSerivce implements IGuMarketService {
      *
      */
     @Override
-    public List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationCd) throws Exception {
+    public List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationCd) {
 
 
             log.info(this.getClass().getName() + ".getGuMarketRes Start!");
@@ -184,7 +183,7 @@ public class GuMarketSerivce implements IGuMarketService {
      *
      */
     @Override
-    public List<SeoulSiMarketDTO> getGuStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) {
 
         log.info(this.getClass().getName() + ".getGuStoreRes Start!");
 
@@ -282,7 +281,7 @@ public class GuMarketSerivce implements IGuMarketService {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getGuCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) throws Exception {
+    public List<SeoulSiMarketDTO> getGuCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) {
 
         log.info(this.getClass().getName() + ".getGuStoreCloseRes Start!");
 
@@ -381,7 +380,7 @@ public class GuMarketSerivce implements IGuMarketService {
     }
 
     @Override
-    public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd) throws Exception {
+    public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd) {
 
         log.info(this.getClass().getName() + ".getGuMarketRes Start!");
 
@@ -406,7 +405,7 @@ public class GuMarketSerivce implements IGuMarketService {
      **/
 
     @Override
-    public List<SeoulSiMarketDTO> getGuMarketLikeIndutyCd(String induty, String guSelect) throws Exception {
+    public List<SeoulSiMarketDTO> getGuMarketLikeIndutyCd(String induty, String guSelect) {
 
         log.info(this.getClass().getName() + ".getGuMarketLikeIndutyCd Start!");
 
@@ -441,6 +440,12 @@ public class GuMarketSerivce implements IGuMarketService {
                     .orElseGet(() -> SeoulSiMarketDTO.builder().build());
 
             double monthSales = saleDTO.monthSales() / 10000;
+            double age10Sales = saleDTO.age10Sales()  / 10000;
+            double age20Sales = saleDTO.age20Sales()  / 10000;
+            double age30Sales = saleDTO.age30Sales()  / 10000;
+            double age40Sales = saleDTO.age40Sales()  / 10000;
+            double age50Sales = saleDTO.age50Sales()  / 10000;
+            double age60Sales = saleDTO.age60Sales()  / 10000;
 
             // 여기서부터 나이대 추가해야 함
 
@@ -448,10 +453,22 @@ public class GuMarketSerivce implements IGuMarketService {
             double closeStoreCount = storeDTO.closeStoreCount();
 
             double monthSalesPerStore = 0;
+            double age10SalesPerStore = 0;
+            double age20SalesPerStore = 0;
+            double age30SalesPerStore = 0;
+            double age40SalesPerStore = 0;
+            double age50SalesPerStore = 0;
+            double age60SalesPerStore = 0;
 
             if (storeCount > 0) {
 
                 monthSalesPerStore =  monthSales / storeCount;
+                age10SalesPerStore =  age10Sales / storeCount;
+                age20SalesPerStore =  age20Sales / storeCount;
+                age30SalesPerStore =  age30Sales / storeCount;
+                age40SalesPerStore =  age40Sales / storeCount;
+                age50SalesPerStore =  age50Sales / storeCount;
+                age60SalesPerStore =  age60Sales / storeCount;
 
             }
 
@@ -463,6 +480,12 @@ public class GuMarketSerivce implements IGuMarketService {
                     .monthSales(monthSalesPerStore)
                     .storeCount(storeCount)
                     .closeStoreCount(closeStoreCount)
+                    .age10Sales(age10SalesPerStore)
+                    .age20Sales(age20SalesPerStore)
+                    .age30Sales(age30SalesPerStore)
+                    .age40Sales(age40SalesPerStore)
+                    .age50Sales(age50SalesPerStore)
+                    .age60Sales(age60SalesPerStore)
                     .build();
 
             rList.add(pDTO);
@@ -475,7 +498,7 @@ public class GuMarketSerivce implements IGuMarketService {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getGuMarketIndutyNm(String induty, String guSelect) throws Exception {
+    public List<SeoulSiMarketDTO> getGuMarketIndutyNm(String induty, String guSelect) {
 
         log.info(this.getClass().getName() + ".getGuMarketLikeIndutyCd Start!");
 
@@ -510,18 +533,36 @@ public class GuMarketSerivce implements IGuMarketService {
                     .orElseGet(() -> SeoulSiMarketDTO.builder().build());
 
             double monthSales = saleDTO.monthSales() / 10000;
+            double age10Sales = saleDTO.age10Sales()  / 10000;
+            double age20Sales = saleDTO.age20Sales()  / 10000;
+            double age30Sales = saleDTO.age30Sales()  / 10000;
+            double age40Sales = saleDTO.age40Sales()  / 10000;
+            double age50Sales = saleDTO.age50Sales()  / 10000;
+            double age60Sales = saleDTO.age60Sales()  / 10000;
 
             // 여기서부터 나이대 추가해야 함
 
             double storeCount = storeDTO.storeCount();
             double closeStoreCount = storeDTO.closeStoreCount();
 
+
             double monthSalesPerStore = 0;
+            double age10SalesPerStore = 0;
+            double age20SalesPerStore = 0;
+            double age30SalesPerStore = 0;
+            double age40SalesPerStore = 0;
+            double age50SalesPerStore = 0;
+            double age60SalesPerStore = 0;
 
             if (storeCount > 0) {
 
                 monthSalesPerStore =  monthSales / storeCount;
-
+                age10SalesPerStore =  age10Sales / storeCount;
+                age20SalesPerStore =  age20Sales / storeCount;
+                age30SalesPerStore =  age30Sales / storeCount;
+                age40SalesPerStore =  age40Sales / storeCount;
+                age50SalesPerStore =  age50Sales / storeCount;
+                age60SalesPerStore =  age60Sales / storeCount;
             }
 
             log.info(year + "년도 구 기준 점포당 매출액" + monthSalesPerStore);
@@ -532,6 +573,12 @@ public class GuMarketSerivce implements IGuMarketService {
                     .monthSales(monthSalesPerStore)
                     .storeCount(storeCount)
                     .closeStoreCount(closeStoreCount)
+                    .age10Sales(age10SalesPerStore)
+                    .age20Sales(age20SalesPerStore)
+                    .age30Sales(age30SalesPerStore)
+                    .age40Sales(age40SalesPerStore)
+                    .age50Sales(age50SalesPerStore)
+                    .age60Sales(age60SalesPerStore)
                     .build();
 
             rList.add(pDTO);
@@ -544,7 +591,7 @@ public class GuMarketSerivce implements IGuMarketService {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getIndutyMarket() throws Exception {
+    public List<SeoulSiMarketDTO> getIndutyMarket(){
 
         log.info(this.getClass().getName() + ".getIndutyMarket Start!");
 
@@ -600,6 +647,124 @@ public class GuMarketSerivce implements IGuMarketService {
 
         return rList;
 
+    }
+
+
+    /* 이번 분기 지역별 매출액 비중 가져오기 */
+    @Override
+    public List<SeoulSiMarketDTO> getSortedMarketByIndutyNm(String indutyNm) {
+
+        log.info(this.getClass().getName() + "getSortedMarketByIndutyNm Start!");
+
+        // 구 기준 매출액 MongoDB 컬렉션
+        String colNm = "SEOUL_GU_MARKET";
+        String year = "20233";
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        List<SeoulSiMarketDTO> salesList = Optional.ofNullable(guMapper.getSortedMarketByIndutyNm(year, indutyNm, colNm))
+                .orElseGet(() -> new LinkedList<>());
+
+
+        colNm = "SEOUL_GU_STORE";
+        List<SeoulSiMarketDTO> storeList = Optional.ofNullable(guMapper.getSortedStoreByIndutyNm(year, indutyNm, colNm))
+                .orElseGet(() -> new LinkedList<>());
+
+
+        for (int i = 0; i < salesList.size(); i++) {
+
+
+            String locationNm = salesList.get(i).seoulLocationNm();
+            String locationCd = salesList.get(i).seoulLocationCd();
+            double sales = salesList.get(i).monthSales() / 10000;
+
+            Optional<Double> storeCountOpt = storeList.stream()
+                    .filter(dto -> locationNm.equals(dto.seoulLocationNm()))
+                    .map(dto -> dto.storeCount())
+                    .findFirst();
+
+            final double[] salesPerStore = {0};
+
+            storeCountOpt.ifPresent(storeCount -> {
+
+                if (storeCount != 0) {
+                    salesPerStore[0] = sales / storeCount;
+
+                    log.info("salesPerStore : " + salesPerStore[0]);
+                }
+
+            });
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationNm(locationNm)
+                    .seoulLocationCd(locationCd)
+                    .monthSales(salesPerStore[0])
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+            log.info(this.getClass().getName() + "getSortedMarketByIndutyNm End!");
+
+            return rList;
+    }
+
+    @Override
+    public List<SeoulSiMarketDTO> getSortedMarketByIndutyCd(String indutyCd) {
+
+        log.info(this.getClass().getName() + "getSortedMarketByIndutyCd Start!");
+
+        // 구 기준 매출액 MongoDB 컬렉션
+        String colNm = "SEOUL_GU_STORE";
+        String year = "20233";
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        List<SeoulSiMarketDTO> salesList = Optional.ofNullable(guMapper.getSortedMarketByIndutyCd(year, indutyCd, colNm))
+                .orElseGet(() -> new LinkedList<>());
+
+        List<SeoulSiMarketDTO> storeList = Optional.ofNullable(guMapper.getSortedStoreByIndutyCd(year, indutyCd, colNm))
+                .orElseGet(() -> new LinkedList<>());
+
+
+        for (int i = 0; i < salesList.size(); i++) {
+
+
+            String locationNm = salesList.get(i).seoulLocationNm();
+            String locationCd = salesList.get(i).seoulLocationCd();
+            double sales = salesList.get(i).monthSales();
+
+            Optional<Double> storeCountOpt = storeList.stream()
+                    .filter(dto -> locationNm.equals(dto.seoulLocationNm()))
+                    .map(dto -> dto.storeCount())
+                    .findFirst();
+
+            final double[] salesPerStore = {0};
+
+            storeCountOpt.ifPresent(storeCount -> {
+
+                if (storeCount != 0) {
+                    salesPerStore[0] = sales / storeCount;
+
+                    log.info("salesPerStore : " + salesPerStore[0]);
+                }
+
+            });
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationNm(locationNm)
+                    .seoulLocationCd(locationCd)
+                    .monthSales(salesPerStore[0])
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+        log.info(this.getClass().getName() + "getSortedMarketByIndutyCd End!");
+
+        return rList;
     }
 
 }

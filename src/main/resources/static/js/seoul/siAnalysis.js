@@ -1068,9 +1068,13 @@ function goTotalAnalysis() {
     let indutyName = document.getElementById("indutyNameSelected");
     let induty = "";
 
+    var selectElement = document.getElementById('induGuSelect');
+    var guName = selectElement.options[selectElement.selectedIndex].text;
+
     console.log("선택된 구 : " + guValue);
     console.log("선택된 업종 분류 : " + indutySort);
     console.log("선택된 업종명 : " + indutyName);
+    console.log("선택된 구 이름 : " + guName);
 
     if (guValue!=null && indutySort!=null) { // 값이 null이 아니라면 실행
 
@@ -1104,7 +1108,7 @@ function goTotalAnalysis() {
 
         }
 
-        window.open("/seoul/totalAnalysis?guSelect=" + guValue + "&induty=" + induty, "_blank");
+        window.open("/seoul/totalAnalysis?guSelect=" + guValue + "&guName=" + guName + "&induty=" + induty, "_blank");
 
     } else {
 

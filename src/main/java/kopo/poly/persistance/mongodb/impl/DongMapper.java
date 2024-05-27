@@ -22,7 +22,7 @@ public class DongMapper implements IDongMapper {
     private final MongoTemplate mongodb;
 
     @Override
-    public List<SeoulSiMarketDTO> getDongSalesAllByName(String seoulDongYear, String indutyName, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongSalesAllByName(String seoulDongYear, String indutyName, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongSalesAllByName Start!");
 
@@ -93,7 +93,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongSalesAllBySort(String seoulDongYear, String indutySort, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongSalesAllBySort(String seoulDongYear, String indutySort, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongSalesAllBySort Start!");
 
@@ -164,7 +164,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongStoreAllByName(String seoulDongYear, String indutyName, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongStoreAllByName(String seoulDongYear, String indutyName, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongStoreAllByName Start!");
 
@@ -215,7 +215,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongStoreAllBySort(String seoulDongYear, String indutySort, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongStoreAllBySort(String seoulDongYear, String indutySort, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongStoreAllBySort Start!");
 
@@ -267,7 +267,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongSalesByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongSalesByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongSalesByLocationCdAndName Start!");
 
@@ -339,7 +339,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongSalesByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongSalesByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongSalesByLocationCdAndSort Start!");
 
@@ -410,7 +410,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongStoreByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongStoreByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongStoreByLocationCdAndName Start!");
 
@@ -467,7 +467,7 @@ public class DongMapper implements IDongMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongStoreByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) throws Exception {
+    public List<SeoulSiMarketDTO> getDongStoreByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) {
 
         log.info(this.getClass().getName() + ".getDongStoreByLocationCdAndSort Start!");
 
