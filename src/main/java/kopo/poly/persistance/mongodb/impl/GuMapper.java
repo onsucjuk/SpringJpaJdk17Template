@@ -7,6 +7,7 @@ import kopo.poly.persistance.mongodb.IGuMapper;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.BsonRegularExpression;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -650,9 +651,9 @@ public class GuMapper implements IGuMapper {
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getSortedMarketByIndutyCd(String year, String indutCd, String colNm) {
+    public List<SeoulSiMarketDTO> getSortedMarketByIndutyCd(String year, String indutyCd, String colNm) {
 
-        log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm Start!");
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyCd Start!");
 
         // 가져와야하는 데이터
         // 년도 , 업종코드(Like) 기준
@@ -662,8 +663,10 @@ public class GuMapper implements IGuMapper {
 
         Document query = new Document();
 
+        log.info("indutycd : " + indutyCd);
+
         query.append("SEOUL_GU_YEAR", year);
-        query.append("INDUTY_CD", new Document("$regex", "^" +  indutCd));
+        query.append("INDUTY_CD", new BsonRegularExpression("^" +indutyCd+".*$", "i"));
 
         Document projection = new Document();
 
@@ -696,7 +699,7 @@ public class GuMapper implements IGuMapper {
         }
 
 
-        log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm End!");
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyCd End!");
 
         return rList;
 

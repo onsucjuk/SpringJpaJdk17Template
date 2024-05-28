@@ -17,7 +17,7 @@
 }
 
 .chart {
-
+    box-shadow: inset 0 0 0 2.5px #DCDCDC;
     padding: 10px;
 
 }
@@ -36,6 +36,12 @@
 
 }
 
+.divContent {
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .title {
 
     font-size: 25px;
@@ -51,19 +57,6 @@
     background-color: #f9fafb; /* 자식 요소들의 배경색을 흰색으로 설정합니다. */
 }
 
-#closeQuarter, #storeQuarter, #salesQuarter {
-
-    font-size: 30px;
-    font-weight: bolder;
-
-}
-
-#salesDiffQuarter, #storeDiffQuarter, #closeDiffQuarter {
-
-    font-size: 20px;
-    font-weight: bold;
-
-}
 
 #salesRateQuarter, #storeRateQuarter, #closeRateQuarter {
 
@@ -81,21 +74,44 @@
 
 }
 
-.indutyList {
+.chart-body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Optional: Ensures the elements take full width */
+}
 
-    background-color: #3f3f45;
-    color: #FFFFFF;
-    padding: 10px;
+
+#circleMarket,
+#myCircleMarketChart {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+#circleAge,
+#myCircleMarketChart {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+
+#circleMarket, #circleAge {
+
+    margin: 20px;
+    font-weight: bold;
+    font-size : 15px;
 
 }
+
 .imgText {
 
-    height: 150px;
+    height: 120px;
 
 }
 .imgDiv {
 
-    height: 200px;
+    height: 180px;
 
 }
 
@@ -125,11 +141,57 @@
 
 /* Home cards */
 .divThree {
-    display: grid;
-    grid-template-columns: repeat(3, 450px);
+    display: flex;
+    /*grid-template-columns: repeat(3, 550px);*/
     grid-gap: 20px;
     margin-bottom: 40px;
     width: 100%; /* 원하는 너비로 조정 */
     height: 100%;
     justify-content: center; /* 가운데 정렬 */
+}
+/* Home cards */
+.divTwo {
+    display: grid;
+    grid-template-columns: repeat(2, 700px);
+    grid-gap: 20px;
+    margin-bottom: 40px;
+    width: 100%; /* 원하는 너비로 조정 */
+    height: 100%;
+    justify-content: center; /* 가운데 정렬 */
+}
+
+.buttonLine, .buttonLine button {
+
+    margin: 20px;
+    display: flex;
+
+}
+
+.inlineText {
+
+    display: flex;
+    text-align: center;
+
+}
+
+.inlineText p {
+    margin: 0 auto; /* 좌우 마진을 자동으로 설정하여 가로 중앙 정렬합니다. */
+    display: inline;
+}
+
+#closeQuarter, #storeQuarter, #salesQuarter {
+
+    font-size: 30px;
+    font-weight: bolder;
+    text-align: center;
+
+}
+
+.indutyList {
+
+    background-color: #3f3f45;
+    color: #FFFFFF;
+    padding: 10px;
+    text-align: center;
+
 }

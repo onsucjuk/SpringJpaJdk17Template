@@ -1088,9 +1088,13 @@ function goTotalAnalysis() {
 
         }
 
-        if (indutySort === "전체") {
+        if (indutyName) {
 
-            alert("자세한 종합 분석을 위해서 '전체' 대신 업종을 선택해주세요.")
+            induty = indutyName.innerText;
+
+        } else {
+
+            alert("자세한 종합 분석을 위해서 업종을 '소분류'로 '자세히' 선택해주세요.")
 
             document.getElementById("indutySortSelected").scrollIntoView();
 
@@ -1098,7 +1102,7 @@ function goTotalAnalysis() {
 
         }
 
-        if(indutyName===null) { // 구체적 업종명 없으면 대분류
+        /*if(indutyName===null) { // 구체적 업종명 없으면 대분류
 
             induty = indutySort;
 
@@ -1106,7 +1110,7 @@ function goTotalAnalysis() {
 
             induty = indutyName.innerText;
 
-        }
+        }*/
 
         window.open("/seoul/totalAnalysis?guSelect=" + guValue + "&guName=" + guName + "&induty=" + induty, "_blank");
 

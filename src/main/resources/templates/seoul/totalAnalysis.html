@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <title>종합 분석</title>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
     <link rel="stylesheet" type="text/css" href="/css/seoul/totalAnalysis.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="/assets/js/init-alpine.js"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
 
@@ -19,6 +27,8 @@
         // 지역별 비중 매출액
         const sortedList = [[${sortedList}]];
 
+        const pDTO = [[${pDTO}]];
+
         /*]]>*/
     </script>
 </head>
@@ -26,39 +36,91 @@
 <div class="container">
     <div class = "bodyContent">
         <h2 class="totalAnalysisTitle">업종 종합 분석</h2>
-        <h3 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${pDTO.seoulLocationNm()} + ' 지역 | ' + ${pDTO.indutyNm()}"></h3>
+        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${pDTO.seoulLocationNm()} + ' 지역 | ' + ${pDTO.indutyNm()}"></h4>
     </div>
 
     <hr>
 
     <div class="dashBoard">
-        <section class="divThree" id="btnBnav2">
+        <div class="divThree" id="btnBnav2">
                     <div class="comment_inline indutyList red-border" id = "quarterSales">
                         <p class="title">매출액</p>
                         <p id = "salesQuarter"></p>
-                        <p id = "salesDiffQuarter"></p>
                         <p id = "salesRateQuarter"></p>
                     </div>
                     <div class="comment_inline indutyList blue-border" id = "quarterStore">
                         <p class="title">점포수</p>
                         <p id = "storeQuarter"></p>
-                        <p id = "storeDiffQuarter"></p>
                         <p id = "storeRateQuarter"></p>
                     </div>
                     <div class="comment_inline indutyList green-border" id = "quarterClose">
                         <p class="title">폐업수</p>
                         <p id = "closeQuarter"></p>
-                        <p id = "closeDiffQuarter"></p>
                         <p id = "closeRateQuarter"></p>
                     </div>
-        </section>
+        </div>
         <div class="chart">
             <h3 class="chart-header">매출액 추이 분석</h3>
             <div class="chart-body">
-                <div id="legend-div" class="legend-div"></div>
                 <canvas id="myAreaChart" width="100%" height="30"></canvas>
             </div>
         </div>
+
+        <hr class="divContent">
+
+        <div class="chart">
+            <h3 class="chart-header">점포수 추이 분석</h3>
+            <div class = "divTwo">
+                <div class="chart-body">
+                    <canvas id="myBarStoreChart" width="100%" height="30"></canvas>
+                </div>
+                <div class="chart-body">
+                    <canvas id="myBarCloseChart" width="100%" height="30"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divContent">
+
+        <div class="chart">
+            <h3 class="chart-header">업종 추이 분석</h3>
+            <div class = "divTwo">
+                    <div class="chart-body">
+                        <canvas id="myCircleMarketChart" width="100%" height="30"></canvas>
+                        <p id="circleMarket"></p>
+                    </div>
+
+                <div class="chart-body">
+                    <canvas id="myCircleAgeChart" width="100%" height="30"></canvas>
+                    <p id="circleAge"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="buttonLine">
+        <button
+                id="btnLocationAnalysis"
+                class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                type="button"
+        >
+            <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">창업 지역 추천</span>
+                <span class="ml-2" aria-hidden="true"></span>
+            </div>
+
+        </button>
+        <button
+                id="btnCloseWindow"
+                class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                type="button"
+        >
+            <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">창 닫기</span>
+                <span class="ml-2" aria-hidden="true"></span>
+            </div>
+
+        </button>
     </div>
 </div>
 </body>

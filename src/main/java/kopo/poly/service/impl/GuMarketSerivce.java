@@ -26,6 +26,8 @@ public class GuMarketSerivce implements IGuMarketService {
      * @param recYear 컨트롤러로 보내온 기준년도 데이터
      * @param seoulLocationCd 컨트롤러로 보내온 지역명
      *
+     * @return 조회 결과 리스트
+     *
      */
     @Override
     public List<SeoulSiMarketDTO> getGuMarketRes(int rank, String preYear, String recYear, String seoulLocationCd) {
@@ -181,6 +183,8 @@ public class GuMarketSerivce implements IGuMarketService {
      * @param recYear 컨트롤러로 보내온 기준년도 데이터
      * @param seoulLocationNm 컨트롤러로 보내온 지역명
      *
+     * @return 조회 결과 리스트
+     *
      */
     @Override
     public List<SeoulSiMarketDTO> getGuStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) {
@@ -280,6 +284,18 @@ public class GuMarketSerivce implements IGuMarketService {
 
     }
 
+    /**
+     *
+     * MongoDB 에서 받아온 데이터 가공해서 넘겨주기 (폐업수)
+     *
+     * @param rank 최종 정제 후 순위
+     * @param preYear 컨트롤러로 보내온 비교년도 데이터
+     * @param recYear 컨트롤러로 보내온 기준년도 데이터
+     * @param seoulLocationNm 컨트롤러로 보내온 지역명
+     *
+     * @return 조회 결과 리스트
+     *
+     */
     @Override
     public List<SeoulSiMarketDTO> getGuCloseStoreRes(int rank, String preYear, String recYear, String seoulLocationNm) {
 
@@ -379,6 +395,15 @@ public class GuMarketSerivce implements IGuMarketService {
         return rList;
     }
 
+    /**
+     *
+     * 지역에 맞는 위치 정보 넘겨주기
+     *
+     * @param seoulLocationCd 컨트롤러에서 보내온 지역코드
+     *
+     * @return 조회 결과
+     *
+     */
     @Override
     public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd) {
 
@@ -404,6 +429,17 @@ public class GuMarketSerivce implements IGuMarketService {
      *
      **/
 
+    /**
+     *
+     * 입종 코드(대분류) 기준 지역 코드를 포함하는(Like) 해당하는 매출액 정보(분기별 매출액, 나이대 별 매출액)들 가져오기
+     * Year List(20221 ~ 20233 분기까지 데이터)
+     *
+     * @param induty 업종 코드
+     * @param guSelect 지억명
+     *
+     * @return 조회 결과 리스트
+     *
+     */
     @Override
     public List<SeoulSiMarketDTO> getGuMarketLikeIndutyCd(String induty, String guSelect) {
 
@@ -497,6 +533,17 @@ public class GuMarketSerivce implements IGuMarketService {
         return rList;
     }
 
+    /**
+     *
+     * 입종명(소분류) 기준 지역명에 해당하는 매출액 정보(분기별 매출액, 나이대 별 매출액)들 가져오기
+     * Year List(20221 ~ 20233 분기까지 데이터)
+     *
+     * @param induty 업종명
+     * @param guSelect 지억명
+     *
+     * @return 조회 결과 리스트
+     *
+     */
     @Override
     public List<SeoulSiMarketDTO> getGuMarketIndutyNm(String induty, String guSelect) {
 
@@ -590,6 +637,14 @@ public class GuMarketSerivce implements IGuMarketService {
         return rList;
     }
 
+    /**
+     *
+     * 모든 업종 매출액 정보 가져오기
+     * Year List(20221 ~ 20233 분기까지 데이터)
+     *
+     * @return 조회 결과 리스트
+     *
+     */
     @Override
     public List<SeoulSiMarketDTO> getIndutyMarket(){
 
@@ -651,6 +706,16 @@ public class GuMarketSerivce implements IGuMarketService {
 
 
     /* 이번 분기 지역별 매출액 비중 가져오기 */
+    /**
+     *
+     * 입종명(소분류) 기준 업종명에 해당하는 지역별 매출액 정보(분기별 매출액, 지역명, 지역코드 정보)들 가져오기
+     * Year List(20221 ~ 20233 분기까지 데이터)
+     *
+     * @param indutyNm 업종명
+     *
+     * @return 조회 결과 리스트
+     *
+     */
     @Override
     public List<SeoulSiMarketDTO> getSortedMarketByIndutyNm(String indutyNm) {
 
@@ -705,18 +770,31 @@ public class GuMarketSerivce implements IGuMarketService {
 
         }
 
+        // desc 정렬
+        rList.sort(Comparator.comparing(SeoulSiMarketDTO::monthSales).reversed());
+
             log.info(this.getClass().getName() + "getSortedMarketByIndutyNm End!");
 
             return rList;
     }
 
+    /**
+     *
+     * 입종코드(대분류) 기준 업종코드를 포함하는(Like) 지역별 매출액 정보(분기별 매출액, 지역명, 지역코드 정보)들 가져오기
+     * Year List(20221 ~ 20233 분기까지 데이터)
+     *
+     * @param indutyCd 업종코드
+     *
+     * @return 조회 결과 리스트
+     *
+     */
     @Override
     public List<SeoulSiMarketDTO> getSortedMarketByIndutyCd(String indutyCd) {
 
-        log.info(this.getClass().getName() + "getSortedMarketByIndutyCd Start!");
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyCd Start!");
 
         // 구 기준 매출액 MongoDB 컬렉션
-        String colNm = "SEOUL_GU_STORE";
+        String colNm = "SEOUL_GU_MARKET";
         String year = "20233";
 
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
@@ -724,6 +802,7 @@ public class GuMarketSerivce implements IGuMarketService {
         List<SeoulSiMarketDTO> salesList = Optional.ofNullable(guMapper.getSortedMarketByIndutyCd(year, indutyCd, colNm))
                 .orElseGet(() -> new LinkedList<>());
 
+        colNm = "SEOUL_GU_STORE";
         List<SeoulSiMarketDTO> storeList = Optional.ofNullable(guMapper.getSortedStoreByIndutyCd(year, indutyCd, colNm))
                 .orElseGet(() -> new LinkedList<>());
 
@@ -762,7 +841,10 @@ public class GuMarketSerivce implements IGuMarketService {
 
         }
 
-        log.info(this.getClass().getName() + "getSortedMarketByIndutyCd End!");
+        // desc 정렬
+        rList.sort(Comparator.comparing(SeoulSiMarketDTO::monthSales).reversed());
+
+        log.info(this.getClass().getName() + ".getSortedMarketByIndutyCd End!");
 
         return rList;
     }
