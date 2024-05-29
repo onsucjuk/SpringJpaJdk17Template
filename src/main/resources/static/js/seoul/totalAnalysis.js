@@ -339,6 +339,11 @@ function makeRevenueChart(array1, array2, array3) {
 function makeStoreChart(array) {
 
     let storeArray = array[0]
+    let minValue = Math.min(...storeArray);
+    let maxValue = Math.max(...storeArray);
+
+    let min = truncMinNumber(minValue);
+    let max = maxValue + 25;
 
     console.log("storeArray : " + storeArray)
 
@@ -360,7 +365,9 @@ function makeStoreChart(array) {
                 yAxes: [{
                     gridLines: {},
                     ticks: {
-                        stepSize: 15,
+                        max : max,
+                        min : min,
+                        stepSize: 25,
                     },
                 }],
                 xAxes: [{
@@ -378,6 +385,12 @@ function makeStoreChart(array) {
 function makeCloseChart(array) {
 
     let closeArray = array[1]
+    let minValue = Math.min(...closeArray);
+    let maxValue = Math.max(...closeArray);
+
+    let min = truncMinNumber(minValue);
+    let max = maxValue+25;
+
 
     console.log("closeArray : " + closeArray)
 
@@ -399,7 +412,9 @@ function makeCloseChart(array) {
                 yAxes: [{
                     gridLines: {},
                     ticks: {
-                        stepSize: 15,
+                        max : max,
+                        min : min,
+                        stepSize: 25,
                     },
                 }],
                 xAxes: [{
@@ -518,7 +533,26 @@ function locationAnalysis() {
 }
 
 function roundUpMaxNumber(num) {
-    let power = Math.pow(10, Math.floor(Math.log10(num))); // 주어진 숫자의 자릿수에 해당하는 10의 거듭제곱 계산
-    let roundedNum = Math.ceil(num / power) * power; // 주어진 숫자를 올림하여 10의 거듭제곱으로 곱하여 최종 결과를 얻음
+
+    // 주어진 숫자의 자릿수에 해당하는 10의 거듭제곱 계산
+    let power = Math.pow(10, Math.floor(Math.log10(num)));
+    // 주어진 숫자를 올림하여 10의 거듭제곱으로 곱하여 최종 결과를 얻음
+    let roundedNum = Math.ceil(num / power) * power;
     return roundedNum;
+
+}
+
+function truncMinNumber(num) {
+
+    if (num < 10) {
+        return 0;
+    }
+
+    // 자리수 구함
+    let numDigits = Math.floor(Math.log10(num));
+    // 10의 자릿수 구함
+    let divisor = Math.pow(10, numDigits);
+    // 나눈 후 나머지 버림 처리 후 다시 곱하여 최종 결과 반환
+    return Math.floor(num / divisor) * divisor;
+
 }
