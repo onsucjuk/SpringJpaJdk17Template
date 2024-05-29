@@ -11,6 +11,8 @@ public interface ISiMarketService {
     String marketData = "VwsmMegaSelngW";
     String storeData = "VwsmMegaStorW";
 
+    boolean getExistsKey(String redisKey) throws Exception;
+
     List<SeoulSiMarketDTO> getSiMarketRes(int rank, String preYear, String recYear) throws Exception;
     List<SeoulSiMarketDTO> getSiStoreRes(int rank, String preYear, String recYear) throws Exception;
     List<SeoulSiMarketDTO> getSiStoreCloseRes(int rank, String preYear, String recYear) throws Exception;

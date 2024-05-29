@@ -1,12 +1,16 @@
 package kopo.poly.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kopo.poly.dto.SeoulSiMarketDTO;
+import kopo.poly.dto.RedisDTO;
+import kopo.poly.persistance.redis.IMyRedisMapper;
 import kopo.poly.service.ISiMarketService;
 import kopo.poly.util.NetworkUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -20,6 +24,15 @@ public class SiMarketService implements ISiMarketService {
 
     @Value("${siMarket.api.key}")
     private String apiKey;
+
+    public final RedisTemplate<String, Object> redisDB;
+    private final IMyRedisMapper myRedisMapper;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    public boolean getExistsKey(String redisKey) throws Exception {
+        return redisDB.hasKey(redisKey);
+    }
 
     private Map<String, String> setSiMarketInfo() {
         Map<String, String> requestHeader = new HashMap<>();
@@ -55,47 +68,83 @@ public class SiMarketService implements ISiMarketService {
         int i = 1;
 
         List<Map<String, Object>> rContents = new ArrayList<>();
+        String redisKey = "";
 
+        if(data.equals(marketData)) {
 
-        while(true) {
+            redisKey = "marketKey";
+        } else if(data.equals(storeData)) {
 
-            String apiParam = "/" + apiKey + "/" + "json" + "/" + data + "/" + start + "/" + end;
+            redisKey = "storeKey";
 
-            String json = NetworkUtil.get(ISiMarketService.apiURL + apiParam, this.setSiMarketInfo());
-
-            // System.out.print("json : " + json);
-
-            Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
-
-
-            Map<String, Object> rData = tMap.containsKey(data) ?
-                    (Map<String, Object>) tMap.get(data) : new HashMap<>();
-
-            if(rData.isEmpty()) { // 호출 데이터가 없으면 변수값 초기화 후 종료
-
-                i = 1;
-                start = 1;
-                end = start + 999;
-
-                break;
-            } else {
-
-                Map<String, Object> tData = (Map<String, Object>) tMap.get(data);
-                List<Map<String, Object>> tContents = (List<Map<String, Object>>) tData.get("row");
-
-                rContents.addAll(tContents);
-
-                log.info(data + "API " + i + "Times Data Count : " +tContents.size());
-
-                start = end+1;
-                end = start + 999;
-                i++;
-
-            }
         }
 
-        log.info(data + "API Count : " + rContents.size());
-        log.info(this.getClass().getName() + ".getSeoulApiList End!");
+        if (redisDB.hasKey(redisKey)) { // 있으면 key값으로 가져옴
+
+            log.info("redisDB에서 데이터 가져오기.");
+
+            RedisDTO pDTO = myRedisMapper.getString(redisKey);
+            rContents = objectMapper.readValue(pDTO.text(), new TypeReference<>() {});
+
+        } else { // 없으면 api키 호출해서 redis 저장
+
+            while (true) {
+
+                String apiParam = "/" + apiKey + "/" + "json" + "/" + data + "/" + start + "/" + end;
+
+                String json = NetworkUtil.get(ISiMarketService.apiURL + apiParam, this.setSiMarketInfo());
+
+                // System.out.print("json : " + json);
+
+                Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
+
+
+                Map<String, Object> rData = tMap.containsKey(data) ?
+                        (Map<String, Object>) tMap.get(data) : new HashMap<>();
+
+                if (rData.isEmpty()) { // 호출 데이터가 없으면 변수값 초기화 후 종료
+
+                    i = 1;
+                    start = 1;
+                    end = start + 999;
+
+                    break;
+                } else {
+
+                    Map<String, Object> tData = (Map<String, Object>) tMap.get(data);
+                    List<Map<String, Object>> tContents = (List<Map<String, Object>>) tData.get("row");
+
+                    rContents.addAll(tContents);
+
+                    log.info(data + "API " + i + "Times Data Count : " + tContents.size());
+
+                    start = end + 1;
+                    end = start + 999;
+                    i++;
+
+                }
+            }
+
+            log.info(data + "API Count : " + rContents.size());
+            log.info(this.getClass().getName() + ".getSeoulApiList End!");
+
+            String jsonString = objectMapper.writeValueAsString(rContents);
+            RedisDTO pDTO = RedisDTO.builder()
+                    .text(jsonString)
+                    .build();
+
+            int res = myRedisMapper.saveString(redisKey, pDTO);
+
+            if (res == 1){  // Redis 저장이 성공하면, 저장된 데이터 가져오기
+
+                log.info("Redis 저장 성공!!");
+
+            } else {
+                log.info("Redis 저장 실패!!");
+                throw new Exception("Redis 저장 실패!!");
+            }
+
+        }
 
         return rContents;
     }
@@ -176,46 +225,82 @@ public class SiMarketService implements ISiMarketService {
         int i = 1;
 
         List<Map<String, Object>> rContents = new ArrayList<>();
+        String redisKey = "";
 
+        if(data.equals(marketData)) {
 
-        while(true) {
+            redisKey = "marketKey";
+        } else if(data.equals(storeData)) {
 
-            String apiParam = "/" + apiKey + "/" + "json" + "/" + data + "/" + start + "/" + end;
+            redisKey = "storeKey";
 
-            String json = NetworkUtil.get(ISiMarketService.apiURL + apiParam, this.setSiMarketInfo());
-
-            // System.out.print("json : " + json);
-
-            Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
-
-
-            Map<String, Object> rData = tMap.containsKey(data) ?
-                    (Map<String, Object>) tMap.get(data) : new HashMap<>();
-
-            if(rData.isEmpty()) { // 호출 데이터가 없으면 변수값 초기화 후 종료
-
-                i = 1;
-                start = 1;
-                end = start + 999;
-
-                break;
-            } else {
-
-                Map<String, Object> tData = (Map<String, Object>) tMap.get(data);
-                List<Map<String, Object>> tContents = (List<Map<String, Object>>) tData.get("row");
-
-                rContents.addAll(tContents);
-
-                log.info(data + "API " + i + "Times Data Count : " +tContents.size());
-
-                start = end+1;
-                end = start + 999;
-                i++;
-
-            }
         }
 
-        log.info(data + "API Count : " + rContents.size());
+        if (redisDB.hasKey(redisKey)) { // 있으면 key값으로 가져옴
+
+            log.info("redisDB에서 데이터 가져오기.");
+
+            RedisDTO pDTO = myRedisMapper.getString(redisKey);
+            rContents = objectMapper.readValue(pDTO.text(), new TypeReference<>() {});
+
+        } else { // 없으면 api 호출 후 저장
+
+            while (true) {
+
+                String apiParam = "/" + apiKey + "/" + "json" + "/" + data + "/" + start + "/" + end;
+
+                String json = NetworkUtil.get(ISiMarketService.apiURL + apiParam, this.setSiMarketInfo());
+
+                // System.out.print("json : " + json);
+
+                Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
+
+
+                Map<String, Object> rData = tMap.containsKey(data) ?
+                        (Map<String, Object>) tMap.get(data) : new HashMap<>();
+
+                if (rData.isEmpty()) { // 호출 데이터가 없으면 변수값 초기화 후 종료
+
+                    i = 1;
+                    start = 1;
+                    end = start + 999;
+
+                    break;
+                } else {
+
+                    Map<String, Object> tData = (Map<String, Object>) tMap.get(data);
+                    List<Map<String, Object>> tContents = (List<Map<String, Object>>) tData.get("row");
+
+                    rContents.addAll(tContents);
+
+                    log.info(data + "API " + i + "Times Data Count : " + tContents.size());
+
+                    start = end + 1;
+                    end = start + 999;
+                    i++;
+
+                }
+            }
+
+            log.info(data + "API Count : " + rContents.size());
+
+            String jsonString = objectMapper.writeValueAsString(rContents);
+            RedisDTO pDTO = RedisDTO.builder()
+                    .text(jsonString)
+                    .build();
+
+            int res = myRedisMapper.saveString(redisKey, pDTO);
+
+            if (res == 1){  // Redis 저장이 성공하면, 저장된 데이터 가져오기
+
+                log.info("Redis 저장 성공!!");
+
+            } else {
+                log.info("Redis 저장 실패!!");
+                throw new Exception("Redis 저장 실패!!");
+            }
+
+        }
 
         // 가져온 데이터에서 분기 데이터 필터
         List<Map<String, Object>> fData = rContents.stream()

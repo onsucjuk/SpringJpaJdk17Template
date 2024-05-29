@@ -22,11 +22,11 @@ $(document).ready(function () {
             return;
         }
 
-        if (f.userName.value === "") {
+/*        if (f.userName.value === "") {
             alert("이름을 입력하세요.");
             f.userName.focus();
             return;
-        }
+        }*/
 
         if (f.email.value === "") {
             alert("이메일을 입력하세요.");
