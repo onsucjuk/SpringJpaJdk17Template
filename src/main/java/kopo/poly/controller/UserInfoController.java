@@ -202,6 +202,30 @@ public class UserInfoController {
     }
 
     @ResponseBody
+    @PostMapping(value = "sendPassEmailAuth")
+    public UserInfoDTO sendPassEmailAuth(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + ".sendEmailAuth Start!");
+
+        String email = CmmUtil.nvl(request.getParameter("email")); // 이메일
+        String userId = CmmUtil.nvl(request.getParameter("userId")); // 아이디
+
+        log.info("email : " + email);
+        log.info("userId : " + userId);
+
+        UserInfoDTO pDTO =  UserInfoDTO.builder()
+                .email(EncryptUtil.encAES128CBC(email))
+                .userId(userId)
+                .build();
+
+        UserInfoDTO rDTO = Optional.ofNullable(userInfoService.sendPasswordEmailAuth(pDTO))
+                .orElseGet(() -> UserInfoDTO.builder().build());
+
+        log.info(this.getClass().getName() + ".sendEmailAuth End!");
+
+        return rDTO;
+    }
+
+    @ResponseBody
     @PostMapping(value = "insertUserInfo")
     public MsgDTO inserUserInfo(HttpServletRequest request) throws Exception {
 

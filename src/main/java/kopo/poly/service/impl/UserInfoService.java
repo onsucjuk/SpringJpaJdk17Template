@@ -82,6 +82,38 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
+    public UserInfoDTO getUserIdAndEmailExists(UserInfoDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getEmailExists Start!");
+
+        UserInfoDTO rDTO;
+
+        String userId = CmmUtil.nvl(pDTO.userId());
+        String email = CmmUtil.nvl(pDTO.email());
+
+        log.info("email : " + email);
+        log.info("userId : " + userId);
+
+        Optional<UserInfoEntity> rEntity = userInfoRepository.findByUserIdAndEmail(userId, email);
+
+        if (rEntity.isPresent()) {
+
+            rDTO = UserInfoDTO.builder()
+                    .existsYn("Y")
+                    .build();
+        } else {
+            rDTO = UserInfoDTO.builder()
+                    .existsYn("N")
+                    .build();
+        }
+
+        log.info(this.getClass().getName() + ".getEmailExists End!");
+
+        return rDTO;
+
+    }
+
+    @Override
     public UserInfoDTO getUserInfo(UserInfoDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".getUserInfo Start!");
@@ -298,21 +330,67 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
+    public UserInfoDTO sendPasswordEmailAuth(UserInfoDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".sendPasswordEmailAuth Start!");
+
+        // DB 이메일이 존재하는지 SQL 쿼리 실행
+        // SQL 쿼리에 COUNT()를 사용하기 때문에 반드시 조회 결과 존재
+        UserInfoDTO rDTO = getUserIdAndEmailExists(pDTO);
+        log.info("rDTO : " + rDTO);
+
+        String existsYn = CmmUtil.nvl(rDTO.existsYn());
+        log.info("existsYn : " + existsYn);
+
+        if(existsYn.equals("Y")) {
+            // 6자리 랜덤 숫자 생성하기
+
+            int authNumber = ThreadLocalRandom.current().nextInt(100000,1000000);
+
+            log.info("authNumber : " + authNumber);
+
+            // 인증번호 발송 로직
+            MailDTO dto = MailDTO.builder()
+                    .title("비밀번호 변경 이메일 확인 인증번호 발송 메일")
+                    .contents("인증번호는 " + authNumber + "입니다.")
+                    .toMail(EncryptUtil.decAES128CBC(pDTO.email()))
+                    .build();
+
+            log.info("dto Title : " + dto.title());
+            log.info("dto contents : " + dto.contents());
+            log.info("dto toMail : " + dto.toMail());
+
+            mailService.doSendMail(dto); // 메일 발송
+
+            //메일 변수값 초기화
+            dto = null;
+
+            rDTO = UserInfoDTO.builder()
+                    .authNumber(authNumber)
+                    .existsYn(existsYn)
+                    .build(); // 인증번호를 결과값에 넣어주기
+
+        }
+
+        log.info(this.getClass().getName() + ".sendPasswordEmailAuth End!");
+
+        return rDTO;
+    }
+
+    @Override
     public int searchUserIdOrPasswordPro(UserInfoDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".searchUserIdOrPasswordProc Start!");
 
         String userId = pDTO.userId();
-        String userName = pDTO.userName();
         String email = pDTO.email();
 
         log.info("userId : " + userId);
-        log.info("userName : " + userName);
         log.info("email : " + email);
 
         int res = 0;
 
-        Optional<UserInfoEntity> rEntity = userInfoRepository.findByUserIdAndUserNameAndEmail(userId, userName, email);
+        Optional<UserInfoEntity> rEntity = userInfoRepository.findByUserIdAndEmail(userId, email);
 
         if (rEntity.isPresent()) {
             res = 1;

@@ -22,11 +22,6 @@ $(document).ready(function () {
             return;
         }
 
-/*        if (f.userName.value === "") {
-            alert("이름을 입력하세요.");
-            f.userName.focus();
-            return;
-        }*/
 
         if (f.email.value === "") {
             alert("이메일을 입력하세요.");
@@ -35,7 +30,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-                url: "/user/sendEmailAuth",
+                url: "/user/sendPassEmailAuth",
                 type: "post",
                 dataType: "JSON",
                 data: $("#f").serialize(),
@@ -48,7 +43,7 @@ $(document).ready(function () {
                         alert("이메일로 인증번호가 발송되었습니다. \n받은 메일의 인증번호를 입력하기 바랍니다.");
                         emailAuthNumber = json.authNumber;
                     } else {
-                        alert("가입된 이메일 정보가 없습니다.");
+                        alert("가입된 이메일 정보가 없거나 등록된 이메일과 다릅니다.");
                         f.email.focus();
                     }
                 }
@@ -63,12 +58,6 @@ $(document).ready(function () {
         if (f.userId.value === "") {
             alert("아이디를 입력하세요.");
             f.userId.focus();
-            return;
-        }
-
-        if (f.userName.value === "") {
-            alert("이름을 입력하세요.");
-            f.userName.focus();
             return;
         }
 
@@ -113,12 +102,6 @@ $(document).ready(function () {
         if (f.userId.value === "") {
             alert("아이디를 입력하세요.");
             f.userId.focus();
-            return;
-        }
-
-        if (f.userName.value === "") {
-            alert("이름을 입력하세요.");
-            f.userName.focus();
             return;
         }
 

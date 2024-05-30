@@ -7,6 +7,8 @@ public interface IUserInfoService {
     UserInfoDTO getUserIdExists(UserInfoDTO pDTO) throws Exception;
     UserInfoDTO getEmailExists(UserInfoDTO pDTO) throws Exception;
 
+    UserInfoDTO getUserIdAndEmailExists(UserInfoDTO pDTO) throws Exception;
+
     // 아이디 정보 가져오기
     UserInfoDTO getUserInfo(UserInfoDTO pDTO) throws Exception;
 
@@ -17,6 +19,8 @@ public interface IUserInfoService {
     UserInfoDTO sendEmailAuth(UserInfoDTO pDTO) throws Exception;
 
     UserInfoDTO sendSignUpEmailAuth(UserInfoDTO pDTO) throws Exception;
+
+    UserInfoDTO sendPasswordEmailAuth(UserInfoDTO pDTO) throws Exception;
 
     // 아이디, 비밀번호 찾기에 활용
     int searchUserIdOrPasswordPro(UserInfoDTO pDTO) throws Exception;
