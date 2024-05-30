@@ -110,40 +110,42 @@
                     <p> 전분기 대비 분석</p>
                 </div>
 
-                <table class="whitespace-no-wrap" id = "rankList">
-                        <thead>
-                            <tr
-                                    class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                <div class="whitespace-no-wrap" id = "rankList">
+                        <div>
+                            <div
+                                    class="td-title-bg py-3 text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 flex" style="padding-top: 0px; padding-bottom: 0px;"
                             >
-                                <th class="px-4 py-3 td-title-bg">순위</th>
-                                <th class="px-4 py-3 td-title-bg">업종명</th>
-                                <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
-                                <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
-                            </tr>
-                        </thead>
-                        <tbody
+                                <span class="flex-1 px-4 py-3 td-title-bg">순위</span>
+                                <span class="flex-1 px-4 py-3 td-title-bg">업종명</span>
+                                <span class="flex-1 px-4 py-3 td-title-bg">점포당 매출액</span>
+                                <span class="flex-1 px-4 py-3 td-title-bg">매출액 증가율</span>
+                            </div>
+                        </div>
+                        <!--<div
                                 class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
-                        >
-                            <tr th:each="dto, iter : ${rSalesList}" class="text-gray-700 dark:text-gray-400 tr-bg"
+                        >-->
+                            <div th:each="dto, iter : ${rSalesList}" class="py-3 bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 tr-bg flex" style="padding-top: 0px; padding-bottom: 0px;"
                             >
 
-                                <td class="px-4 py-3 seq" th:text="${iter.index+1}">
-                                </td>
+                                <sapn class="px-4 py-3 seq" th:text="${iter.index+1}">
+                                </sapn>
 
-                                <td class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
-                                </td>
+                                <span class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
+                                </span>
 
-                                <td class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
-                                </td>
+                                <span class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
+                                </span>
 
-                                <td class="px-4 py-3 seq increase" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
-                                <td class="px-4 py-3 seq decrease" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
-                                <td class="px-4 py-3 seq none" th:unless="${dto.salesDiff() != 0}" th:text="'(0만) 0%'">
-                                </td>
+                                <span class="px-4 py-3 seq increase" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
+                                </span>
+                                <span class="px-4 py-3 seq decrease" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
+                                </span>
+                                <span class="px-4 py-3 seq none" th:unless="${dto.salesDiff() != 0}" th:text="'(0만) 0%'">
+                                </span>
 
-                            </tr>
-                        </tbody>
-                </table>
+                            </div>
+                        </div>
+                </div>
 
                 <div id="dataBottom">
                     <p class="selectText">업종 선택</p>
