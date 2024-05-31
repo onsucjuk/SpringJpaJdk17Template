@@ -53,8 +53,6 @@
             <!-- 전체 컨텐츠-->
             <div class="dataContent">
                 <div id="dataHead">
-                <!-- 나중에 클릭시 이벤트 추가 예정-->
-                <!--<select id="guSelect" onchange="chageData()">-->
                     <div class="selectList">
                         <p class="inlineContens selectText">자치구 선택
                             <select class="inlineContens selectBox" id="guSelect">
@@ -89,7 +87,6 @@
                     </div>
                 </div>
 
-
                 <p class="selectText">분석 선택</p>
                 <div class="sortList">
                     <div class="listSort" id="defaultListClicked">
@@ -106,46 +103,72 @@
                     </div>
                 </div>
 
-                <div class="subContent">
-                    <p> 전분기 대비 분석</p>
-                </div>
 
-                <div class="whitespace-no-wrap" id = "rankList">
-                        <div>
-                            <div
-                                    class="td-title-bg py-3 text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 flex" style="padding-top: 0px; padding-bottom: 0px;"
-                            >
-                                <span class="flex-1 px-4 py-3 td-title-bg">순위</span>
-                                <span class="flex-1 px-4 py-3 td-title-bg">업종명</span>
-                                <span class="flex-1 px-4 py-3 td-title-bg">점포당 매출액</span>
-                                <span class="flex-1 px-4 py-3 td-title-bg">매출액 증가율</span>
+                <div class="whitespace-no-wrap" id="rankList">
+                    <div class="subContent">
+                        <p> 전분기 대비 분석</p>
+                    </div>
+                    <div class="table" id="results" style="margin-top: 0px;">
+                        <div class="theader td-title-bg py-3 text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 flex-1" style="padding-top: 0px; padding-bottom: 0px;">
+                            <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                            <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                            <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                            <div class="table_header px-4 py-3 td-title-bg">매출액 증가율</div>
+                        </div>
+                        <div th:each="dto, iter : ${rSalesList}" class="table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1" style="padding-top: 0px; padding-bottom: 0px;">
+                            <div class="table_small">
+                                <div class="table_cell">순위</div>
+                                <div class="table_cell px-4 py-3 seq" th:text="${iter.index+1}"></div>
+                            </div>
+                            <div class="table_small">
+                                <div class="table_cell">업종명</div>
+                                <div class="table_cell px-4 py-3 seq" th:text="${dto.indutyNm()}"></div>
+                            </div>
+                            <div class="table_small">
+                                <div class="table_cell">점포당 매출액</div>
+                                <div class="table_cell px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'"></div>
+                            </div>
+                            <div class="table_small">
+                                <div class="table_cell">매출액 증가율</div>
+                                <div class="table_cell flex-1 px-4 py-3 seq increase" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'"></div>
+                                <div class="table_cell flex-1 px-4py-3 seq decrease" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'"></div>
+                                <div class="table_cell flex-1 px-4 py-3 seq none" th:unless="${dto.salesDiff() != 0}" th:text="'(0만) 0%'"></div>
                             </div>
                         </div>
-                        <!--<div
-                                class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
-                        >-->
-                            <div th:each="dto, iter : ${rSalesList}" class="py-3 bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 tr-bg flex" style="padding-top: 0px; padding-bottom: 0px;"
-                            >
-
-                                <sapn class="px-4 py-3 seq" th:text="${iter.index+1}">
-                                </sapn>
-
-                                <span class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
-                                </span>
-
-                                <span class="px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
-                                </span>
-
-                                <span class="px-4 py-3 seq increase" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
-                                </span>
-                                <span class="px-4 py-3 seq decrease" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
-                                </span>
-                                <span class="px-4 py-3 seq none" th:unless="${dto.salesDiff() != 0}" th:text="'(0만) 0%'">
-                                </span>
-
-                            </div>
-                        </div>
+                    </div>
                 </div>
+                <!--<div class="whitespace-no-wrap" id = "rankList">
+                    <div>
+                        <div
+                                class="td-title-bg py-3 text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 flex-1" style="padding-top: 0px; padding-bottom: 0px;"
+                        >
+                            <span class="px-4 py-3 td-title-bg">순위</span>
+                            <span class="px-4 py-3 td-title-bg">업종명</span>
+                            <span class="px-4 py-3 td-title-bg">점포당 매출액</span>
+                            <span class="px-4 py-3 td-title-bg">매출액 증가율</span>
+                        </div>
+                    </div>
+                    <div th:each="dto, iter : ${rSalesList}" class="px-2 py-3 bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 flex-1" style="padding-top: 0px; padding-bottom: 0px;"
+                    >
+
+                        <sapn class="flex-1 px-4 py-3 seq" th:text="${iter.index+1}">
+                        </sapn>
+
+                        <span class="flex-1 px-4 py-3 seq" th:text="${dto.indutyNm()}">
+                        </span>
+
+                        <span class="flex-1 px-4 py-3 seq" th:text="${dto.fMonthSales()} + '만'">
+                        </span>
+
+                        <span class="flex-1 px-4 py-3 seq increase" th:if="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% up !'">
+                        </span>
+                        <span class="flex-1 px-4 py-3 seq decrease" th:unless="${dto.salesDiff()}>0" th:text="'(' + ${dto.salesDiff()} + ' 만) ' + ${dto.salesRate()} + '% down'">
+                        </span>
+                        <span class="flex-1 px-4 py-3 seq none" th:unless="${dto.salesDiff() != 0}" th:text="'(0만) 0%'">
+                        </span>
+
+                    </div>
+                </div>-->
 
                 <div id="dataBottom">
                     <p class="selectText">업종 선택</p>
@@ -494,12 +517,14 @@
 
                     </button>
                 </div>
-            </div>
+                </div>
+
 
             <!-- 맵 표기 컨텐츠-->
             <div class="map" id ="map_div">
                 나중에 맵 추가 예정
             </div>
+        </div>
         </div>
     </div>
 </div>

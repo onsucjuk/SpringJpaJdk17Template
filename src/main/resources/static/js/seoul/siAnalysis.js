@@ -179,80 +179,90 @@ function makeSiList(nowClickedText) {
 
     // 테이블 내용 변경
     let rankList = document.getElementById("rankList");
-    let thead = rankList.querySelector("thead");
-    let tbody = rankList.querySelector("tbody");
+    let headerContainer = rankList.querySelector(".theader");
+    let resultContainer = rankList.querySelector("#results");
 
-    // select 요소를 가져옴
+// select 요소를 가져옴
     let selectElement = document.getElementById("guSelect");
-    let selectedValue = ""
+    let selectedValue = "";
 
     if (selectElement) {
         // 선택된 옵션의 값(value)을 가져옴
         selectedValue = selectElement.value;
-
     }
-    // 가져온 값 확인
+
+// 가져온 값 확인
     console.log("선택된 값:", selectedValue);
 
-    // thead 초기화
-    thead.innerHTML = "";
-    // 테이블 내용 초기화
-    tbody.innerHTML = "";
+// headerContainer 초기화
+    headerContainer.innerHTML = "";
+// 테이블 내용 초기화
+    resultContainer.innerHTML = "";
 
-    // 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
+// 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
     if (nowClickedText === "매출액") {
 
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
         spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+        resultContainer.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         // 기본값이 매출액이므로 리로드
         $.ajax({
-            url : "/seoul/siSalesList",
-            type : "post",
+            url: "/seoul/siSalesList",
+            type: "post",
             dataType: "JSON",
             data: { "selectedValue": selectedValue },
             success: function (json) {
 
                 let rSalesList = json;
 
-                thead.innerHTML = `
-                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3 td-title-bg">순위</th>
-                            <th class="px-4 py-3 td-title-bg">업종명</th>
-                            <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
-                            <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
-                            </tr>
-                            `;
+                headerContainer.innerHTML = `
+                <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                <div class="table_header px-4 py-3 td-title-bg">매출액 증가율</div>
+            `;
+                resultContainer.appendChild(headerContainer);
+
                 // 예시 데이터 로드 및 채우기
                 for (let i = 0; i < rSalesList.length; i++) {
                     let dto = rSalesList[i];
-                    let row = document.createElement("tr");
+                    let row = document.createElement("div");
+                    row.className = "table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1";
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
-                                <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
-                                ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
-                                dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
-                                '(0원) 0%'}
-                                </td>
-                                `;
-                    tbody.appendChild(row);
+                    <div class="table_small">
+                        <div class="table_cell">순위</div>
+                        <div class="table_cell px-4 py-3 seq">${i + 1}</div>
+                    </div>
+                    <div class="table_small">
+                        <div class="table_cell">업종명</div>
+                        <div class="table_cell px-4 py-3 seq">${dto.indutyNm}</div>
+                    </div>
+                    <div class="table_small">
+                        <div class="table_cell">점포당 매출액</div>
+                        <div class="table_cell px-4 py-3 seq">${dto.fMonthSales}만</div>
+                    </div>
+                    <div class="table_small">
+                        <div class="table_cell">매출액 증가율</div>
+                        <div class="table_cell flex-1 px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
+                            ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
+                        dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
+                            '(0원) 0%'}
+                        </div>
+                    </div>
+                `;
+                    resultContainer.appendChild(row);
                 }
-
-
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제
                 spinner.remove();
             }
-
-        })
+        });
     }
 
     else if (nowClickedText === "점포수") {
@@ -260,7 +270,7 @@ function makeSiList(nowClickedText) {
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
         spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+        resultContainer.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         $.ajax({
             url : "/seoul/siStoreList",
@@ -271,29 +281,43 @@ function makeSiList(nowClickedText) {
 
                 let rStoreList = json;
 
-                thead.innerHTML = `
-                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3 td-title-bg">순위</th>
-                            <th class="px-4 py-3 td-title-bg">업종명</th>
-                            <th class="px-4 py-3 td-title-bg">점포수</th>
-                            <th class="px-4 py-3 td-title-bg">점포수 증가율</th>
-                            </tr>
-                            `;
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수 증가율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
+
                 // 예시 데이터 로드 및 채우기
                 for (let i = 0; i < rStoreList.length; i++) {
                     let dto = rStoreList[i];
-                    let row = document.createElement("tr");
+                    let row = document.createElement("div");
+                    row.className = "table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1";
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
-                                <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
-                                ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                                dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
-                                '0개 ' + dto.storeRate + '%'}
-                                </td>
+                                <div class="table_small">
+                                    <div class="table_cell">순위</div>
+                                    <div class="table_cell px-4 py-3 seq">${i + 1}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">업종명</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.indutyNm}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">점포수 매출액</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.storeCount}만</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">점포수 증가율</div>
+                                    <div class="table_cell flex-1 px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
+                                        ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% up !' :
+                                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% down' :
+                                        '(0원) 0%'}
+                                    </div>
+                                </div>
                                 `;
-                    tbody.appendChild(row);
+                    resultContainer.appendChild(row);
                 }
 
 
@@ -313,7 +337,7 @@ function makeSiList(nowClickedText) {
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
         spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+        resultContainer.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         $.ajax({
             url: "/seoul/siStoreCloseList",
@@ -324,29 +348,43 @@ function makeSiList(nowClickedText) {
 
                 let rStoreCloseList = json;
 
-                thead.innerHTML = `
-                                <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                    <th class="px-4 py-3 td-title-bg">순위</th>
-                                    <th class="px-4 py-3 td-title-bg">업종명</th>
-                                    <th class="px-4 py-3 td-title-bg">폐업수</th>
-                                    <th class="px-4 py-3 td-title-bg">폐업수 증가율</th>
-                                </tr>
-                            `;
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">폐업수</div>
+                    <div class="table_header px-4 py-3 td-title-bg">폐업수 증가율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
+
                 // 예시 데이터 로드 및 채우기
                 for (let i = 0; i < rStoreCloseList.length; i++) {
                     let dto = rStoreCloseList[i];
-                    let row = document.createElement("tr");
+                    let row = document.createElement("div");
+                    row.className = "table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1";
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
-                                <td class="px-4 py-3 seq">${dto.closeStoreCount}개</td>
-                                <td class="px-4 py-3 seq ${dto.closeStoreDiff > 0 ? 'decrease' : dto.closeStoreDiff < 0 ? 'increase' : 'none'}">
-                                ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up' :
-                                dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down !' :
-                                '0개 ' + dto.closeStoreRate + '%'}
-                                </td>
+                                <div class="table_small">
+                                    <div class="table_cell">순위</div>
+                                    <div class="table_cell px-4 py-3 seq">${i + 1}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">업종명</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.indutyNm}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">폐업수</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.closeStoreCount}만</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">폐업수 증가율</div>
+                                    <div class="table_cell flex-1 px-4 py-3 seq ${dto.closeStoreDiff > 0 ? 'increase' : dto.closeStoreDiff < 0 ? 'decrease' : 'none'}">
+                                        ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '만) ' + dto.closeStoreRate + '% up !' :
+                                        dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '만) ' + dto.closeStoreRate + '% down' :
+                                        '(0원) 0%'}
+                                    </div>
+                                </div>
                                 `;
-                    tbody.appendChild(row);
+                    resultContainer.appendChild(row);
 
                 }
             },
@@ -455,64 +493,6 @@ function indutyAnalysis() {
     selectElement.value = selectedValue
     // 변경된 값에 따라 화면 갱신
     selectElement.dispatchEvent(new Event('change'));
-
-    // 테이블 정보 표시
-
-    // 지도 이동
-
-    // 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
-    /*if (nowClickedText === "매출액") {
-
-        // 로딩 스피너 추가
-        const spinner = document.createElement("div");
-        spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
-
-        // 기본값이 매출액이므로 리로드
-        $.ajax({
-            url : "/seoul/siSalesList",
-            type : "post",
-            dataType: "JSON",
-            data: { "selectedValue": selectedValue },
-            success: function (json) {
-
-                let rSalesList = json;
-
-                thead.innerHTML = `
-                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3 td-title-bg">순위</th>
-                            <th class="px-4 py-3 td-title-bg">업종명</th>
-                            <th class="px-4 py-3 td-title-bg">매출액</th>
-                            <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
-                            </tr>
-                            `;
-                // 예시 데이터 로드 및 채우기
-                for (let i = 0; i < rSalesList.length; i++) {
-                    let dto = rSalesList[i];
-                    let row = document.createElement("tr");
-                    row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.indutyNm}</td>
-                                <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq">${'(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !'}</td>
-                                `;
-                    tbody.appendChild(row);
-                }
-
-
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request error:", status, error);
-            },
-            complete: function () {
-                // AJAX 요청이 완료된 후에 로딩 스피너 삭제
-                spinner.remove();
-            }
-
-        })
-    }*/
-
-
 
 }
 
@@ -801,8 +781,8 @@ function makeInduList(nowClickedText) {
 
     // 테이블 내용 변경
     let rankList = document.getElementById("rankList");
-    let thead = rankList.querySelector("thead");
-    let tbody = rankList.querySelector("tbody");
+    let headerContainer = rankList.querySelector(".theader");
+    let resultContainer = rankList.querySelector("#results");
 
     // select 요소를 가져옴
     let selectElement = document.getElementById("induGuSelect");
@@ -833,10 +813,10 @@ function makeInduList(nowClickedText) {
     // 가져온 값 확인
     console.log("선택된 값:", selectedValue);
 
-    // thead 초기화
-    thead.innerHTML = "";
+    // headerContainer 초기화
+    headerContainer.innerHTML = "";
     // 테이블 내용 초기화
-    tbody.innerHTML = "";
+    resultContainer.innerHTML = "";
 
     // 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
     if (nowClickedText === "매출액") {
@@ -844,7 +824,7 @@ function makeInduList(nowClickedText) {
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
         spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+        resultContainer.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         // 기본값이 매출액이므로 리로드
         $.ajax({
@@ -860,29 +840,42 @@ function makeInduList(nowClickedText) {
 
                 let rSalesList = json;
 
-                thead.innerHTML = `
-                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3 td-title-bg">순위</th>
-                            <th class="px-4 py-3 td-title-bg">지역명</th>
-                            <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
-                            <th class="px-4 py-3 td-title-bg">매출액 증가율</th>
-                            </tr>
-                            `;
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                    <div class="table_header px-4 py-3 td-title-bg">매출액 증가율</div>
+                 `;
+                resultContainer.appendChild(headerContainer);
+
                 // 예시 데이터 로드 및 채우기
                 for (let i = 0; i < rSalesList.length; i++) {
                     let dto = rSalesList[i];
-                    let row = document.createElement("tr");
+                    let row = document.createElement("div");
+                    row.className = "table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1";
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
-                                <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
-                                ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
+                    <div class="table_small">
+                        <div class="table_cell">순위</div>
+                        <div class="table_cell px-4 py-3 seq">${i + 1}</div>
+                    </div>
+                    <div class="table_small">
+                        <div class="table_cell">업종명</div>
+                        <div class="table_cell px-4 py-3 seq">${dto.seoulLocationNm}</div>
+                    </div>
+                    <div class="table_small">
+                        <div class="table_cell">점포당 매출액</div>
+                        <div class="table_cell px-4 py-3 seq">${dto.fMonthSales}만</div>
+                    </div>
+                    <div class="table_small">
+                        <div class="table_cell">매출액 증가율</div>
+                        <div class="table_cell flex-1 px-4 py-3 seq ${dto.salesDiff > 0 ? 'increase' : dto.salesDiff < 0 ? 'decrease' : 'none'}">
+                            ${dto.salesDiff > 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% up !' :
                         dto.salesDiff < 0 ? '(' + dto.salesDiff + '만) ' + dto.salesRate + '% down' :
                             '(0원) 0%'}
-                                </td>
-                                `;
-                    tbody.appendChild(row);
+                        </div>
+                    </div>
+                `;
+                    resultContainer.appendChild(row);
                 }
 
 
@@ -896,12 +889,12 @@ function makeInduList(nowClickedText) {
             }
 
         })
-    } else if (nowClickedText === "점포수") {
+    } else if (nowClickedText === "점포수") { // 여기 수정 할 차례
 
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
         spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+        resultContainer.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         $.ajax({
             url: "/seoul/guStoreList",
@@ -916,29 +909,43 @@ function makeInduList(nowClickedText) {
 
                 let rStoreList = json;
 
-                thead.innerHTML = `
-                            <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3 td-title-bg">순위</th>
-                            <th class="px-4 py-3 td-title-bg">지역명</th>
-                            <th class="px-4 py-3 td-title-bg">점포수</th>
-                            <th class="px-4 py-3 td-title-bg">점포수 증가율</th>
-                            </tr>
-                            `;
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수 증가율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
+
                 // 예시 데이터 로드 및 채우기
                 for (let i = 0; i < rStoreList.length; i++) {
                     let dto = rStoreList[i];
-                    let row = document.createElement("tr");
+                    let row = document.createElement("div");
+                    row.className = "table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1";
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${i + 1}</td>
-                                <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
-                                <td class="px-4 py-3 seq">${dto.storeCount}개</td>
-                                <td class="px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
-                                ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
-                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
-                            '0개 ' + dto.storeRate + '%'}
-                                </td>
+                                <div class="table_small">
+                                    <div class="table_cell">순위</div>
+                                    <div class="table_cell px-4 py-3 seq">${i + 1}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">업종명</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.seoulLocationNm}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">점포수</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.storeCount}만</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">점포수 증가율</div>
+                                    <div class="table_cell flex-1 px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
+                                        ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% up !' :
+                                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% down' :
+                                        '(0원) 0%'}
+                                    </div>
+                                </div>
                                 `;
-                    tbody.appendChild(row);
+                    resultContainer.appendChild(row);
                 }
 
 
@@ -958,7 +965,7 @@ function makeInduList(nowClickedText) {
         // 로딩 스피너 추가
         const spinner = document.createElement("div");
         spinner.className = "spinner"; // 스피너에 CSS 클래스 적용
-        tbody.appendChild(spinner); // 테이블 내부에 스피너 추가
+        resultContainer.appendChild(spinner); // 테이블 내부에 스피너 추가
 
         $.ajax({
             url: "/seoul/guCustomerList",
@@ -973,27 +980,41 @@ function makeInduList(nowClickedText) {
 
                 let rCustomerList = json;
 
-                thead.innerHTML = `
-                                <tr class="text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                    <th class="px-4 py-3 td-title-bg">나이대</th>
-                                    <th class="px-4 py-3 td-title-bg">지역명</th>
-                                    <th class="px-4 py-3 td-title-bg">점포당 매출액</th>
-                                    <th class="px-4 py-3 td-title-bg">주고객층 비율</th>
-                                </tr>
-                            `;
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">나이대</div>
+                    <div class="table_header px-4 py-3 td-title-bg">지역명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                    <div class="table_header px-4 py-3 td-title-bg">주고객층 비율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
+
                 // 예시 데이터 로드 및 채우기
                 for (let i = 0; i < rCustomerList.length; i++) {
                     let dto = rCustomerList[i];
-                    let row = document.createElement("tr");
+                    let row = document.createElement("div");
+                    row.className = "table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1";
                     row.innerHTML = `
-                                <td class="px-4 py-3 seq">${(i + 1) * 10 + '대'}</td>
-                                <td class="px-4 py-3 seq">${dto.seoulLocationNm}</td>
-                                <td class="px-4 py-3 seq">${dto.fMonthSales}만</td>
-                                <td class="px-4 py-3 seq none"> 
-                                ${'(' + dto['age' + ((i + 1) * 10) + 'Sale'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '%'}
-                                </td>
-                                `;
-                    tbody.appendChild(row);
+                                <div class="table_small">
+                                    <div class="table_cell">나이대</div>
+                                    <div class="table_cell px-4 py-3 seq">${(i + 1) * 10 + '대'}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">지역명</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.seoulLocationNm}</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">점포당 매출액</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.fMonthSales}만</div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">주고객층 비율</div>
+                                    <div class="table_cell flex-1 px-4 py-3 seq ageSales">
+                                        ${'(' + dto['age' + ((i + 1) * 10) + 'Sale'] + '만) ' + dto['age' + ((i + 1) * 10) + 'SalesRate'] + '%'}
+                                    </div>
+                                </div>
+                                `
+                    resultContainer.appendChild(row);
 
                 }
 
@@ -1017,42 +1038,28 @@ function addClassTop() {
     // 테이블 요소를 가져옴
     let table = document.getElementById("rankList");
 
-    // 최대 비율 초기값 설정
+    // 최대 비율 및 매출 초기값 설정
     let maxPercentage = 0;
-    let maxRow;
     let maxSales = 0;
+    let maxRow;
 
     // 테이블의 각 행을 반복
-    let rows = table.getElementsByTagName("tr");
-    for (let i = 1; i < rows.length; i++) {
-        // 현재 행에서 % 값 추출
-        let percentageText = rows[i].querySelector(".none").textContent;
-        let number = percentageText.match(/([\d.]+)만/);
+    let rows = table.querySelectorAll('.table_row');
+    for (let i = 0; i < rows.length; i++) {
+        // 현재 행에서 % 값 및 매출 추출
+        let percentageText = rows[i].querySelector(".ageSales").textContent;
         let percentageMatch = percentageText.match(/(\d+(\.\d+)?)%/);
-
-        let sales = parseFloat(number[1]);
-        console.log("sales : " + sales);
-        console.log("percentageMatch : " + percentageMatch);
+        let salesText = rows[i].querySelector(".px-4.py-3.seq").textContent;
+        let sales = parseFloat(salesText.replace('만', '').replace(/,/g, ''));
 
         // 문자열을 부동 소수점 숫자로 변환
         let percentageValue = parseFloat(percentageMatch[1]);
 
         // 현재 비율이 최대 비율보다 높으면 최대값 및 해당 행 갱신
-        if (percentageValue > maxPercentage) {
-
-                maxPercentage = percentageValue;
-                maxSales = sales;
-                maxRow = rows[i];
-
-        } else if (percentageValue === maxPercentage) {
-
-            if(sales > maxSales) {
-
-                maxSales = sales;
-                maxRow = rows[i];
-
-            }
-
+        if (percentageValue > maxPercentage || (percentageValue === maxPercentage && sales > maxSales)) {
+            maxPercentage = percentageValue;
+            maxSales = sales;
+            maxRow = rows[i];
         }
     }
 
