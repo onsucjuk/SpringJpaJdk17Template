@@ -96,6 +96,14 @@
                             <canvas id="myCircleAgeChart" width="100%" height="30"></canvas>
                             <p id="circleAge"></p>
                         </div>
+                        <div class="chart-body">
+                            <canvas id="myCircleTimeChart" width="100%" height="30"></canvas>
+                            <p id="circleTime"></p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="myCircleGenderChart" width="100%" height="30"></canvas>
+                            <p id="circleGender"></p>
+                        </div>
                     </div>
                 </div>
         </div>
@@ -127,97 +135,6 @@
     </div>
 </div>
 </body>
-<!--<body>
-    <div>매출액</div>
-    <div id = "sales" onchange="userIdFunc"></div>
-    <div>점포수</div>
-    <div id = "store"></div>
-    <div>폐업수</div>
-    <div id = "close"></div>
-    <div>서울 전체에서 업종 전체 매출액</div>
-    <tr th:each="dto : ${seoulList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
-        </td>
-    </tr>
-
-    <br>
-
-    <div>서울 전체에서의 선택 업종 매출액</div>
-    <tr th:each="dto : ${seoulIndutyList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
-        </td>
-    </tr>
-
-    <br>
-
-    <div>선택 지역(구)의 선택 업종 매출액</div>
-    <tr th:each="dto : ${guList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
-        </td>
-    </tr>
-
-    <div>선택 지역(구)의 선택 업종 점포수</div>
-    <tr th:each="dto : ${guList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.storeCount(), 1, 2)}">
-        </td>
-    </tr>
-
-    <div>선택 지역(구)의 선택 업종 폐업수</div>
-    <tr th:each="dto : ${guList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.closeStoreCount(), 1, 2)}">
-        </td>
-    </tr>
-
-    <br>
-
-    <div>지역 별 매출액 비중</div>
-    <tr th:each="dto : ${sortedList}"
-        class="text-gray-700 dark:text-gray-400 tr-bg"
-    >
-        <td class="px-4 py-3 seq" th:text="${dto.indutyNm()}">
-        </td>
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(dto.monthSales(), 1, 2)}">
-        </td>
-    </tr>
-
-
-
-    <div>나이대 별 매출액 비중</div>
-    <tr class="text-gray-700 dark:text-gray-400 tr-bg">
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(guList.get(guList.size()-1).age10Sales(), 1, 2)}">
-        </td>
-    </tr>
-    <tr class="text-gray-700 dark:text-gray-400 tr-bg">
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(guList.get(guList.size()-1).age20Sales(), 1, 2)}">
-        </td>
-    </tr>
-    <tr class="text-gray-700 dark:text-gray-400 tr-bg">
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(guList.get(guList.size()-1).age30Sales(), 1, 2)}">
-        </td>
-    </tr>
-    <tr class="text-gray-700 dark:text-gray-400 tr-bg">
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(guList.get(guList.size()-1).age40Sales(), 1, 2)}">
-        </td>
-    </tr>
-    <tr class="text-gray-700 dark:text-gray-400 tr-bg">
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(guList.get(guList.size()-1).age50Sales(), 1, 2)}">
-        </td>
-    </tr>
-    <tr class="text-gray-700 dark:text-gray-400 tr-bg">
-        <td class="px-4 py-3 seq" th:text="${#numbers.formatDecimal(guList.get(guList.size()-1).age60Sales(), 1, 2)}">
-        </td>
-    </tr>
-</body>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js" integrity="sha512-QEiC894KVkN9Tsoi6+mKf8HaCLJvyA6QIRzY5KrfINXYuP9NxdIkRQhGq3BZi0J4I7V5SidGM3XUQ5wFiMDuWg==" crossorigin="anonymous"></script>
 <script src="/js/seoul/totalAnalysis.js"></script>
 </html>

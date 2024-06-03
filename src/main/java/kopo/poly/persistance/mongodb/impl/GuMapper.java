@@ -376,6 +376,14 @@ public class GuMapper implements IGuMapper {
         projection.append("AGE_40_SALES", "$AGE_40_SALES");
         projection.append("AGE_50_SALES", "$AGE_50_SALES");
         projection.append("AGE_60_SALES", "$AGE_60_SALES");
+        projection.append("TIME_0006_SALES", "$TIME_0006_SALES");
+        projection.append("TIME_0611_SALES", "$TIME_0611_SALES");
+        projection.append("TIME_1114_SALES", "$TIME_1114_SALES");
+        projection.append("TIME_1417_SALES", "$TIME_1417_SALES");
+        projection.append("TIME_1721_SALES", "$TIME_1721_SALES");
+        projection.append("TIME_2124_SALES", "$TIME_2124_SALES");
+        projection.append("FEMALE_SALES", "$FEMALE_SALES");
+        projection.append("MALE_SALES", "$MALE_SALES");
         projection.append("_id", 0);
 
 
@@ -390,6 +398,14 @@ public class GuMapper implements IGuMapper {
         double sumAge40Sales = 0;
         double sumAge50Sales = 0;
         double sumAge60Sales = 0;
+        double sumTime0006Sales = 0;
+        double sumTime0611Sales = 0;
+        double sumTime1114Sales = 0;
+        double sumTime1417Sales = 0;
+        double sumTime1721Sales = 0;
+        double sumTime2124Sales = 0;
+        double sumFemaleSales = 0;
+        double sumMaleSales = 0;
 
         for (Document doc : rs) {
 
@@ -401,6 +417,14 @@ public class GuMapper implements IGuMapper {
             double age40Sales = doc.getDouble("AGE_40_SALES");
             double age50Sales = doc.getDouble("AGE_50_SALES");
             double age60Sales = doc.getDouble("AGE_60_SALES");
+            double time0006Sales = doc.getDouble("TIME_0006_SALES");
+            double time0611Sales = doc.getDouble("TIME_0611_SALES");
+            double time1114Sales = doc.getDouble("TIME_1114_SALES");
+            double time1417Sales = doc.getDouble("TIME_1417_SALES");
+            double time1721Sales = doc.getDouble("TIME_1721_SALES");
+            double time2124Sales = doc.getDouble("TIME_2124_SALES");
+            double maleSales = doc.getDouble("FEMALE_SALES");
+            double femaleSales = doc.getDouble("MALE_SALES");
 
             log.info("seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
 
@@ -411,6 +435,14 @@ public class GuMapper implements IGuMapper {
             sumAge40Sales += age40Sales;
             sumAge50Sales += age50Sales;
             sumAge60Sales += age60Sales;
+            sumTime0006Sales += time0006Sales;
+            sumTime0611Sales += time0611Sales;
+            sumTime1114Sales += time1114Sales;
+            sumTime1417Sales += time1417Sales;
+            sumTime1721Sales += time1721Sales;
+            sumTime2124Sales += time2124Sales;
+            sumMaleSales += maleSales;
+            sumFemaleSales += femaleSales;
 
         }
 
@@ -422,6 +454,14 @@ public class GuMapper implements IGuMapper {
                 .age40Sales(sumAge40Sales)
                 .age50Sales(sumAge50Sales)
                 .age60Sales(sumAge60Sales)
+                .time0006Sales(sumTime0006Sales)
+                .time0611Sales(sumTime0611Sales)
+                .time1114Sales(sumTime1114Sales)
+                .time1417Sales(sumTime1417Sales)
+                .time1721Sales(sumTime1721Sales)
+                .time2124Sales(sumTime2124Sales)
+                .maleSales(sumMaleSales)
+                .femaleSales(sumFemaleSales)
                 .build();
 
         log.info(this.getClass().getName() + ".getGuSalesGraphByIndutyNm End!");

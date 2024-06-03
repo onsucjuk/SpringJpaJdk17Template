@@ -89,14 +89,27 @@
 }
 
 #circleAge,
-#myCircleMarketChart {
+#myCircleAgeChart {
     display: block;
     width: 100%;
     text-align: center;
 }
 
+#circleTime,
+#myCircleTimeChart {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
 
-#circleMarket, #circleAge {
+#circleGender,
+#myCircleGenderChart {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+#circleMarket, #circleAge, #circleTime, #circleGender {
 
     margin: 20px;
     font-weight: bold;

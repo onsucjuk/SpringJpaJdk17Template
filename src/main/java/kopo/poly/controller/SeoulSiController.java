@@ -52,7 +52,7 @@ public class SeoulSiController {
 
         } else {
 
-            return "user/login";
+            return "redirect:/user/login";
 
         }
 
@@ -390,80 +390,88 @@ public class SeoulSiController {
      */
 
     @GetMapping(value = "totalAnalysis")
-    public String totalAnalysis(HttpServletRequest request, ModelMap model) throws Exception {
+    public String totalAnalysis(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
 
         log.info(this.getClass().getName() + ".totalAnalysis Start!");
 
-        List<SeoulSiMarketDTO> seoulList = new ArrayList<>();
-        List<SeoulSiMarketDTO> guList = new ArrayList<>();
-        List<SeoulSiMarketDTO> seoulIndutyList = new ArrayList<>();
-        List<SeoulSiMarketDTO> sortedList = new LinkedList<>();
+        String userId =  CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
-        String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역코드
-        String guName = CmmUtil.nvl(request.getParameter("guName")); // 지역명
-        String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
+        if(userId.length() > 0) {
+
+            List<SeoulSiMarketDTO> seoulList = new ArrayList<>();
+            List<SeoulSiMarketDTO> guList = new ArrayList<>();
+            List<SeoulSiMarketDTO> seoulIndutyList = new ArrayList<>();
+            List<SeoulSiMarketDTO> sortedList = new LinkedList<>();
+
+            String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역코드
+            String guName = CmmUtil.nvl(request.getParameter("guName")); // 지역명
+            String induty = CmmUtil.nvl(request.getParameter("induty")); // 선택 업종
 
 
-        log.info("guSelect : " + guSelect);
-        log.info("induty : " + induty);
+            log.info("guSelect : " + guSelect);
+            log.info("induty : " + induty);
 
-        SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
-                .seoulLocationNm(guName)
-                .indutyNm(induty)
-                .build();
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationNm(guName)
+                    .indutyNm(induty)
+                    .build();
 
-        int sort = 0;
+            int sort = 0;
 
-        if (induty.equals("외식업")) {
+            if (induty.equals("외식업")) {
 
-            induty = "CS1";
+                induty = "CS1";
 
-        } else if (induty.equals("서비스업")) {
+            } else if (induty.equals("서비스업")) {
 
-            induty = "CS2";
+                induty = "CS2";
 
-        } else if (induty.equals("소매업")) {
+            } else if (induty.equals("소매업")) {
 
-            induty = "CS3";
+                induty = "CS3";
 
-        } else { // 나머지의 경우 indutyName으로 검색
+            } else { // 나머지의 경우 indutyName으로 검색
 
-            sort = 1;
+                sort = 1;
 
+            }
+
+            if (sort == 0) { // 업종 대분류 검색
+
+                // 서울 전체
+                seoulList = siMarketService.getSeoulMarketLikeIndutyCd(induty);
+                // 구
+                guList = guMarketService.getGuMarketLikeIndutyCd(induty, guSelect);
+                // 동
+                seoulIndutyList = guMarketService.getIndutyMarket();
+                // 지역 매출 비중
+                sortedList = guMarketService.getSortedMarketByIndutyCd(induty);
+
+            } else { // 업종 소분류
+
+                // 서울 전체
+                seoulList = siMarketService.getSeoulMarketByIndutyNm(induty);
+                // 구
+                guList = guMarketService.getGuMarketIndutyNm(induty, guSelect);
+                // 동
+                seoulIndutyList = guMarketService.getIndutyMarket();
+                // 지역 매출 비중
+                sortedList = guMarketService.getSortedMarketByIndutyNm(induty);
+
+            }
+
+            model.addAttribute("seoulList", seoulList);
+            model.addAttribute("guList", guList);
+            model.addAttribute("seoulIndutyList", seoulIndutyList);
+            model.addAttribute("sortedList", sortedList);
+            model.addAttribute("pDTO", pDTO);
+
+            sort = 0; // 초기화
+
+        } else { // 아이디가 없으면 로그인 창으로 이동
+
+            return "redirect:/user/login";
         }
-
-        if (sort == 0) { // 업종 대분류 검색
-
-            // 서울 전체
-            seoulList = siMarketService.getSeoulMarketLikeIndutyCd(induty);
-            // 구
-            guList = guMarketService.getGuMarketLikeIndutyCd(induty, guSelect);
-            // 동
-            seoulIndutyList = guMarketService.getIndutyMarket();
-            // 지역 매출 비중
-            sortedList = guMarketService.getSortedMarketByIndutyCd(induty);
-
-        } else { // 업종 소분류
-
-            // 서울 전체
-            seoulList = siMarketService.getSeoulMarketByIndutyNm(induty);
-            // 구
-            guList = guMarketService.getGuMarketIndutyNm(induty, guSelect);
-            // 동
-            seoulIndutyList = guMarketService.getIndutyMarket();
-            // 지역 매출 비중
-            sortedList = guMarketService.getSortedMarketByIndutyNm(induty);
-
-        }
-
-        model.addAttribute("seoulList", seoulList);
-        model.addAttribute("guList", guList);
-        model.addAttribute("seoulIndutyList", seoulIndutyList);
-        model.addAttribute("sortedList", sortedList);
-        model.addAttribute("pDTO", pDTO);
-
-
-        sort = 0; // 초기화
 
         return "seoul/totalAnalysis";
 

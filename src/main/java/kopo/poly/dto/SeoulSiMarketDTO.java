@@ -25,6 +25,14 @@ public record SeoulSiMarketDTO(
         double age50Sales, // 50대 매출금액
         double age60Sales, // 60대 이상 매출금액
 
+        // 시간대 별 매출액
+        double time0006Sales, // 00시~06시
+        double time0611Sales, // 06시~11시
+        double time1114Sales, // 11시~14시
+        double time1417Sales, // 14시~17시
+        double time1721Sales, // 17시~21시
+        double time2124Sales, // 21시~24시
+
         // 형변환된 매출금액
         String age10Sale, // 10대 매출금액
         String age20Sale, // 20대 매출금액

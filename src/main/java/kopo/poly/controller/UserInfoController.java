@@ -468,7 +468,7 @@ public class UserInfoController {
 
         } else {
 
-            return "/user/login";
+            return "redirect:/user/login";
 
         }
 
@@ -504,7 +504,7 @@ public class UserInfoController {
 
         } else {
 
-            return "/user/login";
+            return "redirect:/user/login";
 
         }
 
@@ -527,7 +527,7 @@ public class UserInfoController {
         } else {
 
 
-            return "user/login";
+            return "redirect:/user/login";
 
         }
 
@@ -665,7 +665,7 @@ public class UserInfoController {
         if(userId.length()>0){
 
         } else {
-            return "user/login";
+            return "redirect:/user/login";
         }
 
         log.info(this.getClass().getName() + ".user/withdrawal End!");

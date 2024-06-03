@@ -199,30 +199,39 @@ public class NoticeController {
      * 게시판 수정 보기
      */
     @GetMapping(value = "noticeEditInfo")
-    public String noticeEditInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeEditInfo(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
 
         log.info(this.getClass().getName() + ".noticeEditInfo Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
-        /*
-         * ####################################################################################
-         * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-         * ####################################################################################
-         */
-        log.info("nSeq : " + nSeq);
+        if (userId.length() > 0) {
 
-        /*
-         * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
-         */
-        NoticeDTO pDTO = NoticeDTO.builder().noticeSeq(Long.parseLong(nSeq)).build();
+            /*
+             * ####################################################################################
+             * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
+             * ####################################################################################
+             */
+            log.info("nSeq : " + nSeq);
 
-        // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
-        NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, false))
-                .orElseGet(() -> NoticeDTO.builder().build());
+            /*
+             * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
+             */
+            NoticeDTO pDTO = NoticeDTO.builder().noticeSeq(Long.parseLong(nSeq)).build();
 
-        // 조회된 리스트 결과값 넣어주기
-        model.addAttribute("rDTO", rDTO);
+            // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
+            NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, false))
+                    .orElseGet(() -> NoticeDTO.builder().build());
+
+            // 조회된 리스트 결과값 넣어주기
+            model.addAttribute("rDTO", rDTO);
+
+        } else {
+
+            return "redirect:/user/login";
+
+        }
 
         log.info(this.getClass().getName() + ".noticeEditInfo End!");
 

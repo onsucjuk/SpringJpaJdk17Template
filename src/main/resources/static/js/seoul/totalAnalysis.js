@@ -100,18 +100,23 @@ $(document).ready(function () {
     let storeGuList = convertStoreList(guList);
     let sotredList = convertSortedList(sortedList);
 
-    let tempAgeList = guList.at(guList.length-1);
+    let tempList = guList.at(guList.length-1);
 
-    let ageList = getAgeMarket(tempAgeList);
+    let ageList = getAgeMarket(tempList);
+    let genderList = getGenderMarket(tempList);
+    let timeList = getTimeMarket(tempList);
 
-    console.log("tempAgeList : " + tempAgeList)
-    console.log("ageList : " + ageList)
+    console.log("tempAgeList : " + tempList)
+    console.log("genderList : " + genderList)
+    console.log("timeList : " + timeList)
 
     makeRevenueChart(pSeoulList, pSeoulIndutyList, pGuList)
     makeStoreChart(storeGuList)
     makeCloseChart(storeGuList)
     makeDonutLocaion(sotredList)
     makeDonutAge(ageList)
+    makeDonutGender(genderList)
+    makeDonutTime(timeList)
 
     $("#btnCloseWindow").on("click", function () {
         window.close() // 창 닫기
@@ -158,6 +163,30 @@ function getAgeMarket(dto) {
     let age60Sales = typeof dto.age60Sales === 'function' ? dto.age60Sales() : dto.age60Sales;
 
     let rArray = [age10Sales.toFixed(2), age20Sales.toFixed(2), age30Sales.toFixed(2), age40Sales.toFixed(2), age50Sales.toFixed(2), age60Sales.toFixed(2)]
+
+    return rArray;
+}
+
+function getGenderMarket(dto) {
+    // 나이대 별 매출액
+    let maleSales = typeof dto.maleSales === 'function' ? dto.maleSales() : dto.maleSales;
+    let femaleSales = typeof dto.femaleSales === 'function' ? dto.femaleSales() : dto.femaleSales;
+
+    let rArray = [maleSales.toFixed(2), femaleSales.toFixed(2)]
+
+    return rArray;
+}
+
+function getTimeMarket(dto) {
+    // 나이대 별 매출액
+    let time0006Sales = typeof dto.time0006Sales === 'function' ? dto.time0006Sales() : dto.time0006Sales;
+    let time0611Sales = typeof dto.time0611Sales === 'function' ? dto.time0611Sales() : dto.time0611Sales;
+    let time1114Sales = typeof dto.time1114Sales === 'function' ? dto.time1114Sales() : dto.time1114Sales;
+    let time1417Sales = typeof dto.time1417Sales === 'function' ? dto.time1417Sales() : dto.time1417Sales;
+    let time1721Sales = typeof dto.time1721Sales === 'function' ? dto.time1721Sales() : dto.time1721Sales;
+    let time2124Sales = typeof dto.time2124Sales === 'function' ? dto.time2124Sales() : dto.time2124Sales;
+
+    let rArray = [time0006Sales.toFixed(2), time0611Sales.toFixed(2), time1114Sales.toFixed(2), time1417Sales.toFixed(2), time1721Sales.toFixed(2), time2124Sales.toFixed(2)]
 
     return rArray;
 }
@@ -509,7 +538,7 @@ function makeDonutAge(array) {
         data: {
             labels: ageArray,
             datasets: [{
-                label: '지역별 매출액',
+                label: '나이대 별 매출액',
                 data: array,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
@@ -524,6 +553,124 @@ function makeDonutAge(array) {
         }
     });
 }
+
+function makeDonutGender(array) {
+
+    let genderArray = ["남성", "여성"]
+
+    let sum = array.reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0);
+    console.log("sum : " + sum)
+    // 최대값 구하기
+    let max = Math.max(...array).toFixed(2); // spread operator를 사용하여 배열 전체를 전달
+    let maxAsString = max.toString();
+
+    console.log("array : " + array)
+
+    let maxIndex = array.indexOf(maxAsString);
+
+    console.log("최대값 : ", max);
+    console.log("최대값의 인덱스 : ", maxIndex);
+
+    let maxGender;
+    if(maxIndex===0){
+
+        maxGender = "남성"
+
+    } else {
+
+        maxGender = "여성"
+
+    }
+
+    let genderRate = ((max/sum)*100).toFixed(2)
+
+    let pCircle = document.getElementById("circleGender")
+
+    pCircle.innerHTML = `주 고객 성별 | <span style="color: rgba(75,192,192,1);">${maxGender}</span> | <span style="color: rgba(75,192,192,1);">${genderRate}%</span> `
+
+    // Create the backgroundColor array based on the rank
+    let backgroundColor = array.map((_, index) => {
+        return index === maxIndex ? 'rgba(75,192,192,1)' : 'rgba(2,117,216,0.2)';
+    });
+
+    // Create the borderColor array (all black borders)
+    let borderColor = array.map(() => '#3f3f45');
+
+    let myChart = new Chart(document.getElementById('myCircleGenderChart'), {
+        type: 'doughnut',
+        data: {
+            labels: genderArray,
+            datasets: [{
+                label: '성별 매출액',
+                data: array,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                borderWidth: 2, // Set the border width
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            }
+        }
+    });
+}
+
+
+function makeDonutTime(array) {
+
+    let timeArray = ["00~06시", "06~11시", "11~14시", "14~17시", "17~21시", "21~24시"]
+
+    let sum = array.reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0);
+    console.log("sum : " + sum)
+    // 최대값 구하기
+    let max = Math.max(...array).toFixed(2); // spread operator를 사용하여 배열 전체를 전달
+    let maxAsString = max.toString();
+
+    console.log("array : " + array)
+
+    let maxIndex = array.indexOf(maxAsString);
+
+    console.log("최대값 : ", max);
+    console.log("최대값의 인덱스 : ", maxIndex);
+
+    let maxTime = timeArray[maxIndex]
+    let timeRate = ((max/sum)*100).toFixed(2)
+
+    let pCircle = document.getElementById("circleTime")
+
+    pCircle.innerHTML = `주 판매 시간대 | <span style="color: rgba(75,192,192,1);">${maxTime}</span> | <span style="color: rgba(75,192,192,1);">${timeRate}%</span> `
+
+    // Create the backgroundColor array based on the rank
+    let backgroundColor = array.map((_, index) => {
+        return index === maxIndex ? 'rgba(75,192,192,1)' : 'rgba(2,117,216,0.2)';
+    });
+
+    // Create the borderColor array (all black borders)
+    let borderColor = array.map(() => '#3f3f45');
+
+    let myChart = new Chart(document.getElementById('myCircleTimeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: timeArray,
+            datasets: [{
+                label: '나이대 별 매출액',
+                data: array,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                borderWidth: 2, // Set the border width
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            }
+        }
+    });
+}
+
 
 // 창업 지역 추천으로 이동
 function locationAnalysis() {

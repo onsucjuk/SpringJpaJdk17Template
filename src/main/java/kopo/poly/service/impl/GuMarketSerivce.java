@@ -547,7 +547,7 @@ public class GuMarketSerivce implements IGuMarketService {
     @Override
     public List<SeoulSiMarketDTO> getGuMarketIndutyNm(String induty, String guSelect) {
 
-        log.info(this.getClass().getName() + ".getGuMarketLikeIndutyCd Start!");
+        log.info(this.getClass().getName() + ".getGuMarketIndutyNm Start!");
 
         // 넘겨줄 rList
         List<SeoulSiMarketDTO> rList = new ArrayList<>();
@@ -586,6 +586,14 @@ public class GuMarketSerivce implements IGuMarketService {
             double age40Sales = saleDTO.age40Sales()  / 10000;
             double age50Sales = saleDTO.age50Sales()  / 10000;
             double age60Sales = saleDTO.age60Sales()  / 10000;
+            double time0006Sales = saleDTO.time0006Sales() / 10000;
+            double time0611Sales = saleDTO.time0611Sales() / 10000;
+            double time1114Sales = saleDTO.time1114Sales() / 10000;
+            double time1417Sales = saleDTO.time1417Sales() / 10000;
+            double time1721Sales = saleDTO.time1721Sales() / 10000;
+            double time2124Sales = saleDTO.time2124Sales() / 10000;
+            double maleSales = saleDTO.maleSales()  / 10000;
+            double femaleSales = saleDTO.femaleSales()  / 10000;
 
             // 여기서부터 나이대 추가해야 함
 
@@ -600,6 +608,14 @@ public class GuMarketSerivce implements IGuMarketService {
             double age40SalesPerStore = 0;
             double age50SalesPerStore = 0;
             double age60SalesPerStore = 0;
+            double time0006SalesPerStore = 0;
+            double time0611SalesPerStore = 0;
+            double time1114SalesPerStore = 0;
+            double time1417SalesPerStore = 0;
+            double time1721SalesPerStore = 0;
+            double time2124SalesPerStore = 0;
+            double maleSalesPerStore = 0;
+            double femaleSalesPerStore = 0;
 
             if (storeCount > 0) {
 
@@ -610,11 +626,24 @@ public class GuMarketSerivce implements IGuMarketService {
                 age40SalesPerStore =  age40Sales / storeCount;
                 age50SalesPerStore =  age50Sales / storeCount;
                 age60SalesPerStore =  age60Sales / storeCount;
+                time0006SalesPerStore = time0006Sales / storeCount;
+                time0611SalesPerStore = time0611Sales / storeCount;
+                time1114SalesPerStore = time1114Sales / storeCount;
+                time1417SalesPerStore = time1417Sales / storeCount;
+                time1721SalesPerStore = time1721Sales / storeCount;
+                time2124SalesPerStore = time2124Sales / storeCount;
+                maleSalesPerStore =  maleSales / storeCount;
+                femaleSalesPerStore =  femaleSales / storeCount;
             }
 
             log.info(year + "년도 구 기준 점포당 매출액" + monthSalesPerStore);
             log.info(year + "년도 구 기준 점포수" + storeCount);
-            log.info(year + "년도 구 기준 폐업수" + closeStoreCount);
+            log.info(year + "년도 구 기준 0006시간대 수익 : " + time0006SalesPerStore);
+            log.info(year + "년도 구 기준 0611시간대 수익" + time0611SalesPerStore);
+            log.info(year + "년도 구 기준 1114시간대 수익" + time1114SalesPerStore);
+            log.info(year + "년도 구 기준 1417시간대 수익" + time1417SalesPerStore);
+            log.info(year + "년도 구 기준 1721시간대 수익" + time1721SalesPerStore);
+            log.info(year + "년도 구 기준 2124시간대 수익" + time2124SalesPerStore);
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .monthSales(monthSalesPerStore)
@@ -626,13 +655,21 @@ public class GuMarketSerivce implements IGuMarketService {
                     .age40Sales(age40SalesPerStore)
                     .age50Sales(age50SalesPerStore)
                     .age60Sales(age60SalesPerStore)
+                    .maleSales(maleSalesPerStore)
+                    .time0006Sales(time0006SalesPerStore)
+                    .time0611Sales(time0611SalesPerStore)
+                    .time1114Sales(time1114SalesPerStore)
+                    .time1417Sales(time1417SalesPerStore)
+                    .time1721Sales(time1721SalesPerStore)
+                    .time2124Sales(time2124SalesPerStore)
+                    .femaleSales(femaleSalesPerStore)
                     .build();
 
             rList.add(pDTO);
 
         }
 
-        log.info(this.getClass().getName() + ".getGuMarketLikeIndutyCd End!");
+        log.info(this.getClass().getName() + ".getGuMarketIndutyNm End!");
 
         return rList;
     }

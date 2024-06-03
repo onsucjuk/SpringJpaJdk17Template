@@ -79,7 +79,11 @@ public class SiMarketService implements ISiMarketService {
 
         }
 
-        if (redisDB.hasKey(redisKey)) { // 있으면 key값으로 가져옴
+        boolean existsYn = getExistsKey(redisKey);
+
+        log.info("getSeoulApiList redisKey existsYn : " + existsYn);
+
+        if (existsYn) { // 있으면 key값으로 가져옴
 
             log.info("redisDB에서 데이터 가져오기.");
 
@@ -236,7 +240,10 @@ public class SiMarketService implements ISiMarketService {
 
         }
 
-        if (redisDB.hasKey(redisKey)) { // 있으면 key값으로 가져옴
+        boolean existsYn = getExistsKey(redisKey);
+        log.info("getSiDataByYearAndData redisKey existsYn : " + existsYn);
+
+        if (existsYn) { // 있으면 key값으로 가져옴
 
             log.info("redisDB에서 데이터 가져오기.");
 
