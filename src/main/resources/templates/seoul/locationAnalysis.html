@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>창업 지역 추천</title>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/totalAnalysis.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="/assets/js/init-alpine.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // Controller에서 받은 값
+        // 서울 전체의 업종 전체 매출액
+        const seoulList = [[${seoulList}]];
+        const pDTO = [[${pDTO}]];
+
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class = "bodyTitle">
+        <h2 class="totalAnalysisTitle">창업 지역 추천</h2>
+        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | 서울 전체 기준 | ' + ${pDTO.indutyNm()}"></h4>
+    </div>
+
+    <hr>
+
+    <div class = "bodyTitle">
+        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${pDTO.seoulLocationNm()} + ' 지역 | ' + ${pDTO.indutyNm()}"></h4>
+    </div>
+
+    <hr>
+
+</div>
+</body>
+<script src="/js/seoul/locationAnalysis.js"></script>
+</html>

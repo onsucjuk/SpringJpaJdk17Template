@@ -148,6 +148,11 @@ function getSeoulLocationNm(dto) {
     return typeof dto.seoulLocationNm === 'function' ? dto.seoulLocationNm() : dto.seoulLocationNm;
 }
 
+function getIndutyNm(dto) {
+    // seoulLocationNm 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
+    return typeof dto.indutyNm === 'function' ? dto.indutyNm() : dto.indutyNm;
+}
+
 function getSeoulLocationCd(dto) {
     // seoulLocationCd 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
     return typeof dto.seoulLocationCd === 'function' ? dto.seoulLocationCd() : dto.seoulLocationCd;
@@ -469,7 +474,7 @@ function makeDonutLocaion(array) {
 
     let pCircle = document.getElementById("circleMarket")
 
-    pCircle.innerHTML = `매출액 기준 | <span style="color: rgba(75,192,192,1);">${locationNm}</span> | ${number}개 행정 구역 중  <span style="color: rgba(75,192,192,1);">${rank} 위</span>`
+    pCircle.innerHTML = `매출액 기준 | <span id="maxLocation" style="color: rgba(75,192,192,1);">${locationNm}</span> | ${number}개 행정 구역 중  <span style="color: rgba(75,192,192,1);">${rank} 위</span>`
 
     // Create the backgroundColor array based on the rank
     let backgroundColor = salesArray.map((_, index) => {
@@ -523,7 +528,7 @@ function makeDonutAge(array) {
 
     let pCircle = document.getElementById("circleAge")
 
-    pCircle.innerHTML = `주 고객층 | <span style="color: rgba(75,192,192,1);">${maxAge}대</span> | <span style="color: rgba(75,192,192,1);">${ageRate}%</span> `
+    pCircle.innerHTML = `주 고객층 나이대 | <span id="maxAge" style="color: rgba(75,192,192,1);">${maxAge}대</span> | <span style="color: rgba(75,192,192,1);">${ageRate}%</span> `
 
     // Create the backgroundColor array based on the rank
     let backgroundColor = array.map((_, index) => {
@@ -586,7 +591,7 @@ function makeDonutGender(array) {
 
     let pCircle = document.getElementById("circleGender")
 
-    pCircle.innerHTML = `주 고객 성별 | <span style="color: rgba(75,192,192,1);">${maxGender}</span> | <span style="color: rgba(75,192,192,1);">${genderRate}%</span> `
+    pCircle.innerHTML = `주 고객층 성별 | <span id="maxGender" style="color: rgba(75,192,192,1);">${maxGender}</span> | <span style="color: rgba(75,192,192,1);">${genderRate}%</span> `
 
     // Create the backgroundColor array based on the rank
     let backgroundColor = array.map((_, index) => {
@@ -601,7 +606,7 @@ function makeDonutGender(array) {
         data: {
             labels: genderArray,
             datasets: [{
-                label: '성별 매출액',
+                label: '성 별 매출액',
                 data: array,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
@@ -640,7 +645,7 @@ function makeDonutTime(array) {
 
     let pCircle = document.getElementById("circleTime")
 
-    pCircle.innerHTML = `주 판매 시간대 | <span style="color: rgba(75,192,192,1);">${maxTime}</span> | <span style="color: rgba(75,192,192,1);">${timeRate}%</span> `
+    pCircle.innerHTML = `피크 타임 | <span id="maxTime" style="color: rgba(75,192,192,1);">${maxTime}</span> | <span style="color: rgba(75,192,192,1);">${timeRate}%</span> `
 
     // Create the backgroundColor array based on the rank
     let backgroundColor = array.map((_, index) => {
@@ -655,7 +660,7 @@ function makeDonutTime(array) {
         data: {
             labels: timeArray,
             datasets: [{
-                label: '나이대 별 매출액',
+                label: '시간대 별 매출액',
                 data: array,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
@@ -675,7 +680,28 @@ function makeDonutTime(array) {
 // 창업 지역 추천으로 이동
 function locationAnalysis() {
 
-    alert("작업 중 입니다.")
+    let tempLocation = document.getElementById("maxLocation").innerText;
+    let tempAge = document.getElementById("maxAge").innerText;
+    let tempGender = document.getElementById("maxGender").innerText;
+    let tempTime = document.getElementById("maxTime").innerText;
+
+    tempAge = tempAge.replace("대", "");
+    tempTime = tempTime.replace("시", "").replace("~", "")
+
+    if(tempGender==="여성"){
+
+        tempGender = "femaleSales"
+
+    } else {
+
+        tempGender = "maleSales"
+    }
+
+    let indutyNm = getIndutyNm(pDTO)
+
+    alert("업종명 : " + indutyNm + " | 지역 : " + tempLocation + " | 주 고객층 나이 : " + tempAge + " | 주 고객층 성별 : " + tempGender + " | 피크 타임 : " + tempTime )
+
+    location.href = "/seoul/locationAnalysis?indutyNm=" + indutyNm + "&locationNm=" + tempLocation + "&ageSales=" + tempAge + "&genderSales=" + tempGender + "&timeSales=" + tempTime
 
 }
 

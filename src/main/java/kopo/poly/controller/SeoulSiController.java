@@ -477,4 +477,59 @@ public class SeoulSiController {
 
     }
 
+
+    /**
+     ############################################################################
+
+                                창업 지역 분석
+
+     ############################################################################
+     */
+
+    @GetMapping(value = "locationAnalysis")
+    public String locationAnalysis(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".locationAnalysis Start!");
+
+        String userId =  CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        if(userId.length() > 0) {
+
+/*            List<SeoulSiMarketDTO> seoulIndutyList = new ArrayList<>();
+            List<SeoulSiMarketDTO> sortedList = new LinkedList<>();*/
+
+            String indutyNm = CmmUtil.nvl(request.getParameter("indutyNm")); // 선택 업종
+            String locationNm = CmmUtil.nvl(request.getParameter("locationNm")); // 지역명
+            String ageSales = CmmUtil.nvl(request.getParameter("ageSales")); // 주 고객층 나이대
+            String genderSales = CmmUtil.nvl(request.getParameter("genderSales")); // 주 고객층 성별
+            String timeSales = CmmUtil.nvl(request.getParameter("timeSales")); // 피크타임
+
+
+            log.info("선택 업종 : " + indutyNm);
+            log.info("지역명 : " + locationNm);
+            log.info("주 고객층 나이대 : " + ageSales);
+            log.info("주 고객층 성별 : " + genderSales);
+            log.info("피크 타임 : " + timeSales);
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationNm(locationNm)
+                    .indutyNm(indutyNm)
+                    .build();
+
+/*            seoulIndutyList = guMarketService.getIndutyMarket();
+            sortedList = guMarketService.getSortedMarketByIndutyCd(induty);*/
+
+/*            model.addAttribute("seoulIndutyList", seoulIndutyList);
+            model.addAttribute("sortedList", sortedList);*/
+            model.addAttribute("pDTO", pDTO);
+
+        } else { // 아이디가 없으면 로그인 창으로 이동
+
+            return "redirect:/user/login";
+        }
+
+        return "seoul/locationAnalysis";
+
+    }
+
 }
