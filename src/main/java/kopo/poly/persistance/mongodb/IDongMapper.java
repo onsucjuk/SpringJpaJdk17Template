@@ -104,4 +104,17 @@ public interface IDongMapper {
      */
     List<SeoulSiMarketDTO> getDongStoreByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) ;
 
+    /**
+     *
+     * 업종 대분류로 매출액(나이대, 성별, 시간대, 매출액 등) 지역 비중 조회하기
+     *
+     * @param year 연도
+     * @param indutyNm 업종명
+     * @param colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+    List<SeoulSiMarketDTO> getLocationMarketByIndutyNm(String year, String indutyNm, String colNm);
+
 }

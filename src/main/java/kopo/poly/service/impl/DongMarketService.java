@@ -244,7 +244,7 @@ public class DongMarketService implements IDongMarketService {
         Collections.sort(rList, salesRateComparator);
 
         // rList에서 rank 이외의 요소를 모두 삭제
-        if(rList.size()>10) {
+        if(rList.size()>rank) {
 
             rList.subList(rank, rList.size()).clear();
 
@@ -660,14 +660,362 @@ public class DongMarketService implements IDongMarketService {
 
     }
 
+    /**
+     *
+     * 창업 지역 추천
+     *
+     **/
+
     @Override
     public SeoulSiMarketDTO getDongLatLon(String seoulLocationCd) throws Exception {
         return null;
     }
 
     @Override
-    public List<SeoulSiMarketDTO> getDongMarketLikeIndutyCd(String induty, String guSelect) {
+    public List<List<SeoulSiMarketDTO>> getLocationMarketRes(SeoulSiMarketDTO pDTO) {
 
-        return null;
+        log.info(this.getClass().getName() + ".getLocationMarketRes Start!");
+
+        String recentYear = "20233";
+        String preYear = "20232";
+        String colNm = "SEOUL_DONG_MARKET";
+        String indutyNm = pDTO.indutyNm();
+        String maxAge = pDTO.maxAge();
+        String maxGender = pDTO.maxGender();
+        String maxTime = pDTO.maxTime();
+
+        int rank = 3;
+
+        // 최종 리스트들을 넘겨줄 List
+        List<List<SeoulSiMarketDTO>> rList = new ArrayList<>();
+        // 각 종 매출액 정보를 담을 List
+        List<SeoulSiMarketDTO> saleList = new ArrayList<>();
+        // 매출액 증가율을 담을 List
+        List<SeoulSiMarketDTO> rateList = new ArrayList<>();
+
+        List<SeoulSiMarketDTO> recSalesList = Optional.ofNullable(dongMapper.getLocationMarketByIndutyNm(recentYear, indutyNm, colNm))
+                .orElseGet(LinkedList::new);
+        List<SeoulSiMarketDTO> preSalesList = Optional.ofNullable(dongMapper.getLocationMarketByIndutyNm(preYear, indutyNm, colNm))
+                .orElseGet(LinkedList::new);
+
+        colNm = "SEOUL_DONG_STORE";
+
+        List<SeoulSiMarketDTO> recStoreList = Optional.ofNullable(dongMapper.getDongStoreAllByName(recentYear, indutyNm, colNm))
+                .orElseGet(LinkedList::new);
+        List<SeoulSiMarketDTO> preStoreList = Optional.ofNullable(dongMapper.getDongStoreAllByName(preYear, indutyNm, colNm))
+                .orElseGet(LinkedList::new);
+
+        for ( int j = 0; j < recSalesList.size(); j++) {
+
+            // 기준년도 매출액 데이터
+            // rec : recent의 약자(최신)
+            SeoulSiMarketDTO recDTO = recSalesList.get(j);
+            String seoulLocationNm = recDTO.seoulLocationNm();
+            String seoulLocationCd = recDTO.seoulLocationCd();
+            double recSales = recDTO.monthSales();
+            double age10Sales = recDTO.age10Sales();
+            double age20Sales = recDTO.age20Sales();
+            double age30Sales = recDTO.age30Sales();
+            double age40Sales = recDTO.age40Sales();
+            double age50Sales = recDTO.age50Sales();
+            double age60Sales = recDTO.age60Sales();
+            double time0006Sales = recDTO.time0006Sales();
+            double time0611Sales = recDTO.time0611Sales();
+            double time1114Sales = recDTO.time1114Sales();
+            double time1417Sales = recDTO.time1417Sales();
+            double time1721Sales = recDTO.time1721Sales();
+            double time2124Sales = recDTO.time2124Sales();
+            double femaleSales = recDTO.femaleSales();
+            double maleSales = recDTO.maleSales();
+
+            // 가져온 점포 데이터에서 기준년도에서 기준년도 지역명 기준으로 데이터 가져오기
+            double recStoreCo = 0;
+            for (SeoulSiMarketDTO dto : recStoreList) {
+                if (dto.seoulLocationNm().equals(seoulLocationNm)) {
+
+                    recStoreCo = dto.storeCount();
+
+                    break;
+                }
+            }
+
+            if(recStoreCo > 0) {
+
+                recSales = (recSales / 10000) / recStoreCo;
+                age10Sales = (age10Sales / 10000) / recStoreCo;
+                age20Sales = (age20Sales / 10000) / recStoreCo;
+                age30Sales = (age30Sales / 10000) / recStoreCo;
+                age40Sales = (age40Sales / 10000) / recStoreCo;
+                age50Sales = (age50Sales / 10000) / recStoreCo;
+                age60Sales = (age60Sales / 10000) / recStoreCo;
+                time0006Sales = (time0006Sales / 10000) / recStoreCo;
+                time0611Sales = (time0611Sales / 10000) / recStoreCo;
+                time1114Sales = (time1114Sales / 10000) / recStoreCo;
+                time1417Sales = (time1417Sales / 10000) / recStoreCo;
+                time1721Sales = (time1721Sales / 10000) / recStoreCo;
+                time2124Sales = (time2124Sales / 10000) / recStoreCo;
+                maleSales = (maleSales / 10000) / recStoreCo;
+                femaleSales = (femaleSales / 10000) / recStoreCo;
+
+                SeoulSiMarketDTO tDTO = SeoulSiMarketDTO.builder()
+                        .seoulLocationNm(seoulLocationNm)
+                        .seoulLocationCd(seoulLocationCd)
+                        .monthSales(recSales)
+                        .age10Sales(age10Sales)
+                        .age20Sales(age20Sales)
+                        .age30Sales(age30Sales)
+                        .age40Sales(age40Sales)
+                        .age50Sales(age50Sales)
+                        .age60Sales(age60Sales)
+                        .time0006Sales(time0006Sales)
+                        .time0611Sales(time0611Sales)
+                        .time1114Sales(time1114Sales)
+                        .time1417Sales(time1417Sales)
+                        .time1721Sales(time1721Sales)
+                        .time2124Sales(time2124Sales)
+                        .maleSales(maleSales)
+                        .femaleSales(femaleSales)
+                        .build();
+
+                saleList.add(tDTO);
+
+            } else { // 점포수가 없으면 0으로 세팅(산출 값에서 계산값 제외)
+
+                SeoulSiMarketDTO tDTO = SeoulSiMarketDTO.builder()
+                        .monthSales(0)
+                        .age10Sales(0)
+                        .age20Sales(0)
+                        .age30Sales(0)
+                        .age40Sales(0)
+                        .age50Sales(0)
+                        .age60Sales(0)
+                        .time0006Sales(0)
+                        .time0611Sales(0)
+                        .time1114Sales(0)
+                        .time1417Sales(0)
+                        .time1721Sales(0)
+                        .time2124Sales(0)
+                        .maleSales(0)
+                        .femaleSales(0)
+                        .build();
+
+                saleList.add(tDTO);
+
+            }
+
+        }
+
+        /* 리스트들 sort*/
+
+        // 매출액 기준 정렬
+        Comparator<SeoulSiMarketDTO> salesComparator = (dto1, dto2) -> {
+            double sales1 = dto1.monthSales();
+            double sales2 = dto2.monthSales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+
+        // 점포수 기준 정렬
+        Comparator<SeoulSiMarketDTO> storeComparator = (dto1, dto2) -> {
+            double storeCount1 = dto1.storeCount();
+            double storeCount2 = dto2.storeCount();
+            return Double.compare(storeCount2, storeCount1); // 내림차순 정렬
+        };
+
+
+        // 매출액 기준 Top3 rList[0]
+        List<SeoulSiMarketDTO> tempSaleList = new ArrayList<>(saleList);
+        tempSaleList.sort(salesComparator);
+        if(tempSaleList.size() > rank) {
+            tempSaleList.subList(rank, tempSaleList.size()).clear();
+        }
+        rList.add(tempSaleList);
+
+        // recStoreList를 storeCount 기준으로 정렬 rList[1]
+        recStoreList.sort(storeComparator);
+        // recStoreList에서 rank 이외의 요소를 모두 삭제
+        if(recStoreList.size()>rank) {
+            recStoreList.subList(rank, recStoreList.size()).clear();
+        }
+        rList.add(recStoreList);
+
+        List<SeoulSiMarketDTO> tempAgeList = new ArrayList<>(saleList);
+        // 주고객층 나이대 Top3 rList[2]
+        tempAgeList = listSortByAge(tempAgeList, maxAge, rank);
+        rList.add(tempAgeList);
+
+        // 주고객층 성별 Top3 rList[3]
+        List<SeoulSiMarketDTO> tempGenderList = new ArrayList<>(saleList);
+        tempGenderList = listSortByGender(tempGenderList, maxGender, rank);
+        rList.add(tempGenderList);
+
+        // 피크타임 Top3 rList[4]
+        List<SeoulSiMarketDTO> tempTimeList = new ArrayList<>(saleList);
+        tempTimeList = listSortByTime(tempTimeList, maxTime, rank);
+        rList.add(tempTimeList);
+
+        log.info("매출액 지역 : " + rList.get(0).get(0).monthSales() + ", " + rList.get(0).get(1).monthSales() + ", " + rList.get(0).get(2).monthSales());
+        log.info("매출액 지역명 : " + rList.get(0).get(0).seoulLocationNm() + ", " + rList.get(0).get(1).seoulLocationNm() + ", " + rList.get(0).get(2).seoulLocationNm());
+        log.info("점포수 지역 : " + rList.get(1).get(0).storeCount() + ", " + rList.get(1).get(1).storeCount() + ", " + rList.get(1).get(2).storeCount());
+        log.info("점포수 지역명 : " + rList.get(1).get(0).seoulLocationNm() + ", " + rList.get(1).get(1).seoulLocationNm() + ", " + rList.get(1).get(2).seoulLocationNm());
+        log.info("나이대 지역 : " + rList.get(2).get(0).age50Sales() + ", " + rList.get(2).get(1).age50Sales() + ", " + rList.get(2).get(2).age50Sales());
+        log.info("나이대 지역명 : " + rList.get(2).get(0).seoulLocationNm() + ", " + rList.get(2).get(1).seoulLocationNm() + ", " + rList.get(2).get(2).seoulLocationNm());
+        log.info("성별 지역 : " + rList.get(3).get(0).femaleSales() + ", " + rList.get(3).get(1).femaleSales() + ", " + rList.get(3).get(2).femaleSales());
+        log.info("성별 지역명 : " + rList.get(3).get(0).seoulLocationNm() + ", " + rList.get(3).get(1).seoulLocationNm() + ", " + rList.get(3).get(2).seoulLocationNm());
+        log.info("피크타임 지역 : " + rList.get(4).get(0).time1721Sales() + ", " + rList.get(4).get(1).time1721Sales() + ", " + rList.get(4).get(2).time1721Sales());
+        log.info("피크타임 지역명 : " + rList.get(4).get(0).seoulLocationNm() + ", " + rList.get(4).get(1).seoulLocationNm() + ", " + rList.get(4).get(2).seoulLocationNm());
+
+        log.info(this.getClass().getName() + ".getLocationMarketRes End!");
+
+        return rList;
+    }
+
+    List<SeoulSiMarketDTO> listSortByAge(List<SeoulSiMarketDTO> pList, String maxAge, int rank) {
+
+        // 나이대 별 정렬
+        // 10~60대
+        Comparator<SeoulSiMarketDTO> age10Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.age10Sales();
+            double sales2 = dto2.age10Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> age20Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.age20Sales();
+            double sales2 = dto2.age20Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> age30Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.age30Sales();
+            double sales2 = dto2.age30Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> age40Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.age40Sales();
+            double sales2 = dto2.age40Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> age50Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.age50Sales();
+            double sales2 = dto2.age50Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> age60Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.age60Sales();
+            double sales2 = dto2.age60Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+
+        // 나이대 별 매출액 Top3
+        // salesRate에서 maxAge 기준으로 정렬
+        if(maxAge.equals("10")) {
+            pList.sort(age10Comparator);
+        } else if(maxAge.equals("20")) {
+            pList.sort(age20Comparator);
+        } else if(maxAge.equals("30")) {
+            pList.sort(age30Comparator);
+        } else if(maxAge.equals("40")) {
+            pList.sort(age40Comparator);
+        } else if(maxAge.equals("50")) {
+            pList.sort(age50Comparator);
+        } else {
+            pList.sort(age60Comparator);
+        }
+
+        if (pList.size() > rank) {
+            pList.subList(rank, pList.size()).clear();
+        }
+
+        return pList;
+    }
+
+    List<SeoulSiMarketDTO> listSortByGender(List<SeoulSiMarketDTO> pList, String maxGender, int rank) {
+
+        boolean temp = maxGender.equals("male");
+
+        log.info("분류되는 주고객층 성별 : " + maxGender);
+        log.info("남성 여부 : " + temp );
+
+        // 성별 정렬
+        // 남, 여
+        Comparator<SeoulSiMarketDTO> maleComparator = (dto1, dto2) -> {
+            double sales1 = dto1.maleSales();
+            double sales2 = dto2.maleSales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> femaleComparator = (dto1, dto2) -> {
+            double sales1 = dto1.femaleSales();
+            double sales2 = dto2.femaleSales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+
+        // 성별 매출액 Top3
+        // maxGender 기준으로 정렬
+        if(maxGender.equals("male")) {
+            pList.sort(maleComparator);
+        } else {
+            pList.sort(femaleComparator);
+        }
+
+        if (pList.size() > rank) {
+            pList.subList(rank, pList.size()).clear();
+        }
+
+        return pList;
+    }
+
+    List<SeoulSiMarketDTO> listSortByTime(List<SeoulSiMarketDTO> pList, String maxTime, int rank) {
+
+        // 시간대 별 정렬
+        Comparator<SeoulSiMarketDTO> time0006Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.time0006Sales();
+            double sales2 = dto2.time0006Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> time0611Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.time0611Sales();
+            double sales2 = dto2.time0611Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> time1114Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.time1114Sales();
+            double sales2 = dto2.time1114Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> time1417Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.time1417Sales();
+            double sales2 = dto2.time1417Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> time1721Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.time1721Sales();
+            double sales2 = dto2.time1721Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+        Comparator<SeoulSiMarketDTO> time2124Comparator = (dto1, dto2) -> {
+            double sales1 = dto1.time2124Sales();
+            double sales2 = dto2.time2124Sales();
+            return Double.compare(sales2, sales1); // 내림차순 정렬
+        };
+
+        // 나이대 별 매출액 Top3
+        // salesRate에서 maxAge 기준으로 정렬
+        if(maxTime.equals("0006")) {
+            pList.sort(time0006Comparator);
+        } else if(maxTime.equals("0611")) {
+            pList.sort(time0611Comparator);
+        } else if(maxTime.equals("1114")) {
+            pList.sort(time1114Comparator);
+        } else if(maxTime.equals("1417")) {
+            pList.sort(time1417Comparator);
+        } else if(maxTime.equals("1721")) {
+            pList.sort(time1721Comparator);
+        } else {
+            pList.sort(time2124Comparator);
+        }
+
+        if (pList.size() > rank) {
+            pList.subList(rank, pList.size()).clear();
+        }
+
+        return pList;
     }
 }

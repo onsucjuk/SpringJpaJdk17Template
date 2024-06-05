@@ -139,8 +139,8 @@ public class DongMapper implements IDongMapper {
             double age50Sales = doc.getDouble("AGE_50_SALES");
             double age60Sales = doc.getDouble("AGE_60_SALES");
 
-            log.info("seoulLocationCd : " + seoulLocationCd + "seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
-            log.info("salesSort : " + age10Sales + "," + age20Sales + "," + age30Sales + "," + age40Sales + "," + age50Sales + "," + age60Sales + ",");
+            /*log.info("seoulLocationCd : " + seoulLocationCd + "seoulLocationNm : " + seoulLocationNm + " / monthSales : " + monthSales);
+            log.info("salesSort : " + age10Sales + "," + age20Sales + "," + age30Sales + "," + age40Sales + "," + age50Sales + "," + age60Sales + ",");*/
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .seoulLocationCd(seoulLocationCd)
@@ -186,18 +186,20 @@ public class DongMapper implements IDongMapper {
         projection.append("STORE_COUNT", "$STORE_COUNT");
         projection.append("_id", 0);
 
+        Document sort = new Document();
+
+        sort.append("SEOUL_LOCATION_CD", 1);
+
 
         // 컬렉션 이름이랑 같은 db 데이터 가져오기
         MongoCollection<Document> col = mongodb.getCollection(colNm);
-        FindIterable<Document> rs = col.find(query).projection(projection);
+        FindIterable<Document> rs = col.find(query).projection(projection).sort(sort);
 
         for (Document doc : rs) {
 
             String seoulLocationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
             String seoulLocationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
             double storeCount = doc.getDouble("STORE_COUNT");
-
-            log.info("seoulLocationCd : " + seoulLocationCd + " / seoulLocationNm : " + seoulLocationNm + " / storeCount : " + storeCount);
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .seoulLocationCd(seoulLocationCd)
@@ -208,6 +210,8 @@ public class DongMapper implements IDongMapper {
             rList.add(pDTO);
 
         }
+
+        log.info(seoulDongYear + "년도 점포수 size : " + rList.size());
 
         log.info(this.getClass().getName() + ".getDongStoreAllByName End!");
 
@@ -521,10 +525,108 @@ public class DongMapper implements IDongMapper {
 
     /**
      *
-     *  그래프 기능
+     *  창업 지역 추천
      *
      */
 
+    @Override
+    public List<SeoulSiMarketDTO> getLocationMarketByIndutyNm(String year, String indutyNm, String colNm) {
+
+        log.info(this.getClass().getName() + ".getLocationMarketByIndutyNm Start!");
+
+        List<SeoulSiMarketDTO> rList = new LinkedList<>();
+
+        Document query = new Document();
+
+        log.info("year : " + year);
+        log.info("indutyNm : " + indutyNm);
+
+        query.append("SEOUL_DONG_YEAR", year);
+        query.append("INDUTY_NM", indutyNm);
+
+        Document projection = new Document();
+
+        projection.append("SEOUL_LOCATION_CD", "$SEOUL_LOCATION_CD");
+        projection.append("SEOUL_LOCATION_NM", "$SEOUL_LOCATION_NM");
+        projection.append("MONTH_SALES", "$MONTH_SALES");
+        projection.append("AGE_10_SALES", "$AGE_10_SALES");
+        projection.append("AGE_20_SALES", "$AGE_20_SALES");
+        projection.append("AGE_30_SALES", "$AGE_30_SALES");
+        projection.append("AGE_40_SALES", "$AGE_40_SALES");
+        projection.append("AGE_50_SALES", "$AGE_50_SALES");
+        projection.append("AGE_60_SALES", "$AGE_60_SALES");
+        projection.append("TIME_0006_SALES", "$TIME_0006_SALES");
+        projection.append("TIME_0611_SALES", "$TIME_0611_SALES");
+        projection.append("TIME_1114_SALES", "$TIME_1114_SALES");
+        projection.append("TIME_1417_SALES", "$TIME_1417_SALES");
+        projection.append("TIME_1721_SALES", "$TIME_1721_SALES");
+        projection.append("TIME_2124_SALES", "$TIME_2124_SALES");
+        projection.append("FEMALE_SALES", "$FEMALE_SALES");
+        projection.append("MALE_SALES", "$MALE_SALES");
+        projection.append("_id", 0);
+
+        Document sort = new Document();
+
+        sort.append("SEOUL_LOCATION_CD", 1);
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection).sort(sort);
+
+        for (Document doc : rs) {
+
+            String locationCd = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_CD"));
+            String locationNm = CmmUtil.nvl(doc.getString("SEOUL_LOCATION_NM"));
+            double monthSales = doc.getDouble("MONTH_SALES");
+            double age10Sales = doc.getDouble("AGE_10_SALES");
+            double age20Sales = doc.getDouble("AGE_20_SALES");
+            double age30Sales = doc.getDouble("AGE_30_SALES");
+            double age40Sales = doc.getDouble("AGE_40_SALES");
+            double age50Sales = doc.getDouble("AGE_50_SALES");
+            double age60Sales = doc.getDouble("AGE_60_SALES");
+            double time0006Sales = doc.getDouble("TIME_0006_SALES");
+            double time0611Sales = doc.getDouble("TIME_0611_SALES");
+            double time1114Sales = doc.getDouble("TIME_1114_SALES");
+            double time1417Sales = doc.getDouble("TIME_1417_SALES");
+            double time1721Sales = doc.getDouble("TIME_1721_SALES");
+            double time2124Sales = doc.getDouble("TIME_2124_SALES");
+            double maleSales = doc.getDouble("FEMALE_SALES");
+            double femaleSales = doc.getDouble("MALE_SALES");
+
+            /*log.info("locationCd : " + locationCd + " / locationNm : " + locationNm + " / monthSales : " + monthSales);*/
+
+            SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                    .seoulLocationCd(locationCd)
+                    .seoulLocationNm(locationNm)
+                    .monthSales(monthSales)
+                    .age10Sales(age10Sales)
+                    .age20Sales(age20Sales)
+                    .age30Sales(age30Sales)
+                    .age40Sales(age40Sales)
+                    .age50Sales(age50Sales)
+                    .age60Sales(age60Sales)
+                    .time0006Sales(time0006Sales)
+                    .time0611Sales(time0611Sales)
+                    .time1114Sales(time1114Sales)
+                    .time1417Sales(time1417Sales)
+                    .time1721Sales(time1721Sales)
+                    .time2124Sales(time2124Sales)
+                    .maleSales(maleSales)
+                    .femaleSales(femaleSales)
+                    .build();
+
+            rList.add(pDTO);
+
+        }
+
+        log.info(year + "년도 매출액 데이터들 사이즈 : " + rList.size());
+
+
+        log.info(this.getClass().getName() + ".getLocationMarketByIndutyNm End!");
+
+        return rList;
+
+    }
 
 
 }

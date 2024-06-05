@@ -149,6 +149,8 @@ public interface IGuMapper {
      */
     List<SeoulSiMarketDTO> getSortedMarketByIndutyNm(String year, String indutyNm, String colNm);
 
+
+
     /**
      *
      * 업종 소분류로 연도별 매출액 지역 비중 조회하기

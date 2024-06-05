@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -499,29 +500,37 @@ public class SeoulSiController {
             List<SeoulSiMarketDTO> sortedList = new LinkedList<>();*/
 
             String indutyNm = CmmUtil.nvl(request.getParameter("indutyNm")); // 선택 업종
-            String locationNm = CmmUtil.nvl(request.getParameter("locationNm")); // 지역명
             String ageSales = CmmUtil.nvl(request.getParameter("ageSales")); // 주 고객층 나이대
             String genderSales = CmmUtil.nvl(request.getParameter("genderSales")); // 주 고객층 성별
             String timeSales = CmmUtil.nvl(request.getParameter("timeSales")); // 피크타임
 
 
             log.info("선택 업종 : " + indutyNm);
-            log.info("지역명 : " + locationNm);
             log.info("주 고객층 나이대 : " + ageSales);
             log.info("주 고객층 성별 : " + genderSales);
             log.info("피크 타임 : " + timeSales);
 
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
-                    .seoulLocationNm(locationNm)
                     .indutyNm(indutyNm)
+                    .maxAge(ageSales)
+                    .maxGender(genderSales)
+                    .maxTime(timeSales)
                     .build();
 
-/*            seoulIndutyList = guMarketService.getIndutyMarket();
-            sortedList = guMarketService.getSortedMarketByIndutyCd(induty);*/
+            List<SeoulSiMarketDTO> salesRateList = Optional.ofNullable(dongMarketService.getDongMarketRes(3, "20232", "20233", "11", "", indutyNm))
+                    .orElseGet(ArrayList::new);
 
-/*            model.addAttribute("seoulIndutyList", seoulIndutyList);
-            model.addAttribute("sortedList", sortedList);*/
+            List<List<SeoulSiMarketDTO>> rList = Optional.ofNullable(dongMarketService.getLocationMarketRes(pDTO))
+                    .orElseGet(ArrayList::new);
+
+
             model.addAttribute("pDTO", pDTO);
+            model.addAttribute("salesList", rList.get(0));
+            model.addAttribute("storeList", rList.get(1));
+            model.addAttribute("ageList", rList.get(2));
+            model.addAttribute("genderList", rList.get(3));
+            model.addAttribute("timeList", rList.get(4));
+            model.addAttribute("salesRateList", salesRateList);
 
         } else { // 아이디가 없으면 로그인 창으로 이동
 

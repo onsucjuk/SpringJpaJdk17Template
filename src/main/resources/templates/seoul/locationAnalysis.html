@@ -19,7 +19,12 @@
 
         // Controller에서 받은 값
         // 서울 전체의 업종 전체 매출액
-        const seoulList = [[${seoulList}]];
+        const salesList = [[${salesList}]];
+        const storeList = [[${storeList}]];
+        const ageList = [[${ageList}]];
+        const genderList = [[${genderList}]];
+        const timeList = [[${timeList}]];
+        const salesRateList = [[${salesRateList}]];
         const pDTO = [[${pDTO}]];
 
         /*]]>*/
@@ -29,16 +34,37 @@
 <div class="container">
     <div class = "bodyTitle">
         <h2 class="totalAnalysisTitle">창업 지역 추천</h2>
-        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | 서울 전체 기준 | ' + ${pDTO.indutyNm()}"></h4>
+        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${tDTO.indutyNm()}"></h4>
     </div>
 
     <hr>
 
-    <div class = "bodyTitle">
-        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${pDTO.seoulLocationNm()} + ' 지역 | ' + ${pDTO.indutyNm()}"></h4>
-    </div>
+    <div class="dashBoard">
+        <div class="divThree" id="btnBnav2">
+            <div class="comment_inline indutyList red-border" id = "rank1">
+                <p class="title" id = "rank1LocationName"></p>
+                <p id = "salesQuarter"></p>
+                <p id = "salesRateQuarter"></p>
+            </div>
+            <div class="comment_inline indutyList blue-border" id = "rank2">
+                <p class="title" id = "rank2LocationName"></p>
+                <p id = "storeQuarter"></p>
+                <p id = "storeRateQuarter"></p>
+            </div>
+            <div class="comment_inline indutyList green-border" id = "rank3">
+                <p class="title" id = "rank3LocationName"></p>
+                <p id = "closeQuarter"></p>
+                <p id = "closeRateQuarter"></p>
+            </div>
+        </div>
 
-    <hr>
+        <hr class="divContent">
+
+        <div class="map" id ="map_div">
+            나중에 맵 추가 예정
+        </div>
+
+    </div>
 
 </div>
 </body>

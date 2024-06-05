@@ -47,6 +47,7 @@ public record SeoulSiMarketDTO(
         String age50SalesRate, // 50대 매출금액
         String age60SalesRate, // 60대 이상 매출금액
         double salesDiff, // 매출액 증가량
+        double saleRate,
         String salesRate, // 매출액 증가율
         double storeCount, //점포수
         double storeDiff, //점포수 증가량
@@ -56,7 +57,12 @@ public record SeoulSiMarketDTO(
         String closeStoreRate, // 폐업수 증가률
 
         double lat, // 위도
-        double lon // 경도
+        double lon, // 경도
+
+        // 창업 지역 변수(나이, 시간, 성별 최대값)
+        String maxAge,
+        String maxTime,
+        String maxGender
 
 
 ) {

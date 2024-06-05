@@ -29,10 +29,6 @@ public class GuMapper implements IGuMapper {
 
         log.info(this.getClass().getName() + ".getGuSalesList Start!");
 
-        // 가져와야하는 데이터
-        // 이번분기 지역 기준, 매출액, 업종명
-        // 전분기 지역 기준, 매출액, 업종명
-
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 
         Document query = new Document();
@@ -77,10 +73,6 @@ public class GuMapper implements IGuMapper {
     public List<SeoulSiMarketDTO> getGuStoreList(String seoulGuYear, String seoulLocationCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuStoreList Start!");
-
-        // 가져와야하는 데이터
-        // 이번분기 지역 기준, 업종명, 점포수
-        // 전분기 지역 기준, 업종명, 점포수
 
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 
@@ -127,10 +119,6 @@ public class GuMapper implements IGuMapper {
 
         log.info(this.getClass().getName() + ".getGuCloseStoreList Start!");
 
-        // 가져와야하는 데이터
-        // 이번분기 지역 기준, 업종명, 점포수
-        // 전분기 지역 기준, 업종명, 점포수
-
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 
         Document query = new Document();
@@ -175,9 +163,6 @@ public class GuMapper implements IGuMapper {
     public SeoulSiMarketDTO getGuLatLon(String seoulLocationCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuLatLon Start!");
-
-        // 가져와야하는 데이터
-        // 지역코드랑 같은 좌표 데이터
 
         SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
 
@@ -225,9 +210,6 @@ public class GuMapper implements IGuMapper {
     public SeoulSiMarketDTO getGuSalesGraphLikeInduty(String year, String induty, String guSelect, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuSalesGraphLikeInduty Start!");
-
-        // 가져와야하는 데이터
-        // 조건에 일치하는 매출액 조회
 
         Document query = new Document();
 
@@ -305,9 +287,6 @@ public class GuMapper implements IGuMapper {
 
         log.info(this.getClass().getName() + ".getGuStoreGraphLikeInduty Start!");
 
-        // 가져와야하는 데이터
-        // 조건에 일치하는 매출액 조회
-
         Document query = new Document();
 
         // MongoDB 조회 쿼리
@@ -356,9 +335,6 @@ public class GuMapper implements IGuMapper {
     public SeoulSiMarketDTO getGuSalesGraphByIndutyNm(String year, String induty, String guSelect, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuSalesGraphByIndutyNm Start!");
-
-        // 가져와야하는 데이터
-        // 조건에 일치하는 매출액 조회
 
         Document query = new Document();
 
@@ -474,9 +450,6 @@ public class GuMapper implements IGuMapper {
     public SeoulSiMarketDTO getGuStoreGraphByIndutyNm(String year, String induty, String guSelect, String colNm) {
 
         log.info(this.getClass().getName() + ".getGuStoreGraphByIndutyNm Start!");
-
-        // 가져와야하는 데이터
-        // 조건에 일치하는 매출액 조회
 
         Document query = new Document();
 
@@ -639,10 +612,6 @@ public class GuMapper implements IGuMapper {
 
         log.info(this.getClass().getName() + ".getSortedMarketByIndutyNm Start!");
 
-        // 가져와야하는 데이터
-        // 년도 , 업종명 기준
-        // 지역명, 지역코드, 매출액
-
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 
         Document query = new Document();
@@ -695,10 +664,6 @@ public class GuMapper implements IGuMapper {
 
         log.info(this.getClass().getName() + ".getSortedMarketByIndutyCd Start!");
 
-        // 가져와야하는 데이터
-        // 년도 , 업종코드(Like) 기준
-        // 지역명, 지역코드, 매출액
-
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 
         Document query = new Document();
@@ -750,10 +715,6 @@ public class GuMapper implements IGuMapper {
 
         log.info(this.getClass().getName() + ".getSortedStoreByIndutyNm Start!");
 
-        // 가져와야하는 데이터
-        // 년도 , 업종명 기준
-        // 지역명, 지역코드, 점포수
-
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 
         Document query = new Document();
@@ -801,10 +762,6 @@ public class GuMapper implements IGuMapper {
     public List<SeoulSiMarketDTO> getSortedStoreByIndutyCd(String year, String indutCd, String colNm) {
 
         log.info(this.getClass().getName() + ".getSortedStoreByIndutyCd Start!");
-
-        // 가져와야하는 데이터
-        // 년도 , 업종코드(Like) 기준
-        // 지역명, 지역코드, 점포수
 
         List<SeoulSiMarketDTO> rList = new LinkedList<>();
 

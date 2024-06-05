@@ -306,13 +306,13 @@ function makeSiList(nowClickedText) {
                                 </div>
                                 <div class="table_small">
                                     <div class="table_cell">점포수 매출액</div>
-                                    <div class="table_cell px-4 py-3 seq">${dto.storeCount}만</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.storeCount}개</div>
                                 </div>
                                 <div class="table_small">
                                     <div class="table_cell">점포수 증가율</div>
                                     <div class="table_cell flex-1 px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
-                                        ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% up !' :
-                                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% down' :
+                                        ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+                                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
                                         '(0원) 0%'}
                                     </div>
                                 </div>
@@ -378,8 +378,8 @@ function makeSiList(nowClickedText) {
                                 <div class="table_small">
                                     <div class="table_cell">폐업수 증가율</div>
                                     <div class="table_cell flex-1 px-4 py-3 seq ${dto.closeStoreDiff > 0 ? 'increase' : dto.closeStoreDiff < 0 ? 'decrease' : 'none'}">
-                                        ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '만) ' + dto.closeStoreRate + '% up !' :
-                                        dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '만) ' + dto.closeStoreRate + '% down' :
+                                        ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
+                                        dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down' :
                                         '(0원) 0%'}
                                     </div>
                                 </div>
@@ -934,13 +934,13 @@ function makeInduList(nowClickedText) {
                                 </div>
                                 <div class="table_small">
                                     <div class="table_cell">점포수</div>
-                                    <div class="table_cell px-4 py-3 seq">${dto.storeCount}만</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.storeCount}개</div>
                                 </div>
                                 <div class="table_small">
                                     <div class="table_cell">점포수 증가율</div>
                                     <div class="table_cell flex-1 px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
-                                        ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% up !' :
-                                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '만) ' + dto.storeRate + '% down' :
+                                        ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
+                                        dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
                                         '(0원) 0%'}
                                     </div>
                                 </div>

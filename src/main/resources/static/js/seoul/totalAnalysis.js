@@ -680,7 +680,6 @@ function makeDonutTime(array) {
 // 창업 지역 추천으로 이동
 function locationAnalysis() {
 
-    let tempLocation = document.getElementById("maxLocation").innerText;
     let tempAge = document.getElementById("maxAge").innerText;
     let tempGender = document.getElementById("maxGender").innerText;
     let tempTime = document.getElementById("maxTime").innerText;
@@ -690,18 +689,18 @@ function locationAnalysis() {
 
     if(tempGender==="여성"){
 
-        tempGender = "femaleSales"
+        tempGender = "female"
 
     } else {
 
-        tempGender = "maleSales"
+        tempGender = "male"
     }
 
     let indutyNm = getIndutyNm(pDTO)
 
-    alert("업종명 : " + indutyNm + " | 지역 : " + tempLocation + " | 주 고객층 나이 : " + tempAge + " | 주 고객층 성별 : " + tempGender + " | 피크 타임 : " + tempTime )
+    alert("업종명 : " + indutyNm + " | 주 고객층 나이 : " + tempAge + " | 주 고객층 성별 : " + tempGender + " | 피크 타임 : " + tempTime )
 
-    location.href = "/seoul/locationAnalysis?indutyNm=" + indutyNm + "&locationNm=" + tempLocation + "&ageSales=" + tempAge + "&genderSales=" + tempGender + "&timeSales=" + tempTime
+    location.href = "/seoul/locationAnalysis?indutyNm=" + indutyNm + "&ageSales=" + tempAge + "&genderSales=" + tempGender + "&timeSales=" + tempTime
 
 }
 
