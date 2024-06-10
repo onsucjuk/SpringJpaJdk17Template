@@ -35,3 +35,7 @@
     color: red; /* 하락을 나타내는 스타일 */
     font-weight: bold;
 }
+
+.locationCd {
+    display: none;
+}

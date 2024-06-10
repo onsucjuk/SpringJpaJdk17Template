@@ -14,6 +14,8 @@ public interface IDongMapper {
      * @param  indutyName 업종 소분류(이름과 같은 값 가져오기)
      * @param  colNm 컬렉션명
      *
+     * @return 조회 결과
+     *
      */
 
     List<SeoulSiMarketDTO> getDongSalesAllByName(String seoulDongYear, String indutyName, String colNm) ;
@@ -26,6 +28,8 @@ public interface IDongMapper {
      * @param  indutySort 업종 대분류(대분류 코드로 시작하는 업종들 가져오기)
      * @param  colNm 컬렉션명
      *
+     * @return 조회 결과
+     *
      */
     List<SeoulSiMarketDTO> getDongSalesAllBySort(String seoulDongYear, String indutySort, String colNm) ;
 
@@ -36,6 +40,8 @@ public interface IDongMapper {
      * @param  seoulDongYear 기준년도
      * @param  indutyName 업종 소분류(이름과 같은 값 가져오기)
      * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
      *
      */
 
@@ -48,6 +54,8 @@ public interface IDongMapper {
      * @param  seoulDongYear 기준년도
      * @param  indutySort 업종 대분류(대분류 코드로 시작하는 업종들 가져오기)
      * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
      *
      */
     List<SeoulSiMarketDTO> getDongStoreAllBySort(String seoulDongYear, String indutySort, String colNm) ;
@@ -63,6 +71,8 @@ public interface IDongMapper {
      * @param  indutyName 업종 소분류(이름과 같은 값 가져오기)
      * @param  colNm 컬렉션명
      *
+     * @return 조회 결과
+     *
      */
 
     List<SeoulSiMarketDTO> getDongSalesByLocationCdAndName(String seoulDongYear, String locationCd, String indutyName, String colNm) ;
@@ -76,6 +86,8 @@ public interface IDongMapper {
      * @param  indutySort 업종 대분류(대분류 코드로 시작하는 업종들 가져오기)
      * @param  colNm 컬렉션명
      *
+     * @return 조회 결과
+     *
      */
     List<SeoulSiMarketDTO> getDongSalesByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) ;
 
@@ -87,6 +99,8 @@ public interface IDongMapper {
      * @param  locationCd 지역코드
      * @param  indutyName 업종 소분류(이름과 같은 값 가져오기)
      * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
      *
      */
 
@@ -100,6 +114,8 @@ public interface IDongMapper {
      * @param  locationCd 지역코드
      * @param  indutySort 업종 대분류(대분류 코드로 시작하는 업종들 가져오기)
      * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
      *
      */
     List<SeoulSiMarketDTO> getDongStoreByLocationCdAndSort(String seoulDongYear, String locationCd, String indutySort, String colNm) ;
@@ -117,4 +133,16 @@ public interface IDongMapper {
      */
     List<SeoulSiMarketDTO> getLocationMarketByIndutyNm(String year, String indutyNm, String colNm);
 
+    /**
+     *
+     * 행정구 코드 기반 좌표 데이터 가져오기
+     *
+     * @param  seoulLocationCd 지역코드
+     * @param  colNm 컬렉션명
+     *
+     * @return 조회 결과
+     *
+     */
+
+    SeoulSiMarketDTO getDongGuLatLon(String seoulLocationCd, String colNm) ;
 }

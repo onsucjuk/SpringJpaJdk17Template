@@ -698,9 +698,17 @@ function locationAnalysis() {
 
     let indutyNm = getIndutyNm(pDTO)
 
-    alert("업종명 : " + indutyNm + " | 주 고객층 나이 : " + tempAge + " | 주 고객층 성별 : " + tempGender + " | 피크 타임 : " + tempTime )
+    // 현재 페이지 url 가져오기
+    const currentUrl = window.location.href;
+    const urlObj = new URL(currentUrl);
+    // url 파라미터 가져오기
+    const params = new URLSearchParams(urlObj.search);
 
-    location.href = "/seoul/locationAnalysis?indutyNm=" + indutyNm + "&ageSales=" + tempAge + "&genderSales=" + tempGender + "&timeSales=" + tempTime
+    // 주고객층 나이대, 성별, 시간 정보 가져오기
+    const guSelect = params.get('guSelect');
+    const guName = params.get('guName');
+
+    location.href = "/seoul/locationAnalysis?indutyNm=" + indutyNm + "&ageSales=" + tempAge + "&genderSales=" + tempGender + "&timeSales=" + tempTime + "&guName=" + guName + "&guSelect=" + guSelect
 
 }
 

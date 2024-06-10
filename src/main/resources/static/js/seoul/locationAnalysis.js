@@ -1,3 +1,30 @@
+$(document).ready(function () {
+    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+    $("#btnTotalAnalysis").on("click", function () {
+
+        // 현재 페이지 url 가져오기
+        const currentUrl = window.location.href;
+        const urlObj = new URL(currentUrl);
+        // url 파라미터 가져오기
+        const params = new URLSearchParams(urlObj.search);
+
+        // 주고객층 나이대, 성별, 시간 정보 가져오기
+        const guValue = params.get('guSelect');
+        const induty = params.get('indutyNm');
+        const guName = params.get('guName');
+
+
+        location.href = "/seoul/totalAnalysis?guSelect=" + guValue + "&guName=" + guName + "&induty=" + induty
+
+    })
+
+    $("#btnCloseWindow").on("click", function () {
+        window.close() // 창 닫기
+    })
+
+})
+
+
 document.addEventListener("DOMContentLoaded", function() {
 
     // 분석 분류 default 설정
@@ -65,6 +92,7 @@ function makeSiList(nowClickedText) {
             let tempDTO = salesList.at(i)
 
             let locationNm = getLocationNm(tempDTO)
+            let locationCd = getLocationCd(tempDTO)
             let monthSales = getMonthSales(tempDTO).toFixed(2)
 
             let row = document.createElement("div");
@@ -80,6 +108,7 @@ function makeSiList(nowClickedText) {
             row.innerHTML = `
             <p class="title" id="rank${i + 1}Number">${i + 1} 위</p>
             <p class="title" id="rank${i + 1}LocationName">${locationNm}</p>
+            <p class="locationCd" id="rank${i + 1}LocationCd">${locationCd}</p>
             <p id="rank${i + 1}Content">${monthSales} 만</p>
         `;
 
@@ -93,6 +122,7 @@ function makeSiList(nowClickedText) {
             let tempDTO = salesRateList.at(i)
 
             let locationNm = getLocationNm(tempDTO)
+            let locationCd = getLocationCd(tempDTO)
             let monthSales = getFmonthSales(tempDTO)
             let salesDiff = getSalesDiff(tempDTO).toFixed(2)
             let salesRate = getSalesRate(tempDTO)
@@ -110,6 +140,7 @@ function makeSiList(nowClickedText) {
             row.innerHTML = `
             <p class="title" id="rank${i + 1}Number">${i + 1} 위</p>
             <p class="title" id="rank${i + 1}LocationName">${locationNm}</p>
+            <p class="locationCd" id="rank${i + 1}LocationCd">${locationCd}</p>
             <p id="rank${i + 1}Content">
                 ${salesDiff > 0 ? monthSales + '만' + '<br>(' + salesDiff + '만)<br><strong>' + salesRate + '% up!</strong>' : 
                 salesDiff < 0 ? monthSales + '만' + '<br>(' + salesDiff + '만)<br><strong>' + salesRate + '% down</strong>' :
@@ -127,6 +158,7 @@ function makeSiList(nowClickedText) {
             let tempDTO = storeList.at(i)
 
             let locationNm = getLocationNm(tempDTO)
+            let locationCd = getLocationCd(tempDTO)
             let storeCount = getStoreCount(tempDTO)
 
             let row = document.createElement("div");
@@ -142,6 +174,7 @@ function makeSiList(nowClickedText) {
             row.innerHTML = `
             <p class="title" id="rank${i + 1}Number">${i + 1} 위</p>
             <p class="title" id="rank${i + 1}LocationName">${locationNm}</p>
+            <p class="locationCd" id="rank${i + 1}LocationCd">${locationCd}</p>
             <p id="rank${i + 1}Content">${storeCount} 개</p>
         `;
 
@@ -155,6 +188,7 @@ function makeSiList(nowClickedText) {
             let tempDTO = ageList.at(i)
 
             let locationNm = getLocationNm(tempDTO)
+            let locationCd = getLocationCd(tempDTO)
             let ageSales = getAgeSales(tempDTO, maxAge).toFixed(2)
 
             let row = document.createElement("div");
@@ -170,6 +204,7 @@ function makeSiList(nowClickedText) {
             row.innerHTML = `
             <p class="title" id="rank${i + 1}Number">${i + 1} 위</p>
             <p class="title" id="rank${i + 1}LocationName">${locationNm}</p>
+            <p class="locationCd" id="rank${i + 1}LocationCd">${locationCd}</p>
             <p id="rank${i + 1}Content">${ageSales} 만</p>
         `;
 
@@ -183,6 +218,7 @@ function makeSiList(nowClickedText) {
             let tempDTO = genderList.at(i)
 
             let locationNm = getLocationNm(tempDTO)
+            let locationCd = getLocationCd(tempDTO)
             let genderSales = getGenderSales(tempDTO, maxGender).toFixed(2)
 
             let row = document.createElement("div");
@@ -198,6 +234,7 @@ function makeSiList(nowClickedText) {
             row.innerHTML = `
             <p class="title" id="rank${i + 1}Number">${i + 1} 위</p>
             <p class="title" id="rank${i + 1}LocationName">${locationNm}</p>
+            <p class="locationCd" id="rank${i + 1}LocationCd">${locationCd}</p>
             <p id="rank${i + 1}Content">${genderSales} 만</p>
         `;
 
@@ -211,6 +248,7 @@ function makeSiList(nowClickedText) {
             let tempDTO = timeList.at(i)
 
             let locationNm = getLocationNm(tempDTO)
+            let locationCd = getLocationCd(tempDTO)
             let timeSales = getTimeSales(tempDTO, maxTime).toFixed(2)
 
             let row = document.createElement("div");
@@ -226,6 +264,7 @@ function makeSiList(nowClickedText) {
             row.innerHTML = `
             <p class="title" id="rank${i + 1}Number">${i + 1} 위</p>
             <p class="title" id="rank${i + 1}LocationName">${locationNm}</p>
+            <p class="locationCd" id="rank${i + 1}LocationCd">${locationCd}</p>
             <p id="rank${i + 1}Content">${timeSales} 만</p>
         `;
 
@@ -235,19 +274,33 @@ function makeSiList(nowClickedText) {
     } else {
 
         alert("분석할 수 없는 탭입니다. 분석 분류를 제대로 선택해주세요.")
-        location.reload()
+        return;
 
     }
 
     let rankedList = getRankedLocation();
 
-    setCluster(rankedList)
+    setMapData(rankedList)
 }
 
 function getMonthSales(dto) {
     // monthSales가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
     return typeof dto.monthSales === 'function' ? dto.monthSales() : dto.monthSales;
 }
+
+function getLat(dto) {
+
+    // lat가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
+    return typeof dto.lat === 'function' ? dto.lat() : dto.lat;
+}
+
+
+function getLon(dto) {
+
+    // lon가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
+    return typeof dto.lon === 'function' ? dto.lon() : dto.lon;
+}
+
 
 function getFmonthSales(dto) {
     // monthSales가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
@@ -270,6 +323,12 @@ function getLocationNm(dto) {
 
     return locationNm.replace(/\?/g, '.');
 }
+
+function getLocationCd(dto) {
+    // monthSales가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
+    return  typeof dto.seoulLocationCd === 'function' ? dto.seoulLocationCd() : dto.seoulLocationCd;
+}
+
 
 
 function getAgeSales(dto, age) {
@@ -344,92 +403,149 @@ let mapContainer = document.getElementById('map_div'), // 지도를 표시할 di
         level: 8 //지도의 레벨(확대, 축소 정도)
     };
 
-function setCluster(rankedList) {
+let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+let circleList = [];
+let points = [];
 
-    let indutyNm1 = rankedList.at(0)
-    let indutyNm2 = rankedList.at(1)
-    let indutyNm3 = rankedList.at(2)
 
-// 마커 클러스터러를 생성합니다
-        let clusterer = new kakao.maps.MarkerClusterer({
-        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-        minLevel: 10, // 클러스터 할 최소 지도 레벨
-        calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
-        texts: getTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다
-        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
-            width: '30px', height: '30px',
-            background: 'rgba(51, 204, 255, .8)',
-            borderRadius: '15px',
-            color: '#000',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            lineHeight: '31px'
-        },
-            {
-                width: '40px', height: '40px',
-                background: 'rgba(255, 153, 0, .8)',
-                borderRadius: '20px',
-                color: '#000',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                lineHeight: '41px'
-            },
-            {
-                width: '50px', height: '50px',
-                background: 'rgba(255, 51, 204, .8)',
-                borderRadius: '25px',
-                color: '#000',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                lineHeight: '51px'
-            },
-            {
-                width: '60px', height: '60px',
-                background: 'rgba(255, 80, 80, .8)',
-                borderRadius: '30px',
-                color: '#000',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                lineHeight: '61px'
-            }
-        ]
-    });
+function setMapData(rankedList) {
+
+    // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+    let bounds = new kakao.maps.LatLngBounds();
+
+    // 원 초기화
+    if(circleList) {
+        for(let i = 0; i < circleList.length; i++) {
+
+            let circle = circleList.at(i)
+
+            circle.setMap(null)
+
+        }
+    }
+
+    // points 초기화
+    points = []
+
+    let location1 = rankedList.at(0)
+    let location2 = rankedList.at(1)
+    let location3 = rankedList.at(2)
+
+    console.log("지역 위도 경도 찾기 !! : " + location1 + ", " + location2 + ", " + location3)
 
     $.ajax({
         url: "/seoul/getDongLatLon",
         type: "post",
         dataType: "JSON",
-        data: {"indutyNm1": indutyNm1,
-               "indutyNm2": indutyNm2,
-               "indutyNm3": indutyNm3,
+        data: {"location1": location1,
+               "location2": location2,
+               "location3": location3,
         },
         success: function (json) {
 
-            for(let i = 0; json.length; i++) {
+            for(let i = 0; i < json.length; i++) {
 
                 let dto = json.at(i)
 
-                let lat = dto.lat;
-                let lon = dto.lon;
+                let lat = getLat(dto);
+                let lon = getLon(dto);
 
                 console.log("return lat : " + lat);
                 console.log("return lon : " + lon);
 
-                let markers = new kakao.maps.Marker({
-                    position: new kakao.maps.LatLng(lat, lon)
-                });
+                if (i===2) {
 
-                clusterer.addMarkers(markers);
+                    console.log(i+1 + "번째 그림그리기!!")
+                    let number = 2000;
+                    let color = '#CD7F32';
+                    let back = '#E8C39E';
+                    let zIndex = 2;
+
+                    drawCircle(number, color, back, lat, lon, zIndex)
+
+                    //points에 위도, 경도 저장
+                    addPoint(lat, lon);
+
+                    // 바운스에 저장
+                    bounds.extend(points[i])
+
+                }
+
+                else if (i===1) {
+
+                    console.log(i+1 + "번째 그림그리기!!")
+                    let number = 2250;
+                    let color = '#C0C0C0';
+                    let back = '#D3D3D3';
+                    let zIndex = 3;
+
+                    drawCircle(number, color, back, lat, lon, zIndex)
+
+                    //points에 위도, 경도 저장
+                    addPoint(lat, lon);
+
+                    // 바운스에 저장
+                    bounds.extend(points[i])
+
+                }
+
+                else if(i===0) {
+
+                    console.log(i+1 + "번째 그림그리기!!")
+
+                    let number = 2500;
+                    let color = '#FFD700';
+                    let back = '#FFFACD';
+                    let zIndex = 4;
+
+                    drawCircle(number, color, back, lat, lon, zIndex)
+
+                    //points에 위도, 경도 저장
+                    addPoint(lat, lon);
+
+                    // 바운스에 저장
+                    bounds.extend(points[i])
+
+                }
+
+                else {
+
+                    alert("지역의 위도, 경도 정보가 없습니다.")
+                    return;
+
+                }
 
             }
+
+            setBounds(bounds)
 
         },
         error: function (xhr, status, error) {
             console.error("AJAX request error:", status, error);
         }
     })
+}
 
+function drawCircle(number, color, back, lat, lon, zIndex) {
+
+
+        let circle = new kakao.maps.Circle({
+            center: new kakao.maps.LatLng(lat, lon),  // 원의 중심좌표 입니다
+            radius: number, // 미터 단위의 원의 반지름입니다
+            strokeWeight: 5, // 선의 두께입니다
+            strokeColor: color, // 선의 색깔입니다
+            strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            strokeStyle: 'dashed', // 선의 스타일 입니다
+            fillColor: back, // 채우기 색깔입니다
+            fillOpacity: 0.7,  // 채우기 불투명도 입니다
+            zIndex: zIndex
+        });
+
+        // 원 리스트에 저장
+        circleList.push(circle)
+
+        // 지도에 원을 표시합니다
+        circle.setMap(map);
 }
 
 function getRankedLocation() {
@@ -438,34 +554,25 @@ function getRankedLocation() {
 
     for(let i = 1; i < 4; i++) {
 
-        let locationNm = document.getElementById("rank" + i + "LocationName").innerText
+        let locationCd = document.getElementById("rank" + i + "LocationCd").innerText
 
-        if (locationNm) {
-
-            tempList.push(locationNm)
-            console.log(`${i}위 ${locationNm}`)
-
+        if (locationCd) {
+            tempList.push(locationCd)
+            console.log(`${i}위 ${locationCd}`)
         } else {
-            console.error("Element not found for rank" + i + "LocationName");
+            console.error("Element not found for rank" + i + "$LocationCd");
         }
-
     }
-
     return tempList;
-
 }
 
-// 클러스터 내부에 삽입할 문자열 생성 함수입니다
-function getTexts( count ) {
+function addPoint(lat, lon) {
+    let point = new kakao.maps.LatLng(lat, lon);
+    points.push(point);
+}
 
-    // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다
-    if(count < 10) {
-        return '삐약';
-    } else if(count < 30) {
-        return '꼬꼬';
-    } else if(count < 50) {
-        return '꼬끼오';
-    } else {
-        return '치멘';
-    }
+function setBounds(bounds) {
+    // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+    // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+    map.setBounds(bounds, 100, 100, 100, 100);
 }

@@ -628,5 +628,47 @@ public class DongMapper implements IDongMapper {
 
     }
 
+    @Override
+    public SeoulSiMarketDTO getDongGuLatLon(String seoulLocationCd, String colNm) {
+
+        log.info(this.getClass().getName() + ".getDongGuLatLon Start!");
+        log.info(seoulLocationCd + "지역 위도 경도 찾기!!");
+
+        SeoulSiMarketDTO rDTO = SeoulSiMarketDTO.builder().build();
+
+        Document query = new Document();
+
+        query.append("SEOUL_LOCATION_CD", seoulLocationCd);
+
+        Document projection = new Document();
+
+        projection.append("LAT", "$LAT");
+        projection.append("LON", "$LON");
+        projection.append("_id", 0);
+
+
+        // 컬렉션 이름이랑 같은 db 데이터 가져오기
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+
+            double lat = doc.getDouble("LAT");
+            double lon = doc.getDouble("LON");
+
+            log.info("lat : " + lat + " / lon : " + lon);
+
+            rDTO = SeoulSiMarketDTO.builder()
+                    .lat(lat)
+                    .lon(lon)
+                    .build();
+
+        }
+
+        log.info(this.getClass().getName() + ".getDongGuLatLon End!");
+
+        return rDTO;
+    }
+
 
 }

@@ -133,6 +133,7 @@ public class DongMarketService implements IDongMarketService {
             // rec : recent의 약자(최신)
             SeoulSiMarketDTO recDTO = recSalesList.get(j);
             String seoulLocationNm = recDTO.seoulLocationNm();
+            String locationCd = recDTO.seoulLocationCd();
             double recSales = recDTO.monthSales();
 
 
@@ -224,6 +225,7 @@ public class DongMarketService implements IDongMarketService {
             // 필요한 값 업종명, 업종코드, 매출액, 매출액 증가량, 증가율
             SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
                     .seoulLocationNm(seoulLocationNm)
+                    .seoulLocationCd(locationCd)
                     .fMonthSales(fMonthSales)
                     .salesDiff(salesDiff)
                     .salesRate(salesRate)
@@ -667,8 +669,25 @@ public class DongMarketService implements IDongMarketService {
      **/
 
     @Override
-    public SeoulSiMarketDTO getDongLatLon(String seoulLocationCd) throws Exception {
-        return null;
+    public List<SeoulSiMarketDTO> getDongLatLon(List<SeoulSiMarketDTO> pList) {
+
+        List<SeoulSiMarketDTO> rList = new ArrayList<>();
+
+        for(int i = 0; i < pList.size(); i++) {
+
+            String colNm = "SEOUL_DONG_LATLON";
+
+            SeoulSiMarketDTO pDTO = pList.get(i);
+            String locationCd = pDTO.seoulLocationCd();
+
+            SeoulSiMarketDTO rDTO = Optional.ofNullable(dongMapper.getDongGuLatLon(locationCd, colNm))
+                    .orElseGet(() -> SeoulSiMarketDTO.builder().build());
+
+            rList.add(rDTO);
+
+        }
+
+        return rList;
     }
 
     @Override

@@ -215,36 +215,36 @@ public class SeoulSiController {
 
     @ResponseBody
     @PostMapping(value = "getDongLatLon")
-    public List<SeoulSiMarketDTO> getDongLatLon(HttpServletRequest request) {
+    public List<SeoulSiMarketDTO> getDongLatLon(HttpServletRequest request) throws Exception {
 
         log.info(this.getClass().getName() + ".getLatLon Start!");
 
-        String indutyNm1 = CmmUtil.nvl(request.getParameter("indutyNm1"));
-        String indutyNm2 = CmmUtil.nvl(request.getParameter("indutyNm2"));
-        String indutyNm3 = CmmUtil.nvl(request.getParameter("indutyNm3"));
+        String location1 = CmmUtil.nvl(request.getParameter("location1"));
+        String location2 = CmmUtil.nvl(request.getParameter("location2"));
+        String location3 = CmmUtil.nvl(request.getParameter("location3"));
+
+        log.info("순위 행정동 코드 : " + location1 + ", " + location2 + ", " + location3);
 
         List<SeoulSiMarketDTO> pList = new ArrayList<>();
 
         SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
-                .seoulLocationNm(indutyNm1)
+                .seoulLocationCd(location1)
                 .build();
         pList.add(pDTO);
 
-        pDTO = SeoulSiMarketDTO.builder()
-                .seoulLocationNm(indutyNm2)
+        SeoulSiMarketDTO pDTO1 = SeoulSiMarketDTO.builder()
+                .seoulLocationCd(location2)
                 .build();
 
-        pList.add(pDTO);
+        pList.add(pDTO1);
 
-        pDTO = SeoulSiMarketDTO.builder()
-                .seoulLocationNm(indutyNm3)
+        SeoulSiMarketDTO pDTO2 = SeoulSiMarketDTO.builder()
+                .seoulLocationCd(location3)
                 .build();
 
-        pList.add(pDTO);
+        pList.add(pDTO2);
 
-        List<SeoulSiMarketDTO> rList = new ArrayList<>() ;
-
-        //판별 길이
+        List<SeoulSiMarketDTO> rList = Optional.ofNullable(dongMarketService.getDongLatLon(pList)).orElseGet(ArrayList::new);
 
 
         log.info(this.getClass().getName() + ".getDongLatLon End!");
