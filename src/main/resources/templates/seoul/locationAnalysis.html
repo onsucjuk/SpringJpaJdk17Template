@@ -12,6 +12,7 @@
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
     <link rel="stylesheet" type="text/css" href="/css/seoul/totalAnalysis.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/locationAnalysis.css">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="/assets/js/init-alpine.js"></script>
     <script th:inline="javascript">
@@ -34,33 +35,61 @@
 <div class="container">
     <div class = "bodyTitle">
         <h2 class="totalAnalysisTitle">창업 지역 추천</h2>
-        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${tDTO.indutyNm()}"></h4>
+        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${pDTO.indutyNm()}"></h4>
     </div>
 
     <hr>
 
-    <div class="dashBoard">
+    <p class="selectText">분석 선택</p>
+    <div class="sortList">
+        <div class="listSort" id="defaultListClicked">
+            <img src="/img/seoul/sales.png" alt="sales"/>
+            매출액
+        </div>
+        <div class="listSort">
+            <img src="/img/seoul/salesRate.png" alt="rate"/>
+            매출률
+        </div>
+        <div class="listSort">
+            <img src="/img/seoul/store.png" alt="store"/>
+            점포수
+        </div>
+        <div class="listSort">
+            <img src="/img/seoul/age.png" alt="age"/>
+            나이대
+        </div>
+        <div class="listSort">
+            <img src="/img/seoul/gender.png" alt="gender"/>
+            성별
+        </div>
+        <div class="listSort">
+            <img src="/img/seoul/time.png" alt="time"/>
+            시간대
+        </div>
+    </div>
+
+    <div class="dashBoard" style="height: auto">
         <div class="divThree" id="btnBnav2">
-            <div class="comment_inline indutyList red-border" id = "rank1">
+            <div class="comment_inline indutyList gold-border" id = "rank1">
+                <p id = "rank1Number"></p>
                 <p class="title" id = "rank1LocationName"></p>
-                <p id = "salesQuarter"></p>
-                <p id = "salesRateQuarter"></p>
+                <p id = "rank1Content"></p>
             </div>
-            <div class="comment_inline indutyList blue-border" id = "rank2">
-                <p class="title" id = "rank2LocationName"></p>
-                <p id = "storeQuarter"></p>
-                <p id = "storeRateQuarter"></p>
+            <div class="comment_inline indutyList silver-border" id = "rank2">
+                <p class="title" id = "rank2Number"></p>
+                <p id = "rank2LocationName"></p>
+                <p id = "rank2Content"></p>
             </div>
-            <div class="comment_inline indutyList green-border" id = "rank3">
-                <p class="title" id = "rank3LocationName"></p>
-                <p id = "closeQuarter"></p>
-                <p id = "closeRateQuarter"></p>
+            <div class="comment_inline indutyList bronze-border" id = "rank3">
+                <p class="title" id = "rank3Number"></p>
+                <p id = "rank3LocationName"></p>
+                <p id = "rank3Content"></p>
             </div>
         </div>
 
         <hr class="divContent">
 
-        <div class="map" id ="map_div">
+        <div class="map" style="height: 600px" id ="map_div">
             나중에 맵 추가 예정
         </div>
 
@@ -68,5 +97,6 @@
 
 </div>
 </body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=afb7f9da685154e4de522b7c462eddc1"></script>
 <script src="/js/seoul/locationAnalysis.js"></script>
 </html>

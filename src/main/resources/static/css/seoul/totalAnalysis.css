@@ -148,6 +148,18 @@
     border-top: 15px solid #5AB3D1;
 }
 
+.gold-border {
+    border-top: 15px solid #FFD700; /* Gold color */
+}
+
+.silver-border {
+    border-top: 15px solid #C0C0C0; /* Silver color */
+}
+
+.bronze-border {
+    border-top: 15px solid #CD7F32; /* Bronze color */
+}
+
 .green-border {
     border-top: 15px solid #5AD1A2;
 }

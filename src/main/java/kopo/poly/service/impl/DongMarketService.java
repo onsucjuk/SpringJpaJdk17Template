@@ -702,8 +702,7 @@ public class DongMarketService implements IDongMarketService {
 
         List<SeoulSiMarketDTO> recStoreList = Optional.ofNullable(dongMapper.getDongStoreAllByName(recentYear, indutyNm, colNm))
                 .orElseGet(LinkedList::new);
-        List<SeoulSiMarketDTO> preStoreList = Optional.ofNullable(dongMapper.getDongStoreAllByName(preYear, indutyNm, colNm))
-                .orElseGet(LinkedList::new);
+
 
         for ( int j = 0; j < recSalesList.size(); j++) {
 
@@ -857,12 +856,6 @@ public class DongMarketService implements IDongMarketService {
         log.info("매출액 지역명 : " + rList.get(0).get(0).seoulLocationNm() + ", " + rList.get(0).get(1).seoulLocationNm() + ", " + rList.get(0).get(2).seoulLocationNm());
         log.info("점포수 지역 : " + rList.get(1).get(0).storeCount() + ", " + rList.get(1).get(1).storeCount() + ", " + rList.get(1).get(2).storeCount());
         log.info("점포수 지역명 : " + rList.get(1).get(0).seoulLocationNm() + ", " + rList.get(1).get(1).seoulLocationNm() + ", " + rList.get(1).get(2).seoulLocationNm());
-        log.info("나이대 지역 : " + rList.get(2).get(0).age50Sales() + ", " + rList.get(2).get(1).age50Sales() + ", " + rList.get(2).get(2).age50Sales());
-        log.info("나이대 지역명 : " + rList.get(2).get(0).seoulLocationNm() + ", " + rList.get(2).get(1).seoulLocationNm() + ", " + rList.get(2).get(2).seoulLocationNm());
-        log.info("성별 지역 : " + rList.get(3).get(0).femaleSales() + ", " + rList.get(3).get(1).femaleSales() + ", " + rList.get(3).get(2).femaleSales());
-        log.info("성별 지역명 : " + rList.get(3).get(0).seoulLocationNm() + ", " + rList.get(3).get(1).seoulLocationNm() + ", " + rList.get(3).get(2).seoulLocationNm());
-        log.info("피크타임 지역 : " + rList.get(4).get(0).time1721Sales() + ", " + rList.get(4).get(1).time1721Sales() + ", " + rList.get(4).get(2).time1721Sales());
-        log.info("피크타임 지역명 : " + rList.get(4).get(0).seoulLocationNm() + ", " + rList.get(4).get(1).seoulLocationNm() + ", " + rList.get(4).get(2).seoulLocationNm());
 
         log.info(this.getClass().getName() + ".getLocationMarketRes End!");
 

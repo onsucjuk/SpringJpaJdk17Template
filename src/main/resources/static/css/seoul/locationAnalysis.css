@@ -1,0 +1,37 @@
+
+.sortList {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 2px;
+    margin-bottom: 40px;
+    max-width: 60%;
+}
+
+.listSort {
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+    background-color: #E0E5E8;
+    cursor: pointer;
+}
+
+.listSort.clicked {
+    background-color: #B0C4DE; /* 클릭된 요소의 배경색 변경 */
+}
+
+.listSort img {
+    width : 80%;
+    height: 70%;
+    display: block;
+    margin: 0 auto;
+}
+
+.raise {
+    color: green; /* 상승을 나타내는 스타일 */
+    font-weight: bold;
+}
+
+.decrease {
+    color: red; /* 하락을 나타내는 스타일 */
+    font-weight: bold;
+}

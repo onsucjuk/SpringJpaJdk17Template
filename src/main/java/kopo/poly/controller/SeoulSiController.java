@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -190,7 +187,7 @@ public class SeoulSiController {
      */
     @ResponseBody
     @PostMapping(value = "getLatLon")
-    public SeoulSiMarketDTO getLatLon(HttpServletRequest request) throws Exception {
+    public SeoulSiMarketDTO getLatLon(HttpServletRequest request) {
 
         log.info(this.getClass().getName() + ".getLatLon Start!");
 
@@ -214,6 +211,45 @@ public class SeoulSiController {
         log.info(this.getClass().getName() + ".getLatLon End!");
 
         return rDTO;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "getDongLatLon")
+    public List<SeoulSiMarketDTO> getDongLatLon(HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".getLatLon Start!");
+
+        String indutyNm1 = CmmUtil.nvl(request.getParameter("indutyNm1"));
+        String indutyNm2 = CmmUtil.nvl(request.getParameter("indutyNm2"));
+        String indutyNm3 = CmmUtil.nvl(request.getParameter("indutyNm3"));
+
+        List<SeoulSiMarketDTO> pList = new ArrayList<>();
+
+        SeoulSiMarketDTO pDTO = SeoulSiMarketDTO.builder()
+                .seoulLocationNm(indutyNm1)
+                .build();
+        pList.add(pDTO);
+
+        pDTO = SeoulSiMarketDTO.builder()
+                .seoulLocationNm(indutyNm2)
+                .build();
+
+        pList.add(pDTO);
+
+        pDTO = SeoulSiMarketDTO.builder()
+                .seoulLocationNm(indutyNm3)
+                .build();
+
+        pList.add(pDTO);
+
+        List<SeoulSiMarketDTO> rList = new ArrayList<>() ;
+
+        //판별 길이
+
+
+        log.info(this.getClass().getName() + ".getDongLatLon End!");
+
+        return rList;
     }
 
 
