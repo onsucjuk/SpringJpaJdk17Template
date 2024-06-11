@@ -82,7 +82,7 @@
                                         class="py-3 bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 tr-bg"
                                 >-->
                                     <div th:each="dto : ${rList}" th:onclick="doDetail([[${dto.noticeSeq}]])"
-                                        class="py-3 bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 tr-bg flex" style="padding-top: 0px; padding-bottom: 0px;"
+                                        class="py-3 bg-white dark:divide-gray-700 dark:bg-gray-800 tr-bg flex" style="padding-top: 0px; padding-bottom: 0px; border-bottom: 1px solid lightgrey;"
                                     >
 
                                         <span class="flex-1 px-4 py-3 seq flex-1" th:text="${dto.noticeSeq}">

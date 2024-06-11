@@ -20,7 +20,9 @@
         // Controller에서 받은 값
         // 선택 지역(구)의 선택 업종 매출액
         const guList = [[${guList}]];
-        const rDTO = [[${rDTO}]];
+        const guValue = [[${rDTO.seoulLocationCd}]];
+        const guName = [[${rDTO.seoulLocationNm}]];
+        const induty = [[${rDTO.indutyNm}]];
 
         /*]]>*/
     </script>
@@ -28,10 +30,31 @@
 <body>
 <div class="container">
     <div class = "bodyTitle">
-        <h2 class="totalAnalysisTitle">업종 현황</h2>
+        <h2 class="totalAnalysisTitle">관심 업종 간이 현황</h2>
         <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${rDTO.seoulLocationNm()} + ' 지역 | ' + ${rDTO.indutyNm()}"></h4>
     </div>
 
+    <hr>
+
+    <div class="dashBoard">
+        <div class="divThree" id="btnBnav2">
+            <div class="comment_inline indutyList red-border" id = "quarterSales">
+                <p class="title">매출액</p>
+                <p id = "salesQuarter"></p>
+                <p id = "salesRateQuarter"></p>
+            </div>
+            <div class="comment_inline indutyList blue-border" id = "quarterStore">
+                <p class="title">점포수</p>
+                <p id = "storeQuarter"></p>
+                <p id = "storeRateQuarter"></p>
+            </div>
+            <div class="comment_inline indutyList green-border" id = "quarterClose">
+                <p class="title">폐업수</p>
+                <p id = "closeQuarter"></p>
+                <p id = "closeRateQuarter"></p>
+            </div>
+        </div>
+    </div>
 
     <div class="buttonLine">
         <button

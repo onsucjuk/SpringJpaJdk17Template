@@ -81,8 +81,10 @@ function makeSiList(nowClickedText) {
 
     // rankDiv를 가져오기
     const rankDiv = document.getElementById('btnBnav2');
+    const maxDiv = document.getElementById('maxContents');
     // 초기화
     rankDiv.innerHTML = '';
+    maxDiv.innerHTML = '';
 
     // 클릭된 값에 따라 다른 테이블 헤더와 데이터 로드
     if (nowClickedText === "매출액") {
@@ -211,6 +213,12 @@ function makeSiList(nowClickedText) {
             rankDiv.appendChild(row);
         }
 
+        let hTag = document.createElement("h4");
+        hTag.className = "indutyAndLocation";
+        hTag.innerText = `| 주고객층 : ${maxAge}대 |`;
+
+        maxDiv.appendChild(hTag)
+
     } else if (nowClickedText === "성별") {
 
         for(let i = 0; i < genderList.length; i++) {
@@ -239,7 +247,21 @@ function makeSiList(nowClickedText) {
         `;
 
             rankDiv.appendChild(row);
+
         }
+
+        let gender = "";
+        if(maxGender==="male") {
+            gender = "남성"
+        } else {
+            gender = "여성"
+        }
+
+        let hTag = document.createElement("h4");
+        hTag.className = "indutyAndLocation";
+        hTag.innerText = `| 주고객 성별 : ${gender} |`;
+
+        maxDiv.appendChild(hTag)
 
     } else if (nowClickedText === "시간대") {
 
@@ -269,7 +291,29 @@ function makeSiList(nowClickedText) {
         `;
 
             rankDiv.appendChild(row);
+
         }
+
+        let time = "";
+        if(maxTime==="0006") {
+            time = "00시~06시"
+        } else if(maxTime==="0611") {
+            time = "06시~11시"
+        } else if(maxTime==="1114") {
+            time = "11시~14시"
+        } else if(maxTime==="1417") {
+            time = "14시~17시"
+        } else if(maxTime==="1721") {
+            time = "17시~21시"
+        } else if(maxTime==="2124") {
+            time = "21시~24시"
+        }
+
+        let hTag = document.createElement("h4");
+        hTag.className = "maxContents";
+        hTag.innerText = `| 피크 타임 : ${time} |`;
+
+        maxDiv.appendChild(hTag)
 
     } else {
 
@@ -574,5 +618,16 @@ function addPoint(lat, lon) {
 function setBounds(bounds) {
     // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
     // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-    map.setBounds(bounds, 100, 100, 100, 100);
+    map.setBounds(bounds, 150, 150, 150, 150);
+
+    let level = map.getLevel();
+
+    console.log("map level : " + level)
+
+    if(level<6) {
+
+        map.setLevel(6)
+        console.log("바뀐 지도 레벨 : " + level)
+
+    }
 }
