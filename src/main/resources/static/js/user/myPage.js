@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $("#btnInterest").on("click", function () {
 
-        location.href = "/user/interrested";
+        location.href = "/user/interestList";
 
     })
 

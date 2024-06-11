@@ -2,8 +2,12 @@ package kopo.poly.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kopo.poly.dto.InterestDTO;
 import kopo.poly.dto.MsgDTO;
+import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.dto.UserInfoDTO;
+import kopo.poly.service.IGuMarketService;
+import kopo.poly.service.IInterestService;
 import kopo.poly.service.IUserInfoService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.EncryptUtil;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,6 +32,8 @@ public class UserInfoController {
     // @RequiredArgsConstructor 를 통해 메모리에 올라간 서비스 객체를 Controller에서 사용할 수 있게 주입함
 
     private final IUserInfoService userInfoService;
+    private final IInterestService iInterestService;
+    private final IGuMarketService guMarketService;
 
 
     @GetMapping(value = "userRegForm")
@@ -643,15 +650,315 @@ public class UserInfoController {
         return dto;
     }
 
-    // 관심 업종 페이지
-    @GetMapping(value = "interrested")
-    public String interrested() {
+    /**
+     *
+     *  ################ 관심 업종 관련 기능 ######################
+     *
+     *                     관심 업종 CRUD
+     *
+     * #########################################################
+     */
+    @GetMapping(value = "interestList")
+    public String interestList(HttpSession session, ModelMap model) {
 
-        log.info(this.getClass().getName() + ".user/interrested Start!");
+        log.info(this.getClass().getName() + ".user/interestList Start!");
 
-        log.info(this.getClass().getName() + ".user/interrested End!");
+            List<InterestDTO> rList;
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
-        return "user/interrested";
+            InterestDTO pDTO = InterestDTO.builder()
+                    .userId(userId)
+                    .build();
+
+            if(userId.length() > 0) {
+
+                rList = iInterestService.getInterestList(pDTO);
+
+            } else {
+
+                return "redirect:/user/login";
+
+            }
+
+            model.addAttribute("rList", rList);
+
+        log.info(this.getClass().getName() + ".user/interestList End!");
+
+        return "user/interestList";
+    }
+
+    @GetMapping(value = "interestReg")
+    public String interestReg(HttpSession session) {
+
+        log.info(this.getClass().getName() + ".user/interestReg Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        if(userId.length() > 0) {
+
+        } else {
+
+            return "redirect:/user/login";
+
+        }
+
+        log.info(this.getClass().getName() + ".user/interestReg End!");
+
+        return "user/interestReg";
+    }
+
+    @GetMapping(value = "interestEdit")
+    public String interestEdit(HttpSession session, HttpServletRequest request, ModelMap model) {
+
+        log.info(this.getClass().getName() + ".user/interestEdit Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String interestSeq = CmmUtil.nvl(request.getParameter("nSeq"));
+
+        log.info("interestSeq : " + interestSeq);
+
+        if(userId.length() > 0) {
+
+            InterestDTO pDTO = InterestDTO.builder()
+                    .interestSeq(interestSeq)
+                    .build();
+
+            InterestDTO rDTO = Optional.ofNullable(iInterestService.getInterestInfo(pDTO))
+                    .orElseGet(() -> InterestDTO.builder().build());
+
+            String existsYn = rDTO.existsYn();
+            String indutyCd = rDTO.indutyCd();
+            String locationCd = rDTO.seoulLocationCd();
+
+            log.info("indutyCd : " + indutyCd);
+            log.info("locationCd : " + locationCd);
+
+            if (existsYn.equals("Y")) { // 정보가 있다면 데이터 build
+
+                model.addAttribute("rDTO", rDTO);
+
+            }
+
+        } else {
+
+            return "redirect:/user/login";
+
+        }
+
+        log.info(this.getClass().getName() + ".interestEdit End!");
+
+        return "user/interestEdit";
+    }
+
+    @GetMapping(value = "interestInfo")
+    public String interestInfo(HttpSession session, HttpServletRequest request, ModelMap model) {
+
+        log.info(this.getClass().getName() + ".user/interestInfo Start!");
+
+        List<SeoulSiMarketDTO> guList;
+        String interestSeq = CmmUtil.nvl(request.getParameter("nSeq"));
+
+        log.info("interestSeq : " + interestSeq);
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        if(userId.length() > 0) {
+
+            InterestDTO pDTO = InterestDTO.builder()
+                    .interestSeq(interestSeq)
+                    .build();
+
+            /* interestSeq로 정보 받와와서 model 객체로 넘겨주기 */
+            InterestDTO rDTO = iInterestService.getInterestInfo(pDTO);
+
+            String induty = rDTO.indutyNm();
+            String guSelect = rDTO.seoulLocationCd();
+
+            guList = guMarketService.getGuMarketIndutyNm(induty, guSelect);
+
+            model.addAttribute("guList", guList);
+            model.addAttribute("rDTO", rDTO);
+
+        } else {
+
+            return "redirect:/user/login";
+
+        }
+
+        log.info(this.getClass().getName() + ".user/interestInfo End!");
+
+        return "user/interestInfo";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "insertInterest")
+    public MsgDTO insertInterest(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".user/insertInterest Start!");
+
+        // 결과 리턴 변수 초기화
+        MsgDTO mDTO;
+        int res = 1;
+        String msg = "";
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("seoulLocationCd"));
+        String seoulLocationNm = CmmUtil.nvl(request.getParameter("seoulLocationNm"));
+        String indutyCd = CmmUtil.nvl(request.getParameter("indutyCd"));
+        String indutyNm = CmmUtil.nvl(request.getParameter("indutyNm"));
+
+        log.info("userId : " + userId);
+        log.info("seoulLocationCd : " + seoulLocationCd);
+        log.info("seoulLocationNm : " + seoulLocationNm);
+        log.info("indutyCd : " + indutyCd);
+        log.info("indutyNm : " + indutyNm);
+
+        InterestDTO pDTO = InterestDTO.builder()
+                .userId(userId)
+                .seoulLocationCd(seoulLocationCd)
+                .seoulLocationNm(seoulLocationNm)
+                .indutyCd(indutyCd)
+                .indutyNm(indutyNm)
+                .build();
+
+        InterestDTO rDTO = iInterestService.getInterestDataExists(pDTO);
+
+        String existsYn = rDTO.existsYn();
+
+        if(existsYn.equals("N")) {
+
+            try {
+
+                iInterestService.insertInterestInfo(pDTO);
+
+                msg = "관심 업종 등록에 성공하였습니다.";
+
+            } catch (Exception e) { //모든 에러 다 잡기
+
+                res = 0; // 등록 실패
+                msg = "관심 업종 등록에 실패했습니다. 에러는 다음과 같습니다. " + e;
+                log.info("[ERROR] " + this.getClass().getName() + ".insertInterest : " + e);
+
+            } finally {
+
+                mDTO = MsgDTO.builder()
+                        .result(res)
+                        .msg(msg)
+                        .build();
+
+                log.info(this.getClass().getName() + ".insertInterest End!");
+            }
+        } else { // "Y" 이미 등록되어 있는 정보
+
+            res = 0; // 등록 실패
+            msg = "이미 등록되어 있는 관심 업종입니다. 다른 항목을 선택해주세요.";
+
+            mDTO = MsgDTO.builder()
+                    .result(res)
+                    .msg(msg)
+                    .build();
+
+        }
+
+        return mDTO;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "udateInterest")
+    public MsgDTO udateInterest(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".user/udateInterest Start!");
+
+        // 결과 리턴 변수 초기화
+        MsgDTO mDTO;
+        int res = 1;
+        String msg = "";
+
+        String interestSeq = CmmUtil.nvl(request.getParameter("interestSeq"));
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String seoulLocationCd = CmmUtil.nvl(request.getParameter("seoulLocationCd"));
+        String seoulLocationNm = CmmUtil.nvl(request.getParameter("seoulLocationNm"));
+        String indutyCd = CmmUtil.nvl(request.getParameter("indutyCd"));
+        String indutyNm = CmmUtil.nvl(request.getParameter("indutyNm"));
+
+        log.info("interestSeq : " + interestSeq);
+
+        InterestDTO pDTO = InterestDTO.builder()
+                .interestSeq(interestSeq)
+                .userId(userId)
+                .seoulLocationCd(seoulLocationCd)
+                .seoulLocationNm(seoulLocationNm)
+                .indutyCd(indutyCd)
+                .indutyNm(indutyNm)
+                .build();
+
+        try {
+
+            iInterestService.updateInterestInfo(pDTO);
+
+            msg = "해당 관심 업종을 수정하였습니다.";
+
+        } catch (Exception e) { //모든 에러 다 잡기
+
+            res = 0; // 등록 실패
+            msg = "관심 업종 등록에 실패했습니다. 에러는 다음과 같습니다. : " + e;
+            log.info("[ERROR] " + this.getClass().getName() + ".insertInterest : " + e);
+
+        } finally {
+
+            mDTO = MsgDTO.builder()
+                    .result(res)
+                    .msg(msg)
+                    .build();
+        }
+
+        log.info(this.getClass().getName() + ".udateInterest End!");
+
+        return mDTO;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "deleteInterest")
+    public MsgDTO deleteInterest(HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".user/deleteInterest Start!");
+
+        // 결과 리턴 변수 초기화
+        MsgDTO mDTO;
+        int res = 1;
+        String msg = "";
+
+        String interestSeq = CmmUtil.nvl(request.getParameter("interestSeq"));
+
+        log.info("interestSeq : " + interestSeq);
+
+        InterestDTO pDTO = InterestDTO.builder()
+                .interestSeq(interestSeq)
+                .build();
+
+        try {
+
+            iInterestService.deleteInterestInfo(pDTO);
+
+            msg = "해당 관심 업종을 삭제하였습니다.";
+
+        } catch (Exception e) { //모든 에러 다 잡기
+
+            res = 0; // 등록 실패
+            msg = "관심 업종 등록에 실패했습니다. 에러는 다음과 같습니다. : " + e;
+            log.info("[ERROR] " + this.getClass().getName() + ".insertInterest : " + e);
+
+        } finally {
+
+            mDTO = MsgDTO.builder()
+                    .result(res)
+                    .msg(msg)
+                    .build();
+        }
+
+        log.info(this.getClass().getName() + ".deleteInterest End!");
+
+        return mDTO;
     }
 
     // 회원 탈퇴 페이지

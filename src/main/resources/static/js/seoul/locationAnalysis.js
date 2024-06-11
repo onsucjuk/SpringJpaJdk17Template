@@ -8,7 +8,7 @@ $(document).ready(function () {
         // url 파라미터 가져오기
         const params = new URLSearchParams(urlObj.search);
 
-        // 주고객층 나이대, 성별, 시간 정보 가져오기
+        // 지역, 지역코드, 업종명 가져오기
         const guValue = params.get('guSelect');
         const induty = params.get('indutyNm');
         const guName = params.get('guName');

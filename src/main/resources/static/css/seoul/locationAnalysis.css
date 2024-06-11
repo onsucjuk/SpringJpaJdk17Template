@@ -4,7 +4,8 @@
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 2px;
     margin-bottom: 40px;
-    max-width: 60%;
+    max-width: 40%;
+    min-width: 400px;
 }
 
 .listSort {

@@ -4,7 +4,7 @@ import kopo.poly.dto.UserInfoDTO;
 
 public interface IUserInfoService {
 
-    UserInfoDTO getUserIdExists(UserInfoDTO pDTO) throws Exception;
+    UserInfoDTO getUserIdExists(UserInfoDTO pDTO);
     UserInfoDTO getEmailExists(UserInfoDTO pDTO) throws Exception;
 
     UserInfoDTO getUserIdAndEmailExists(UserInfoDTO pDTO) throws Exception;

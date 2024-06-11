@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관심 업종 리스트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/indutyAnalysis.css">
+    <link href="/css/user/myPage.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/css/user/interestList.css">
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/user/interestList.js"></script>
+    <script src="/js/home/nav.js"></script>
+</head>
+<body>
+<div class="container">
+    <nav class="main-nav">
+        <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+
+        <ul class="right-menu">
+
+            <ul class="main-menu">
+                <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
+                <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
+                <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+            </ul>
+
+            <p th:if="${session.SS_USER_ID}">
+                <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
+                </button>
+            </p>
+
+            <li th:unless="${session.SS_USER_ID}">
+                <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
+            </li>
+
+        </ul>
+    </nav>
+
+    <hr class="titleLine">
+
+    <div
+            class="flex h-screen bg-gray-50 dark:bg-gray-900"
+            :class="{ 'overflow-hidden': isSideMenuOpen}"
+    >
+
+        <div class="flex flex-col flex-1 w-full">
+            <main class="h-full pb-16 overflow-y-auto">
+                <div class="container grid px-6 mx-auto">
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                        관심 업종 리스트
+                    </h2>
+
+                    <!-- With actions -->
+                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"></h4>
+                    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                        <div th:if="${session.SS_USER_ID}" class="px-6 my-6 " style="margin-top: 10px; margin-bottom: 10px;">
+                            <button
+                                    id="btnListReg"
+                                    class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    type="button"
+                            >
+                                <div class="w-full">
+                                    <span class="px-4 py-3 text-sm font-semibold">관심 업종 등록</span>
+                                    <span class="ml-2" aria-hidden="true">+</span>
+                                </div>
+
+                            </button>
+                        </div>
+
+                        <div class="table" id="results" style="margin-top: 0px; margin-left: 0px;">
+                            <div class="theader td-title-bg py-3 text-xs font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 flex-1" style="padding-top: 0px; padding-bottom: 0px;">
+                                <div class="table_header px-4 py-3 td-title-bg seoulLocationCd">지역코드</div>
+                                <div class="table_header px-4 py-3 td-title-bg">지역명</div>
+                                <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                                <div class="table_header px-4 py-3 td-title-bg indutyCd">업종코드</div>
+                                <div class="table_header px-4 py-3 td-title-bg">기능</div>
+                                <div class="table_header px-4 py-3 td-title-bg interestSeq">관심번호</div>
+                            </div>
+                            <div th:each="dto : ${rList}" class="table_row bg-white dark:divide-gray-700 dark:bg-gray-800 flex-1" style="padding-top: 0px; padding-bottom: 0px;">
+                                <div class="table_small seoulLocationCd">
+                                    <div class="table_cell">지역코드</div>
+                                    <div class="table_cell px-4 py-3 seq" th:id = "seoulLocationCd+${dto.interestSeq}" th:text="${dto.seoulLocationCd}"></div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">지역명</div>
+                                    <div class="table_cell px-4 py-3 seq" th:id = "seoulLocationNm+${dto.interestSeq}" th:text="${dto.seoulLocationNm}"></div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">업종명</div>
+                                    <div class="table_cell flex-1 px-4 py-3 seq" th:id = "indutyNm+${dto.interestSeq}" th:text="${dto.indutyNm}"></div>
+                                </div>
+                                <div class="table_small indutyCd">
+                                    <div class="table_cell">업종코드</div>
+                                    <div class="table_cell flex-1 px-4 py-3 seq" th:id = "indutyCd+${dto.interestSeq}" th:text="${dto.indutyCd}"></div>
+                                </div>
+                                <div class="table_small">
+                                    <div class="table_cell">기능</div>
+                                    <div class="table_cell flex-1 px-4 py-2 seq inline_contents center_contents">
+                                        <button
+                                                th:id="btnInterestEdit+${dto.interestSeq}"
+                                                th:onclick="doEdit([[${dto.interestSeq}]])"
+                                                class="flex items-left justify-between w-1/10 px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="text-sm font-semibold">수정</span>
+                                                <span class="ml-2" aria-hidden="true">*</span>
+                                            </div>
+                                        </button>
+                                        <button
+                                                th:id="btnInterestDel+${dto.interestSeq}"
+                                                th:onclick="doDel([[${dto.interestSeq}]])"
+                                                class="flex items-left justify-between w-1/10 px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="text-sm font-semibold">삭제</span>
+                                                <span class="ml-2" aria-hidden="true">-</span>
+                                            </div>
+                                        </button>
+                                        <button
+                                                th:id="btnInterestView+${dto.interestSeq}"
+                                                th:onclick="doDetail([[${dto.interestSeq}]])"
+                                                class="flex items-left justify-between w-1/10 px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="text-sm font-semibold">현황 보기</span>
+                                                <span class="ml-2" aria-hidden="true">o</span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="table_small interestSeq">
+                                    <div class="table_cell">관심번호</div>
+                                    <div class="table_cell px-4 py-3 seq" th:id = "interestSeq+${dto.interestSeq}" th:text="${dto.interestSeq}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

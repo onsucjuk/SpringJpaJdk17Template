@@ -25,7 +25,7 @@ public class UserInfoService implements IUserInfoService {
     private final IMailService mailService; // 메일 발송을 위한 MailService 자바 객체 가져오기
 
     @Override
-    public UserInfoDTO getUserIdExists(UserInfoDTO pDTO) throws Exception {
+    public UserInfoDTO getUserIdExists(UserInfoDTO pDTO) {
 
         log.info(this.getClass().getName() + ".getUserIdExists Start!");
 

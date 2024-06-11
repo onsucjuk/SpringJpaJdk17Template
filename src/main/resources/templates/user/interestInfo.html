@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관심 업종 현황</title>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/home/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/seoul/totalAnalysis.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="/assets/js/init-alpine.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // Controller에서 받은 값
+        // 선택 지역(구)의 선택 업종 매출액
+        const guList = [[${guList}]];
+        const rDTO = [[${rDTO}]];
+
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class = "bodyTitle">
+        <h2 class="totalAnalysisTitle">업종 현황</h2>
+        <h4 class="indutyAndLocation" th:text="'2023년 3분기 | ' + ${rDTO.seoulLocationNm()} + ' 지역 | ' + ${rDTO.indutyNm()}"></h4>
+    </div>
+
+
+    <div class="buttonLine">
+        <button
+                id="btnTotalAnalysis"
+                class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                type="button"
+        >
+            <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">종합 분석 보기</span>
+                <span class="ml-2" aria-hidden="true"></span>
+            </div>
+
+        </button>
+        <button
+                id="btnBack"
+                class="flex items-left justify-between w-1/10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                type="button"
+        >
+            <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">돌아가기</span>
+                <span class="ml-2" aria-hidden="true"></span>
+            </div>
+
+        </button>
+    </div>
+</div>
+</body>
+<script src="/js/user/interestInfo.js"></script>
+</html>

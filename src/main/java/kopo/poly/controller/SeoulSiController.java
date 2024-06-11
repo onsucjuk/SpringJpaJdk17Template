@@ -215,7 +215,7 @@ public class SeoulSiController {
 
     @ResponseBody
     @PostMapping(value = "getDongLatLon")
-    public List<SeoulSiMarketDTO> getDongLatLon(HttpServletRequest request) throws Exception {
+    public List<SeoulSiMarketDTO> getDongLatLon(HttpServletRequest request) {
 
         log.info(this.getClass().getName() + ".getLatLon Start!");
 
@@ -435,10 +435,10 @@ public class SeoulSiController {
 
         if(userId.length() > 0) {
 
-            List<SeoulSiMarketDTO> seoulList = new ArrayList<>();
-            List<SeoulSiMarketDTO> guList = new ArrayList<>();
-            List<SeoulSiMarketDTO> seoulIndutyList = new ArrayList<>();
-            List<SeoulSiMarketDTO> sortedList = new LinkedList<>();
+            List<SeoulSiMarketDTO> seoulList;
+            List<SeoulSiMarketDTO> guList;
+            List<SeoulSiMarketDTO> seoulIndutyList;
+            List<SeoulSiMarketDTO> sortedList;
 
             String guSelect = CmmUtil.nvl(request.getParameter("guSelect")); // 지역코드
             String guName = CmmUtil.nvl(request.getParameter("guName")); // 지역명
