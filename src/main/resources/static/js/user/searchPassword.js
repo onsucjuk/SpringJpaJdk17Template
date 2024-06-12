@@ -1,6 +1,8 @@
 // HTML로딩이 완료되고, 실행됨
 $(document).ready(function () {
 
+    let emailCheck = "Y"
+
     let f = document.getElementById("f");
 
     // 로그인 화면 이동

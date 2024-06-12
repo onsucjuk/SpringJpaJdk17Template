@@ -1,5 +1,12 @@
 $(document).ready(function () {
 
+    let msg = ""
+    // 클래스명을 이용하여 요소를 선택
+    let element = document.querySelector('.indutyAndLocation');
+    let content = element.innerText;
+    msg = content + "\n";
+    let msgLength = msg.length;
+
     let firstDto = guList.at(guList.length - 1);
     let secondDto = guList.at(guList.length - 2);
 
@@ -60,13 +67,10 @@ $(document).ready(function () {
         salesDiv.innerText = `${firstSales.toFixed(2)}만 (${salesDiff.toFixed(2)} 만)`
         salesRateDiv.innerText = `${salesRate.toFixed(2)}%`
     } else {
-        // 클래스명을 이용하여 요소를 선택
-        let element = document.querySelector('.indutyAndLocation');
         let button = document.getElementById("btnTotalAnalysis");
         button.style.display = 'none';
         // 요소의 텍스트 내용을 가져옴
-        let content = element.innerText;
-        alert(content + "의 데이터가 없습니다.")
+        msg = msg + "매출액 데이터가 없습니다.\n"
     }
 
     if (salesDiff > 0) {
@@ -80,13 +84,10 @@ $(document).ready(function () {
         storeDiv.innerText = `${firstStore}(개) (${storeDiff} 개)`
         storeRateDiv.innerText = `${storeRate.toFixed(2)}%`
     } else {
-        // 클래스명을 이용하여 요소를 선택
-        let element = document.querySelector('.indutyAndLocation');
         let button = document.getElementById("btnTotalAnalysis");
         button.style.display = 'none';
-        // 요소의 텍스트 내용을 가져옴
-        let content = element.innerText;
-        alert(content + "의 데이터가 없습니다.")
+
+        msg = msg + "점포수 데이터가 없습니다.\n"
     }
 
     if (storeDiff > 0) {
@@ -100,13 +101,8 @@ $(document).ready(function () {
         closeDiv.innerText = `${firstClose}(개) (${closeDiff} 개)`
         closeRateDiv.innerText = `${closeRate.toFixed(2)}%`
     } else {
-        // 클래스명을 이용하여 요소를 선택
-        let element = document.querySelector('.indutyAndLocation');
-        let button = document.getElementById("btnTotalAnalysis");
-        button.style.display = 'none';
-        // 요소의 텍스트 내용을 가져옴
-        let content = element.innerText;
-        alert(content + "의 데이터가 없습니다.")
+
+        msg = msg + "폐업수 데이터가 없습니다.\n"
     }
 
     if (closeDiff > 0) {
@@ -116,7 +112,14 @@ $(document).ready(function () {
     }
 
 
-
+    // 최초 설정 msg보다 길다면 데이터가 없는 것
+    // 종합 분석 버튼 숨기기
+    if(msg.length>msgLength) {
+        let button = document.getElementById("btnTotalAnalysis");
+        button.style.display = 'none';
+        msg = msg + "종합분석 기능을 제공 할 수 없는 업종입니다."
+        alert(msg)
+    }
 
     $("#btnBack").on("click", function () {
         location.href = "/user/interestList";
