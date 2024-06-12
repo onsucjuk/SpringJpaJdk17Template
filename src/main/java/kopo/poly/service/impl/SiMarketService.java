@@ -406,9 +406,21 @@ public class SiMarketService implements ISiMarketService {
             List<Map<String, Object>> marketYear = sortByYear(marketContents, year);
             List<Map<String, Object>> storeYear = sortByYear(storeContents, year);
 
-            double market = ((double) marketYear.get(0).get("THSMON_SELNG_AMT"))/10000;
-            double storeCount = (double) storeYear.get(0).get("SIMILR_INDUTY_STOR_CO");
-            double closeStoreCount = (double) storeYear.get(0).get("CLSBIZ_STOR_CO");
+            double market = 0;
+            if(marketYear.isEmpty()){
+                log.info("marketYear Empty");
+            } else {
+                market = ((double) marketYear.get(0).get("THSMON_SELNG_AMT")) / 10000;
+            }
+
+            double storeCount = 0;
+            double closeStoreCount = 0;
+            if(storeYear.isEmpty()){
+                log.info("storeYear Empty");
+            } else {
+               storeCount = (double) storeYear.get(0).get("SIMILR_INDUTY_STOR_CO");
+               closeStoreCount = (double) storeYear.get(0).get("CLSBIZ_STOR_CO");
+            }
 
             log.info("seoul storeCount : " + storeCount);
             log.info("seoul closeStoreCount : " + closeStoreCount);

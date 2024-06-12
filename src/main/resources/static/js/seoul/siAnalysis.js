@@ -257,6 +257,14 @@ function makeSiList(nowClickedText) {
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
+
+                headerContainer.innerHTML = `
+                <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                <div class="table_header px-4 py-3 td-title-bg">매출액 증가율</div>
+            `;
+                resultContainer.appendChild(headerContainer);
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제
@@ -324,6 +332,15 @@ function makeSiList(nowClickedText) {
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request error:", status, error);
+
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수 증가율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제
@@ -373,14 +390,14 @@ function makeSiList(nowClickedText) {
                                 </div>
                                 <div class="table_small">
                                     <div class="table_cell">폐업수</div>
-                                    <div class="table_cell px-4 py-3 seq">${dto.closeStoreCount}만</div>
+                                    <div class="table_cell px-4 py-3 seq">${dto.closeStoreCount}개</div>
                                 </div>
                                 <div class="table_small">
                                     <div class="table_cell">폐업수 증가율</div>
-                                    <div class="table_cell flex-1 px-4 py-3 seq ${dto.closeStoreDiff > 0 ? 'increase' : dto.closeStoreDiff < 0 ? 'decrease' : 'none'}">
-                                        ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up !' :
-                                        dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down' :
-                                        '(0원) 0%'}
+                                    <div class="table_cell flex-1 px-4 py-3 seq ${dto.closeStoreDiff > 0 ? 'decrease' : dto.closeStoreDiff < 0 ? 'increase' : 'none'}">
+                                        ${dto.closeStoreDiff > 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% up' :
+                                        dto.closeStoreDiff < 0 ? '(' + dto.closeStoreDiff + '개) ' + dto.closeStoreRate + '% down ! ' :
+                                        '(0개) 0%'}
                                     </div>
                                 </div>
                                 `;
@@ -390,6 +407,16 @@ function makeSiList(nowClickedText) {
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request error:", status, error);
+
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">폐업수</div>
+                    <div class="table_header px-4 py-3 td-title-bg">폐업수 증가율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
+
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제
@@ -882,6 +909,15 @@ function makeInduList(nowClickedText) {
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
+
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                    <div class="table_header px-4 py-3 td-title-bg">매출액 증가율</div>
+                 `;
+                resultContainer.appendChild(headerContainer);
+
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제
@@ -941,7 +977,7 @@ function makeInduList(nowClickedText) {
                                     <div class="table_cell flex-1 px-4 py-3 seq ${dto.storeDiff > 0 ? 'increase' : dto.storeDiff < 0 ? 'decrease' : 'none'}">
                                         ${dto.storeDiff > 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% up !' :
                                         dto.storeDiff < 0 ? '(' + dto.storeDiff + '개) ' + dto.storeRate + '% down' :
-                                        '(0원) 0%'}
+                                        '(0개) 0%'}
                                     </div>
                                 </div>
                                 `;
@@ -952,6 +988,15 @@ function makeInduList(nowClickedText) {
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
+
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">순위</div>
+                    <div class="table_header px-4 py-3 td-title-bg">업종명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포수 증가율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제
@@ -1024,6 +1069,15 @@ function makeInduList(nowClickedText) {
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request error:", status, error);
+
+                headerContainer.innerHTML = `
+                    <div class="table_header px-4 py-3 td-title-bg">나이대</div>
+                    <div class="table_header px-4 py-3 td-title-bg">지역명</div>
+                    <div class="table_header px-4 py-3 td-title-bg">점포당 매출액</div>
+                    <div class="table_header px-4 py-3 td-title-bg">주고객층 비율</div>
+                `;
+
+                resultContainer.appendChild(headerContainer);
             },
             complete: function () {
                 // AJAX 요청이 완료된 후에 로딩 스피너 삭제

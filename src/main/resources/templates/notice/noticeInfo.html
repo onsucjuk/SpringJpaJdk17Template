@@ -21,6 +21,8 @@
         const session_user_id = [[${session.SS_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
         const user_id = [[${rDTO.userId}]]; // 공지사항 게시글 작성자 아이디
         const nSeq = [[${rDTO.noticeSeq}]]; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+        const textContent = [[${rDTO.contents()}]];
+        const cList = [[${cList}]];
 
         /*]]>*/
     </script>
@@ -80,7 +82,7 @@
 
                                 <!-- 제목 라인-->
                                 <div
-                                        class="tr-title-bg py-3 font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800" style="background-color: #000000"
+                                        class="tr-title-bg py-3 font-semibold tracking-wide text-left text-white border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800" style="background-color: #000000"
                                 >
                                         <span class="px-4 py-3 td-title-bg" th:text="제목"></span>
                                         <span class="px-4 py-3 text-sm td-title-bg" name = "noticeSeq" th:text="${rDTO.noticeSeq()}"></span>
@@ -106,7 +108,7 @@
                             <div>
                             </div>
                             <div>
-                                <div class="px-4 py-3" colspan="2" style="width : 100%; height: 400px;  vertical-align: top;" th:text="${rDTO.contents()}">
+                                <div class="px-4 py-3" style="width : 100%; height: 400px;  vertical-align: top;" id = "textContent">
                                 </div>
                             </div>
 
@@ -134,7 +136,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="comment-content" th:id = "'commentContent' +${dto.commentSeq()}"  name="commentContent" th:text="${dto.commentContents()}">
+                                <div class="comment-content" th:id = "'commentContent' +${dto.commentSeq()}"  name="commentContent">
                                 </div>
                             </div>
                         </li>

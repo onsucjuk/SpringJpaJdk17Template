@@ -35,17 +35,6 @@ public class UserInfoController {
     private final IInterestService iInterestService;
     private final IGuMarketService guMarketService;
 
-
-    @GetMapping(value = "userRegForm")
-    public String userRegForm() {
-
-        log.info(this.getClass().getName() + ".user/userRegForm Start!");
-
-        log.info(this.getClass().getName() + ".user/userRegForm End!");
-
-        return "user/userRegForm";
-    }
-
     @GetMapping(value = "searchUserId")
     public String searchUserId() {
 

@@ -19,6 +19,27 @@ $(document).ready(function () {
         doCInsert();
     })
 
+    let textBox = document.getElementById("textContent")
+    textBox.innerText = textContent
+
+    if(cList) {
+
+        for(let i = 0; i < cList.length; i++) {
+
+            let commentSeq = getCommentSeq(cList[i])
+            let commentText = getCommentContent(cList[i])
+
+            console.log(i + "번째 코멘트 번호 : " + commentSeq + "번, 내용 : " + commentText)
+
+
+            let commentBox = document.getElementById("commentContent" + commentSeq)
+
+            commentBox.innerText = commentText
+
+        }
+
+    }
+
 })
 
 // 글자 수 체크
@@ -196,7 +217,7 @@ function doCEdit(commentSeq) {
     // 댓글 내용(id="'commentContent' +${dto.commentSeq()}")을 textarea로 변경합니다.
     let commentContentId = 'commentContent' + commentSeq;
     let commentContentElement = document.getElementById(commentContentId);
-    let commentText = commentContentElement.textContent; // 이전에 있는 텍스트 가져오기
+    let commentText = commentContentElement.innerText; // 이전에 있는 텍스트 가져오기
     let textareaElement = document.createElement('textarea'); // 새로운 textarea 요소 생성
     textareaElement.value = commentText; // textarea에 이전 텍스트를 설정
     textareaElement.setAttribute('id', commentContentId); // textarea에 id 설정
@@ -268,3 +289,12 @@ function doCancel(commentSeq) {
     location.reload();
 }
 
+function getCommentSeq(dto) {
+    // monthSales가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
+    return typeof dto.commentSeq === 'function' ? dto.commentSeq() : dto.commentSeq;
+}
+
+function getCommentContent(dto) {
+    // monthSales가 메서드일 경우 호출하고, 속성일 경우 그대로 반환합니다.
+    return typeof dto.commentContents === 'function' ? dto.commentContents() : dto.commentContents;
+}

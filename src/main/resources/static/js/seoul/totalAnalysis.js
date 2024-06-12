@@ -18,7 +18,7 @@ $(document).ready(function () {
     let secondClose = getCloseStoreCount(secondDto);
 
 
-    /!* 매출률, 점포률, 폐업률*!/
+    /* 매출률, 점포률, 폐업률*/
     // 매출
     let salesDiff = firstSales - secondSales;
     let salesRate = 0
@@ -48,20 +48,28 @@ $(document).ready(function () {
     }
 
     let salesDiv = document.getElementById("salesQuarter")
-    let salesDiffDiv = document.getElementById("salesDiffQuarter")
     let salesRateDiv = document.getElementById("salesRateQuarter")
 
     let storeDiv = document.getElementById("storeQuarter")
-    let storeDiffDiv = document.getElementById("storeDiffQuarter")
     let storeRateDiv = document.getElementById("storeRateQuarter")
 
     let closeDiv = document.getElementById("closeQuarter")
-    let closeDiffDiv = document.getElementById("closeDiffQuarter")
     let closeRateDiv = document.getElementById("closeRateQuarter")
 
     // 매출액 데이터
-    salesDiv.innerText = `${firstSales.toFixed(2)}만 (${salesDiff.toFixed(2)} 만)`
-    salesRateDiv.innerText = `${salesRate.toFixed(2)}%`
+
+    if(firstSales && salesDiff && salesRate) {
+        salesDiv.innerText = `${firstSales.toFixed(2)}만 (${salesDiff.toFixed(2)} 만)`
+        salesRateDiv.innerText = `${salesRate.toFixed(2)}%`
+    } else {
+        // 클래스명을 이용하여 요소를 선택
+        let element = document.querySelector('.indutyAndLocation');
+        // 요소의 텍스트 내용을 가져옴
+        let content = element.innerText;
+        alert(content + "의 데이터가 없습니다.")
+        window.close();
+        return
+    }
 
     if (salesDiff > 0) {
         salesRateDiv.className = 'raise';
@@ -70,8 +78,18 @@ $(document).ready(function () {
     }
 
     // 점포수 데이터
-    storeDiv.innerText = `${firstStore}(개) (${storeDiff} 개)`
-    storeRateDiv.innerText = `${storeRate.toFixed(2)}%`
+    if(firstStore && storeDiff && storeRate){
+        storeDiv.innerText = `${firstStore}(개) (${storeDiff} 개)`
+        storeRateDiv.innerText = `${storeRate.toFixed(2)}%`
+    } else {
+        // 클래스명을 이용하여 요소를 선택
+        let element = document.querySelector('.indutyAndLocation');
+        // 요소의 텍스트 내용을 가져옴
+        let content = element.innerText;
+        alert(content + "의 데이터가 없습니다.")
+        window.close();
+        return
+    }
 
     if (storeDiff > 0) {
         storeRateDiv.className = 'raise';
@@ -80,8 +98,18 @@ $(document).ready(function () {
     }
 
     // 폐업수 데이터
-    closeDiv.innerText = `${firstClose}(개) (${closeDiff} 개)`
-    closeRateDiv.innerText = `${closeRate.toFixed(2)}%`
+    if(firstClose && closeDiff && closeRate){
+        closeDiv.innerText = `${firstClose}(개) (${closeDiff} 개)`
+        closeRateDiv.innerText = `${closeRate.toFixed(2)}%`
+    } else {
+        // 클래스명을 이용하여 요소를 선택
+        let element = document.querySelector('.indutyAndLocation');
+        // 요소의 텍스트 내용을 가져옴
+        let content = element.innerText;
+        alert(content + "의 데이터가 없습니다.")
+        window.close();
+        return
+    }
 
     if (closeDiff > 0) {
         closeRateDiv.className = 'decrease';
@@ -89,34 +117,36 @@ $(document).ready(function () {
         closeRateDiv.className = 'raise';
     }
 
+    makeChart()
 
     /* 차트 만들기 */
     // 3개년 차트
+    function makeChart() {
+        let pSeoulList = convertMarketList(seoulList);
+        let pSeoulIndutyList = convertMarketList(seoulIndutyList);
+        let pGuList = convertMarketList(guList);
 
-    let pSeoulList = convertMarketList(seoulList);
-    let pSeoulIndutyList = convertMarketList(seoulIndutyList);
-    let pGuList = convertMarketList(guList);
+        let storeGuList = convertStoreList(guList);
+        let sotredList = convertSortedList(sortedList);
 
-    let storeGuList = convertStoreList(guList);
-    let sotredList = convertSortedList(sortedList);
+        let tempList = guList.at(guList.length - 1);
 
-    let tempList = guList.at(guList.length-1);
+        let ageList = getAgeMarket(tempList);
+        let genderList = getGenderMarket(tempList);
+        let timeList = getTimeMarket(tempList);
 
-    let ageList = getAgeMarket(tempList);
-    let genderList = getGenderMarket(tempList);
-    let timeList = getTimeMarket(tempList);
+        console.log("tempAgeList : " + tempList)
+        console.log("genderList : " + genderList)
+        console.log("timeList : " + timeList)
 
-    console.log("tempAgeList : " + tempList)
-    console.log("genderList : " + genderList)
-    console.log("timeList : " + timeList)
-
-    makeRevenueChart(pSeoulList, pSeoulIndutyList, pGuList)
-    makeStoreChart(storeGuList)
-    makeCloseChart(storeGuList)
-    makeDonutLocaion(sotredList)
-    makeDonutAge(ageList)
-    makeDonutGender(genderList)
-    makeDonutTime(timeList)
+        makeRevenueChart(pSeoulList, pSeoulIndutyList, pGuList)
+        makeStoreChart(storeGuList)
+        makeCloseChart(storeGuList)
+        makeDonutLocaion(sotredList)
+        makeDonutAge(ageList)
+        makeDonutGender(genderList)
+        makeDonutTime(timeList)
+    }
 
     $("#btnCloseWindow").on("click", function () {
         window.close() // 창 닫기
