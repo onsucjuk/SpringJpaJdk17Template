@@ -624,10 +624,14 @@ function setBounds(bounds) {
 
     console.log("map level : " + level)
 
-    if(level<6) {
+    if(level<7) {
 
-        map.setLevel(6)
+        map.setLevel(7)
         console.log("바뀐 지도 레벨 : " + level)
 
+    } else if(level>8) {
+
+        map.setLevel(8)
+        console.log("바뀐 지도 레벨 : " + level)
     }
 }

@@ -800,6 +800,8 @@ public class DongMarketService implements IDongMarketService {
             } else { // 점포수가 없으면 0으로 세팅(산출 값에서 계산값 제외)
 
                 SeoulSiMarketDTO tDTO = SeoulSiMarketDTO.builder()
+                        .seoulLocationNm(seoulLocationNm)
+                        .seoulLocationCd(seoulLocationCd)
                         .monthSales(0)
                         .age10Sales(0)
                         .age20Sales(0)

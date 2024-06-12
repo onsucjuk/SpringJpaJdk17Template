@@ -190,12 +190,14 @@ function getSeoulLocationCd(dto) {
 
 function getAgeMarket(dto) {
     // 나이대 별 매출액
-    let age10Sales = typeof dto.age10Sales === 'function' ? dto.age10Sales() : dto.age10Sales;
-    let age20Sales = typeof dto.age20Sales === 'function' ? dto.age20Sales() : dto.age20Sales;
-    let age30Sales = typeof dto.age30Sales === 'function' ? dto.age30Sales() : dto.age30Sales;
-    let age40Sales = typeof dto.age40Sales === 'function' ? dto.age40Sales() : dto.age40Sales;
-    let age50Sales = typeof dto.age50Sales === 'function' ? dto.age50Sales() : dto.age50Sales;
-    let age60Sales = typeof dto.age60Sales === 'function' ? dto.age60Sales() : dto.age60Sales;
+    let age10Sales = Number(typeof dto.age10Sales === 'function' ? dto.age10Sales() : dto.age10Sales) || 0;
+    let age20Sales = Number(typeof dto.age20Sales === 'function' ? dto.age20Sales() : dto.age20Sales) || 0;
+    let age30Sales = Number(typeof dto.age30Sales === 'function' ? dto.age30Sales() : dto.age30Sales) || 0;
+    let age40Sales = Number(typeof dto.age40Sales === 'function' ? dto.age40Sales() : dto.age40Sales) || 0;
+    let age50Sales = Number(typeof dto.age50Sales === 'function' ? dto.age50Sales() : dto.age50Sales) || 0;
+    let age60Sales = Number(typeof dto.age60Sales === 'function' ? dto.age60Sales() : dto.age60Sales) || 0;
+
+    console.log(age10Sales + ", " + age20Sales + ", "  + age30Sales + ", "  + age40Sales + ", "  + age50Sales + ", "  + age60Sales)
 
     let rArray = [age10Sales.toFixed(2), age20Sales.toFixed(2), age30Sales.toFixed(2), age40Sales.toFixed(2), age50Sales.toFixed(2), age60Sales.toFixed(2)]
 
@@ -214,12 +216,14 @@ function getGenderMarket(dto) {
 
 function getTimeMarket(dto) {
     // 나이대 별 매출액
-    let time0006Sales = typeof dto.time0006Sales === 'function' ? dto.time0006Sales() : dto.time0006Sales;
-    let time0611Sales = typeof dto.time0611Sales === 'function' ? dto.time0611Sales() : dto.time0611Sales;
-    let time1114Sales = typeof dto.time1114Sales === 'function' ? dto.time1114Sales() : dto.time1114Sales;
-    let time1417Sales = typeof dto.time1417Sales === 'function' ? dto.time1417Sales() : dto.time1417Sales;
-    let time1721Sales = typeof dto.time1721Sales === 'function' ? dto.time1721Sales() : dto.time1721Sales;
-    let time2124Sales = typeof dto.time2124Sales === 'function' ? dto.time2124Sales() : dto.time2124Sales;
+    let time0006Sales = Number(typeof dto.time0006Sales === 'function' ? dto.time0006Sales() : dto.time0006Sales) || 0;
+    let time0611Sales = Number(typeof dto.time0611Sales === 'function' ? dto.time0611Sales() : dto.time0611Sales) || 0;
+    let time1114Sales = Number(typeof dto.time1114Sales === 'function' ? dto.time1114Sales() : dto.time1114Sales) || 0;
+    let time1417Sales = Number(typeof dto.time1417Sales === 'function' ? dto.time1417Sales() : dto.time1417Sales) || 0;
+    let time1721Sales = Number(typeof dto.time1721Sales === 'function' ? dto.time1721Sales() : dto.time1721Sales) || 0;
+    let time2124Sales = Number(typeof dto.time2124Sales === 'function' ? dto.time2124Sales() : dto.time2124Sales) || 0;
+
+
 
     let rArray = [time0006Sales.toFixed(2), time0611Sales.toFixed(2), time1114Sales.toFixed(2), time1417Sales.toFixed(2), time1721Sales.toFixed(2), time2124Sales.toFixed(2)]
 
@@ -671,7 +675,7 @@ function makeDonutTime(array) {
     console.log("최대값의 인덱스 : ", maxIndex);
 
     let maxTime = timeArray[maxIndex]
-    let timeRate = ((max/sum)*100).toFixed(2)
+    let timeRate = Number((max/sum)*100).toFixed(2)
 
     let pCircle = document.getElementById("circleTime")
 
