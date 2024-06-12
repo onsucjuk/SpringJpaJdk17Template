@@ -254,7 +254,7 @@ function doSubmit(f) {
     }
 
     if (f.password2.value === "") {
-        alert("비밀번호를 입력하세요.");
+        alert("비밀번호 확인을 입력하세요.");
         f.password2.focus();
         return;
     }
