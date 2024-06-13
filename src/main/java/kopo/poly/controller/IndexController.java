@@ -9,12 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Slf4j
-@RequestMapping(value = "/html")
+/*@RequestMapping(value = "/html")*/
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
@@ -22,7 +21,7 @@ public class IndexController {
     private final ISiMarketService siMarketService;
     private final IYoutubeService youtubeService;
 
-    @GetMapping(value = "index")
+    @GetMapping(value = "/")
     public String goIndex(ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".html/index Start!");
