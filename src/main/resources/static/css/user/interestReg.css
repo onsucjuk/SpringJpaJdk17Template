@@ -13,3 +13,10 @@
     align-items: center;
     gap: 8px; /* 버튼 사이의 간격을 설정합니다 */
 }
+
+.interestContentBox {
+
+    padding: 20px;
+
+
+}
