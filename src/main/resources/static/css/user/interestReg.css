@@ -1,11 +1,11 @@
 .indutyList {
     margin-left: 5px;
-    width: 20%;
+    max-width: 100%;
     text-align: left;
 }
 
 .indutySelectList {
-    max-width: 30%;
+    max-width: 100%;
 }
 
 .inline_contents {
@@ -15,8 +15,58 @@
 }
 
 .interestContentBox {
-
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
+}
+
+#siAnalysisTitle {
+    padding: 20px;
+}
+
+.locationBox {
+
+    padding: 0px 20px 0px 20px;
+    margin : 10px;
+    width: 500px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* 외곽선의 음영 설정 */
+    border-radius: 8px;
+    display: block;
+}
+
+.indutyBox {
+
+    margin : 10px;
+    width: 500px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* 외곽선의 음영 설정 */
+    border-radius: 8px;
+    display: block;
+}
+
+.hrLine {
+
+    margin: 10px;
+
+}
+
+.indutyTitle {
+
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+
+}
+
+.indutyBody {
+
+    padding: 10px;
+
+}
+.inline_contents {
+
+    margin : 0px 0px 10px 10px;
 
 }
