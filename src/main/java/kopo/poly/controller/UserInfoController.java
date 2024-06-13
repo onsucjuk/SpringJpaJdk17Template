@@ -310,9 +310,6 @@ public class UserInfoController {
         String userId = CmmUtil.nvl(request.getParameter("userId"));
         String password = CmmUtil.nvl(request.getParameter("password"));
 
-        log.info("userId : " +  userId);
-        log.info("password : " +  password);
-
         UserInfoDTO pDTO = UserInfoDTO.builder()
                 .userId(userId)
                 .password(EncryptUtil.encHashSHA256(password)).build();
