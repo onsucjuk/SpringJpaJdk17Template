@@ -10,7 +10,7 @@
         $(document).ready(function () {
 
             $("#btnSend").on("click", function (){
-                location.href = "/html/index"
+                location.href = "/"
             })
 
             $("#btnLogout").on("click", function (){
@@ -23,7 +23,7 @@
 
                         if (json.result === 1) {
                             alert(json.msg);
-                            location.href = "/html/index";
+                            location.href = "/";
                         } else {
                             alert(json.msg);
                         }

@@ -1,8 +1,6 @@
 package kopo.poly.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import kopo.poly.dto.YoutubeDTO;
 import kopo.poly.service.IYoutubeService;
 import kopo.poly.util.NetworkUtil;
@@ -11,14 +9,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class YoutubeSerivce implements IYoutubeService {
 
-    @Value("${youtube.api.key}")
+    @Value("${youtube.api.key2}")
     private String apiKey;
 
     @Override
@@ -48,7 +51,7 @@ public class YoutubeSerivce implements IYoutubeService {
 
         String json = NetworkUtil.get(IYoutubeService.apiURL + apiParam);
 
-        /*System.out.print("json : " + json);*/
+        System.out.print("json : " + json);
 
         Map<String, Object> tMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
 
