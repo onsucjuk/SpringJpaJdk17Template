@@ -18,7 +18,7 @@ public class RootController {
 
         log.info(this.getClass().getName() + ".redirectIndex End!");
 
-        return "redirect:html/index";
+        return "redirect:/user/login";
 
     }
 
