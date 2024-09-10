@@ -19,9 +19,9 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class YoutubeSerivce implements IYoutubeService {
+public class YoutubeService implements IYoutubeService {
 
-    @Value("${youtube.api.key2}")
+    @Value("${youtube.api.key}")
     private String apiKey;
 
     @Override

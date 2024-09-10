@@ -1,8 +1,10 @@
 package kopo.poly.controller;
 
 import kopo.poly.dto.SeoulSiMarketDTO;
+import kopo.poly.dto.WeatherDTO;
 import kopo.poly.dto.YoutubeDTO;
 import kopo.poly.service.ISiMarketService;
+import kopo.poly.service.IWeatherService;
 import kopo.poly.service.IYoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ public class IndexController {
 
     private final ISiMarketService siMarketService;
     private final IYoutubeService youtubeService;
+    private final IWeatherService weatherService;
 
     @GetMapping(value = "/index")
     public String goIndex(ModelMap model) throws Exception {
@@ -35,9 +38,11 @@ public class IndexController {
 
         List<SeoulSiMarketDTO> rList = siMarketService.getSiMarketRes(rank, preYear, recYear);
         List<YoutubeDTO> yList = youtubeService.getYoutueInfo();
+        WeatherDTO wDTO = weatherService.getWeatherInfo();
 
         model.addAttribute("rList", rList);
         model.addAttribute("yList", yList);
+        model.addAttribute("wDTO", wDTO);
 
         log.info(this.getClass().getName() + ".html/index End!");
 
