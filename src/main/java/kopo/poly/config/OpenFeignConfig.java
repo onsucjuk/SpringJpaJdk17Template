@@ -1,9 +1,13 @@
 package kopo.poly.config;
 
 import feign.Contract;
+import feign.Feign;
 import feign.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import feign.codec.Decoder;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+
 
 @Configuration
 public class OpenFeignConfig {
@@ -27,5 +31,4 @@ public class OpenFeignConfig {
         */
         return Logger.Level.FULL;
     }
-
 }

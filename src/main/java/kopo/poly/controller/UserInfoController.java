@@ -9,6 +9,7 @@ import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.service.IGuMarketService;
 import kopo.poly.service.IInterestService;
 import kopo.poly.service.IUserInfoService;
+import kopo.poly.service.IWalkService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
@@ -273,7 +274,7 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "login")
-    public String login() {
+    public String login() throws Exception {
 
         log.info(this.getClass().getName() + ".user/login Start!");
 

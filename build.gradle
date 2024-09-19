@@ -28,6 +28,7 @@ ext {
 
 dependencies {
 
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.1'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

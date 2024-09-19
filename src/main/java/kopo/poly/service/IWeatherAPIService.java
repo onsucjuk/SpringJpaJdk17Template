@@ -4,9 +4,6 @@ import feign.Param;
 import feign.RequestLine;
 import kopo.poly.dto.WeatherDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @FeignClient(name="WeatherAPI", url="https://apihub.kma.go.kr")
 public interface IWeatherAPIService {

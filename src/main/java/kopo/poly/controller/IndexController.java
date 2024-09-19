@@ -4,6 +4,7 @@ import kopo.poly.dto.SeoulSiMarketDTO;
 import kopo.poly.dto.WeatherDTO;
 import kopo.poly.dto.YoutubeDTO;
 import kopo.poly.service.ISiMarketService;
+import kopo.poly.service.IWalkService;
 import kopo.poly.service.IWeatherService;
 import kopo.poly.service.IYoutubeService;
 import lombok.RequiredArgsConstructor;
