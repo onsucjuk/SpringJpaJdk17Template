@@ -58,7 +58,7 @@ public class WalkService implements IWalkService {
                 log.info("sensingTime : " + sensingTime);
                 log.info("visitorCount : " + visitorCount);
 
-                // 데이터가 모두 수집되었다면 저장함
+                // 이틀 전 데이터가 조회되면 저장 중지 이외의 경우 데이터가 모두 수집되었다면 저장함
                 if ((!modelNm.isEmpty()) && (!serialNo.isEmpty()) && (!sensingTime.isEmpty()) && (!visitorCount.isEmpty())) {
 
                     WalkDTO pDTO = WalkDTO.builder()
@@ -89,6 +89,9 @@ public class WalkService implements IWalkService {
         return pList;
     }
 
+    /**
+     *  서울열린데이터 - 유동 인구 API의 데이터 수집해서 MongoDB에 저장
+     **/
     @Override
     public int collectWalk() throws Exception {
         int res = 0;

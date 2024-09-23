@@ -3,7 +3,6 @@ package kopo.poly.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -20,7 +19,12 @@ public record WalkDTO(
         String modelNm, // 모델번호
         String serialNo, // 시리얼
         String sensingIme, // 측정시간
-        String visitorCount // 방문자수
+        String visitorCount, // 방문자수
+
+        /* 센서 데이터 */
+        String lat, // 위도
+        String lon, // 경도
+        String addr // 주소
 
 ) {
 }

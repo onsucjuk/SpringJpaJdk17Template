@@ -63,4 +63,14 @@ public class MongoMapper extends AbstractMongoDBCommon implements IMongoMapper {
 
         return res;
     }
+
+    @Override
+    public List<WalkDTO> getWalkList(String serialNo) {
+
+        log.info(this.getClass().getName() + ".getWalkList Start!");
+
+        log.info(this.getClass().getName() + ".getWalkList End!");
+
+        return null;
+    }
 }

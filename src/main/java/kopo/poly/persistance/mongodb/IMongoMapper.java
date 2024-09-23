@@ -25,4 +25,12 @@ public interface IMongoMapper {
 
     int dropCollection(String colNm);
 
+    /**
+     *  유동 인구 지역 리스트 가져오기
+     *
+     * @param serialNo 유동 인구 측정 CCTV 고유 넘버
+     * @return 해당 지역의 유동 인구 정보를 MongoDB 조회 결과
+     */
+    List<WalkDTO> getWalkList(String serialNo);
+
 }
