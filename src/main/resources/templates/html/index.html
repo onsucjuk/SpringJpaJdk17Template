@@ -5,7 +5,6 @@
     <title>메인화면</title>
     <link rel="stylesheet" href="/css/table.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="/js/home/index.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript">
@@ -20,27 +19,39 @@
     <!-- Nav -->
     <nav class="main-nav">
         <img src="/img/index/bnavLogo.png" alt="Bnav" class="logo">
-
         <ul class="right-menu">
-
             <ul class="main-menu">
                 <li id="btnBnav"><p><a>시장분석</a></p></li>
+                <li id="btnWalk"><p><a>유동인구분석</a></p></li>
                 <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
                 <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
                 <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
             </ul>
-
             <p th:if="${session.SS_USER_ID}">
                 <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
                 </button>
             </p>
-
             <li th:unless="${session.SS_USER_ID}">
                 <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
             </li>
-
         </ul>
     </nav>
+    <div class="weatherInfo" style="display: flex; align-items: center;">
+        <div id="topInfo">
+            <div id="date" th:text="${wDTO.announceTime()}"></div>
+            <div id="wf" style="margin-top: 5px; text-align:center" th:text="${wDTO.wf()}"></div>
+        </div>
+        <div id="botInfo">
+            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                <img id="taImg" src="/img/index/ta.png" style="width: 30px; height: 20px; margin-right: 5px;" alt="ta" />
+                <div id="ta" th:text="${wDTO.ta()}+'℃'"></div>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <img id="rnImg" src="/img/index/rn.png" style="width: 30px; height: 20px; margin-right: 5px;" alt="rn" />
+                <div id="rnSt" th:text="${wDTO.rnSt()}+'%'"></div>
+            </div>
+        </div>
+    </div>
     <!-- Showcase -->
     <div class="chatch" id = "mainTopLine">
         <header class="showcase">
@@ -239,4 +250,5 @@
 </footer>
  -->
 </body>
+<script type="text/javascript" src="/js/home/index.js"></script>
 </html>

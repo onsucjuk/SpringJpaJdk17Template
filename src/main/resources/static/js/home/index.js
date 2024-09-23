@@ -4,10 +4,13 @@ $(document).ready(function () {
         location.href = "/user/login";
     })
 
+    $("#btnWalk").on("click", function () {
+        location.href = "/seoul/walkAnalysis";
+    })
+
     $("#btnBnav, #btnBnav1, #btnBnav2").on("click", function () {
         location.href = "/seoul/siAnalysis";
     })
-
 
     $("#btnNotice").on("click", function () {
         location.href = "/notice/noticeList";
@@ -21,11 +24,11 @@ $(document).ready(function () {
         location.href = "/user/login";
     })
 
-    $("#mainLogOut").on("click", function (){
+    $("#mainLogOut").on("click", function () {
 
         $.ajax({
-            url : "/user/logout",
-            type : "post",
+            url: "/user/logout",
+            type: "post",
             dataType: "JSON",
             success: function (json) {
 
@@ -39,7 +42,6 @@ $(document).ready(function () {
         })
     })
 
-
-document.querySelector('.menu-btn').addEventListener('click', () => document.querySelector('.main-menu').classList.toggle('show'));
+    document.querySelector('.menu-btn').addEventListener('click', () => document.querySelector('.main-menu').classList.toggle('show'));
 
 })

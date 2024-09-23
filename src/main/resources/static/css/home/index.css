@@ -12,6 +12,17 @@ body {
     background-color: #f9fafb;
 }
 
+.weatherInfo {
+    font-family: fangsong;
+    font-weight: bold;
+    border: 1px solid #dadcdf;
+    border-radius: 5px; /* 10px 반지름의 둥근 외곽선 */
+    width: 180px;
+    height: 70px;
+    padding: 21px 20px 18px;
+
+}
+
 a {
     color: #262626;
     text-decoration: none;
@@ -340,7 +351,7 @@ ul {
 
 #mainTopLine {
 
-    margin-top: 40px;
+    margin-top: 20px;
     margin-bottom: 30px;
 
 }

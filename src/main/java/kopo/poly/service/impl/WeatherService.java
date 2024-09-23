@@ -74,10 +74,22 @@ public class WeatherService implements IWeatherService {
             }
         }
 
+        // 날짜를 **월**일로 변환
+        String month = announceTime.substring(4, 6); // 09
+        String day = announceTime.substring(6, 8);   // 23
+        announceTime = month + "월" + day + "일";
+
+        WeatherDTO wDTO = WeatherDTO.builder()
+                .announceTime(announceTime)
+                .rnSt(rnSt)
+                .ta(ta)
+                .wf(wf)
+                .build();
+
         log.info("announceTime : "+ announceTime + " rnSt : " + rnSt + " ta : "+ ta + " wf : " + wf);
 
         log.info(this.getClass().getName() + ".getWeatherInfo End!");
 
-        return rDTO;
+        return wDTO;
     }
 }

@@ -1,12 +1,16 @@
 $(document).ready(function () {
+
     $("#btnLogin").on("click", function () {
         location.href = "/user/login";
+    })
+
+    $("#btnWalk").on("click", function () {
+        location.href = "/seoul/walkAnalysis";
     })
 
     $("#btnBnav").on("click", function () {
         location.href = "/seoul/siAnalysis";
     })
-
 
     $("#btnNotice").on("click", function () {
         location.href = "/notice/noticeList";
@@ -37,5 +41,7 @@ $(document).ready(function () {
             }
         })
     })
+
+    document.querySelector('.menu-btn').addEventListener('click', () => document.querySelector('.main-menu').classList.toggle('show'));
 
 })

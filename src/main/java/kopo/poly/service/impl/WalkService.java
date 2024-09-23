@@ -48,6 +48,8 @@ public class WalkService implements IWalkService {
 
                 String modelNm = CmmUtil.nvl((String) walkInfo.get("MODEL_NM")); // 모델 번호
                 String serialNo = CmmUtil.nvl((String) walkInfo.get("SERIAL_NO")); // 시리얼 번호
+                int len = serialNo.length();
+                serialNo = serialNo.substring(len-4);
                 String sensingTime = CmmUtil.nvl((String) walkInfo.get("SENSING_TIME")); // 측정 시간
                 String visitorCount = CmmUtil.nvl((String) walkInfo.get("VISITOR_COUNT")); // 방문자 수
 

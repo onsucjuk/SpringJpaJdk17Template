@@ -18,33 +18,33 @@
     <script src="/js/home/nav.js"></script>
 </head>
 <body>
+<div class="menu-btn">
+    <i style="font-size:24px" class="fa">&#xf0c9;</i>
+</div>
 <div class="container">
-    <div class="menu-btn">
-        <i style="font-size:24px" class="fa">&#xf0c9;</i>
-    </div>
-    <nav class="main-nav">
-        <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+    <div class="navDiv">
+        <nav class="main-nav">
+            <a href="/html/index"><img src="/img/index/bnavLogo.png" alt="Bnav" class="logo"></a>
+            <ul class="right-menu" style="margin-top: 22px;">
+                <ul class="main-menu">
+                    <li id="btnBnav"><p><a>시장분석</a></p></li>
+                    <li id="btnWalk"><p><a>유동인구분석</a></p></li>
+                    <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
+                    <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
+                    <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+                </ul>
 
-        <ul class="right-menu" style="margin-top: 22px;">
+                <p th:if="${session.SS_USER_ID}">
+                    <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
+                    </button>
+                </p>
 
-            <ul class="main-menu">
-                <li id="btnBnav"><p><a>시장분석</a></p></li>
-                <li id="btnNotice"><p><a>창업자 게시판</a></p></li>
-                <li id="mainMypage" th:if="${session.SS_USER_ID}"><p><a>마이페이지</a></p></li>
-                <li id="mainLogOut" th:if="${session.SS_USER_ID}"><p><a>로그아웃</a></p></li>
+                <li th:unless="${session.SS_USER_ID}">
+                    <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
+                </li>
             </ul>
-
-            <p th:if="${session.SS_USER_ID}">
-                <button class="signup in_button" type="button" th:text="${session.SS_USER_ID} + '님 환영합니다.'">
-                </button>
-            </p>
-
-            <li th:unless="${session.SS_USER_ID}">
-                <button id = "mainLogin" class="signup in_button" type="button" th:text="'로그인/회원가입'"></button>
-            </li>
-
-        </ul>
-    </nav>
+        </nav>
+    </div>
     <hr id="mainTopLine">
     <div class = "bodyContent">
         <h3 id="siAnalysisTitle">서울시 시장 현황</h3>
