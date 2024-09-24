@@ -5,6 +5,7 @@ import kopo.poly.persistance.mongodb.IMongoMapper;
 import kopo.poly.service.IWalkAPIService;
 import kopo.poly.service.IWalkService;
 import kopo.poly.util.CmmUtil;
+import kopo.poly.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,7 @@ public class WalkService implements IWalkService {
 
         int start = 1;
         int end = 1000;
-        String yesterday = "";
+        String yesterday = DateUtil.getYesterdayDate("yyyy-MM-dd").substring(5);
 
         while(end < 15000) {
 

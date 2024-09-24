@@ -67,7 +67,13 @@ function defaultTo(lat, lon) {
 
 }
 
+let myChart;  // 전역 변수로 차트 객체 선언
 function makeBarChart(array) {
+
+    // 기존 차트가 있을 경우 삭제
+    if (myChart) {
+        myChart.destroy();
+    }
 
     let timeArray = []
     for(let i = 0; i < 24; i++){
@@ -78,7 +84,7 @@ function makeBarChart(array) {
         }
     }
 
-    let myChart = new Chart(document.getElementById('myBarChart'), {
+    myChart = new Chart(document.getElementById('myBarChart'), {
         type: 'bar',
         data: {
             labels: timeArray,
