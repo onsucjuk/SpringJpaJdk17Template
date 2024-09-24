@@ -34,6 +34,7 @@ public class WalkService implements IWalkService {
 
         int start = 1;
         int end = 1000;
+        String yesterday = "";
 
         while(end < 15000) {
 
@@ -44,6 +45,11 @@ public class WalkService implements IWalkService {
 
             List<Map<String, Object>> row = (List<Map<String, Object>>) rDTO.IotVdata018().get("row");
 
+            if(start==1){
+                Map<String, Object> firstWalkInfo = row.get(0); // 첫 번째 항목 가져오기
+                yesterday = CmmUtil.nvl((String) firstWalkInfo.get("SENSING_TIME")).substring(5,10); // 측정 시간 가져오기
+            }
+
             for (Map<String, Object> walkInfo : row) {
 
                 String modelNm = CmmUtil.nvl((String) walkInfo.get("MODEL_NM")); // 모델 번호
@@ -53,18 +59,25 @@ public class WalkService implements IWalkService {
                 String sensingTime = CmmUtil.nvl((String) walkInfo.get("SENSING_TIME")); // 측정 시간
                 String visitorCount = CmmUtil.nvl((String) walkInfo.get("VISITOR_COUNT")); // 방문자 수
 
+                String tempTime = sensingTime.substring(5,10);
+
+                log.info("yesterday : " + yesterday);
+                log.info("tempTime : " + tempTime);
                 log.info("modelNm : " + modelNm);
                 log.info("serialNo : " + serialNo);
                 log.info("sensingTime : " + sensingTime);
                 log.info("visitorCount : " + visitorCount);
 
-                // 이틀 전 데이터가 조회되면 저장 중지 이외의 경우 데이터가 모두 수집되었다면 저장함
-                if ((!modelNm.isEmpty()) && (!serialNo.isEmpty()) && (!sensingTime.isEmpty()) && (!visitorCount.isEmpty())) {
+                // 어제 날짜와 같은지 확인
+                boolean check = yesterday.equals(tempTime);
+
+                // 어제와 날짜가 같다면 저장, 이외의 경우 데이터가 모두 수집되었다면 저장함
+                if ((!modelNm.isEmpty()) && (!serialNo.isEmpty()) && (!sensingTime.isEmpty()) && (!visitorCount.isEmpty()) && check) {
 
                     WalkDTO pDTO = WalkDTO.builder()
                             .modelNm(modelNm)
                             .serialNo(serialNo)
-                            .sensingIme(sensingTime)
+                            .sensingTime(sensingTime)
                             .visitorCount(visitorCount)
                             .build();
 
@@ -94,6 +107,9 @@ public class WalkService implements IWalkService {
      **/
     @Override
     public int collectWalk() throws Exception {
+
+        log.info(this.getClass().getName() + ".collectWalk Start!");
+
         int res = 0;
         int dropRes = 0;
 
@@ -116,13 +132,46 @@ public class WalkService implements IWalkService {
 
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
-        log.info(this.getClass().getName() + ".collectMelonSong End!");
+        log.info(this.getClass().getName() + ".collectWalk End!");
 
         return res;
     }
 
     @Override
     public List<WalkDTO> getWalkList() throws Exception {
-        return null;
+
+        log.info(this.getClass().getName() + ".getWalkList Start!");
+
+        List<WalkDTO> rList = mongoMapper.getWalkList();
+
+        log.info(this.getClass().getName() + ".getWalkList End!");
+
+        return rList;
+    }
+
+    @Override
+    public WalkDTO getWalkInfoList(WalkDTO pDTO) throws Exception {
+
+        String serialNo = CmmUtil.nvl(pDTO.serialNo());
+
+        List<WalkDTO> rList = mongoMapper.getWalkInfoList(serialNo);
+        long[] tempTimeCount = new long[24];
+
+        for(WalkDTO tempDTO : rList) {
+            int time = Integer.parseInt(tempDTO.sensingTime().substring(11,13));
+            int count = Integer.parseInt(tempDTO.visitorCount());
+            // 시간과 일차하는 리스트의 index의 값(방문자수) 비교 후 최대값으로 대체
+            if(tempTimeCount[time] < count) {
+                tempTimeCount[time] = count;
+            }
+            log.info("시간 : " + time);
+            log.info("유동 인구 : " + count);
+        }
+
+        WalkDTO rDTO = WalkDTO.builder()
+                .timeVisitor(tempTimeCount)
+                .build();
+
+        return rDTO;
     }
 }

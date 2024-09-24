@@ -2,6 +2,7 @@ package kopo.poly.util;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -79,6 +80,28 @@ public class DateUtil {
                 .withZone(ZoneId.systemDefault())
                 .format(instant);
 
+    }
+
+    /**
+     * 어제 날짜 출력하기
+     *
+     * @param fm 날짜 출력 형식
+     * @return 어제 날짜
+     */
+    public static String getYesterdayDate(String fm) {
+        LocalDate yesterday = LocalDate.now().minusDays(1); // 현재 날짜에서 하루 빼기
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fm);
+
+        return yesterday.format(formatter);
+    }
+
+    /**
+     * 어제 날짜 출력하기 (기본 형식: yyyy.MM.dd)
+     *
+     * @return 어제 날짜
+     */
+    public static String getYesterdayDate() {
+        return getYesterdayDate("yyyy.MM.dd");
     }
 
 

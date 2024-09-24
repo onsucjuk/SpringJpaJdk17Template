@@ -16,4 +16,9 @@ public interface IWalkService {
      */
     List<WalkDTO> getWalkList() throws Exception;
 
+    /**
+     * 지역에 일치하는 유동 인구 데이터 가져오기
+     */
+    WalkDTO getWalkInfoList(WalkDTO pDTO) throws Exception;
+
 }

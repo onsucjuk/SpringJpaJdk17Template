@@ -5,7 +5,7 @@ $(document).ready(function () {
     })
 
     $("#btnWalk").on("click", function () {
-        location.href = "/seoul/walkAnalysis";
+        location.href = "/seoul/walkInfo";
     })
 
     $("#btnBnav").on("click", function () {

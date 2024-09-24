@@ -3,10 +3,13 @@ package kopo.poly.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kopo.poly.dto.SeoulSiMarketDTO;
+import kopo.poly.dto.WalkDTO;
 import kopo.poly.service.IDongMarketService;
 import kopo.poly.service.IGuMarketService;
 import kopo.poly.service.ISiMarketService;
+import kopo.poly.service.IWalkService;
 import kopo.poly.util.CmmUtil;
+import kopo.poly.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,7 @@ public class SeoulSiController {
     private final ISiMarketService siMarketService;
     private final IGuMarketService guMarketService;
     private final IDongMarketService dongMarketService;
+    private final IWalkService walkService;
 
     @GetMapping(value = "siAnalysis")
     public String test(HttpSession session, ModelMap model) throws Exception {
@@ -577,4 +581,68 @@ public class SeoulSiController {
 
     }
 
+    /**
+     * ###############################################################################
+     *
+     *                          여기서 부터는 유동 인구 데이터
+     *
+     * ###############################################################################
+     */
+
+    @GetMapping(value = "walkInfo")
+    public String walkInfo(HttpSession session, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".walkInfo Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        List<WalkDTO> rWalkList;
+
+        log.info("userId : userId");
+
+        if (userId.length() > 0) {
+
+            rWalkList = walkService.getWalkList();
+
+        } else {
+
+            return "redirect:/user/login";
+
+        }
+
+        String yesterday = DateUtil.getYesterdayDate();
+
+        WalkDTO pDTO = WalkDTO.builder()
+                        .sensingTime(yesterday)
+                        .build();
+
+        model.addAttribute("rWalkList", rWalkList);
+        model.addAttribute("pDTO", pDTO);
+
+        log.info("yesterday : " + yesterday);
+
+        log.info(this.getClass().getName() + ".walkInfo End!");
+
+        return "seoul/walkInfo";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "walkAnalysis")
+    public WalkDTO walkAnalysis(HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".walkAnalysis Start!");
+
+        String serialNo = request.getParameter("serialNo");
+
+        log.info("serialNo : " + serialNo);
+
+        WalkDTO pDTO = WalkDTO.builder()
+                .serialNo(serialNo)
+                .build();
+
+        WalkDTO rDTO = walkService.getWalkInfoList(pDTO);
+
+        log.info(this.getClass().getName() + ".walkAnalysis End!");
+
+        return rDTO;
+    }
 }

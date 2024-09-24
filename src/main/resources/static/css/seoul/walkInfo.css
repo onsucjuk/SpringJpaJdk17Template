@@ -1,0 +1,43 @@
+.interestContentBox {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#navHr {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+.bodyContent{
+
+    padding: 20px;
+    margin: 10px;
+
+}
+.selectList {
+    border: 2px solid black; /* 두께 2px의 검정색 경계선 */
+    border-radius: 5px;      /* 둥근 모서리 */
+    padding: 8px;            /* 내부 여백 */
+    background-color: #f9f9f9; /* 부드러운 배경색 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    transition: all 0.3s ease; /* 부드러운 효과 전환 */
+}
+
+.selectList:hover {
+    border-color: #333;      /* 마우스를 올렸을 때 경계선 색상 진하게 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 더 강한 그림자 효과 */
+}
+
+.map {
+    width: 600px;
+    height: 300px;
+    margin: 30px 10px 20px 10px;
+    border: 4px solid black; /* 두께 2px의 검정색 경계선 */
+    border-radius: 5px;
+}
