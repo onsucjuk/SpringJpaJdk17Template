@@ -3,9 +3,11 @@ package kopo.poly.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kopo.poly.dto.CommentDTO;
+import kopo.poly.dto.LikeDTO;
 import kopo.poly.dto.MsgDTO;
 import kopo.poly.dto.NoticeDTO;
 import kopo.poly.service.ICommentService;
+import kopo.poly.service.ILikeService;
 import kopo.poly.service.INoticeService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ public class NoticeController {
     // @RequiredArgsConstructor 를 통해 메모리에 올라간 서비스 객체를 Controller에서 사용할 수 있게 주입함
     private final INoticeService noticeService;
     private final ICommentService commentService;
+    private final ILikeService likeService;
 
     /**
      * 게시판 리스트 보여주기
@@ -153,11 +156,12 @@ public class NoticeController {
      * 게시판 상세보기
      */
     @GetMapping(value = "noticeInfo")
-    public String noticeInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeInfo(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".noticeInfo Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq"), "0"); // 공지글번호(PK)
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
         /*
          * ####################################################################################
@@ -165,6 +169,7 @@ public class NoticeController {
          * ####################################################################################
          */
         log.info("nSeq : " + nSeq);
+        log.info("userId : " + userId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
@@ -177,6 +182,11 @@ public class NoticeController {
                 .noticeSeq(Long.parseLong(nSeq))
                 .build();
 
+        LikeDTO lDTO = LikeDTO.builder()
+                .noticeSeq(Long.parseLong(nSeq))
+                .userId(userId)
+                .build();
+
         // 공지사항 상세정보 가져오기
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, true))
@@ -185,9 +195,13 @@ public class NoticeController {
         List<CommentDTO> cList = Optional.ofNullable(commentService.getCommentList(cDTO))
                 .orElseGet(() -> new ArrayList<>());
 
+        LikeDTO likeDTO = Optional.ofNullable(likeService.likeExists(lDTO))
+                .orElseGet(() -> LikeDTO.builder().build());
+
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("cList", cList);
+        model.addAttribute("likeDTO", likeDTO);
 
 
         log.info(this.getClass().getName() + ".noticeInfo End!");
@@ -343,4 +357,69 @@ public class NoticeController {
         return dto;
     }
 
+    /**
+     *
+     * ##########################################################################
+     *
+     *                                  좋아요 기능
+     *
+     * ##########################################################################
+     *
+     **/
+
+    @ResponseBody
+    @PostMapping(value="addLike")
+    public MsgDTO addLike(HttpServletRequest request, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".addLike Start!");
+
+        String userId = (String) session.getAttribute("SS_USER_ID");
+        long noticeSeq = Long.parseLong(CmmUtil.nvl(request.getParameter("noticeSeq")));
+
+        log.info("userId : " + userId);
+        log.info("noticeSeq : " + noticeSeq);
+
+        LikeDTO pDTO = LikeDTO.builder()
+                .userId(userId)
+                .noticeSeq(noticeSeq)
+                .build();
+
+        likeService.insertLike(pDTO);
+
+        MsgDTO rDTO = MsgDTO.builder()
+                        .msg("좋아요 하였습니다.")
+                        .build();
+
+        log.info(this.getClass().getName() + ".addLike End!");
+
+        return rDTO;
+    }
+
+    @ResponseBody
+    @PostMapping(value="deleteLike")
+    public MsgDTO deleteLike(HttpServletRequest request, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteLike Start!");
+
+        String userId = (String) session.getAttribute("SS_USER_ID");
+        long noticeSeq = Long.parseLong(CmmUtil.nvl(request.getParameter("noticeSeq")));
+
+        log.info("userId : " + userId);
+        log.info("noticeSeq : " + noticeSeq);
+
+        LikeDTO pDTO = LikeDTO.builder()
+                .userId(userId)
+                .noticeSeq(noticeSeq)
+                .build();
+
+        likeService.deleteLike(pDTO);
+
+        MsgDTO rDTO = MsgDTO.builder()
+                .msg("좋아요 취소 성공하였습니다.")
+                .build();
+
+        log.info(this.getClass().getName() + ".deleteLike End!");
+
+        return rDTO;
+    }
 }

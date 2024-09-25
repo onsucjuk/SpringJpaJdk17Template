@@ -8,6 +8,7 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
     />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="/css/home/index.css">
     <link rel="stylesheet" type="text/css" href="/css/notice/comment.css">
@@ -114,6 +115,14 @@
                             </div>
 
                             </div>
+                        </div>
+                    </div>
+                    <div th:if="${session.SS_USER_ID}">
+                        <div class="heart" th:if="${likeDTO.existsYn()}=='Y'">
+                            <i class="bi bi-heart-fill" style="color: red;" th:onclick="delLike([[${rDTO.noticeSeq}]])")></i>
+                        </div>
+                        <div class="heart" th:unless="${likeDTO.existsYn()}=='Y'">
+                            <i class="bi bi-heart" th:onclick="addLike([[${rDTO.noticeSeq}]])"></i> <!-- 하얀 테두리 하트 -->
                         </div>
                     </div>
                     <hr>

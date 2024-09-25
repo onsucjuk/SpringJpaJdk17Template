@@ -9,6 +9,7 @@ import kopo.poly.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -106,6 +107,7 @@ public class WalkService implements IWalkService {
     /**
      *  서울열린데이터 - 유동 인구 API의 데이터 수집해서 MongoDB에 저장
      **/
+    @Scheduled(cron = "15 53 9 * * ?")
     @Override
     public int collectWalk() throws Exception {
 
