@@ -71,12 +71,9 @@ public class SiMarketService implements ISiMarketService {
         String redisKey = "";
 
         if(data.equals(marketData)) {
-
             redisKey = "marketKey";
         } else if(data.equals(storeData)) {
-
             redisKey = "storeKey";
-
         }
 
         boolean existsYn = getExistsKey(redisKey);

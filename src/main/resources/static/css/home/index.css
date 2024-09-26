@@ -11,13 +11,18 @@ body {
     line-height: 1.5;
     background-color: #f9fafb;
 }
-
+#topInfo{
+    text-align: center;
+}
+#botInfo{
+    margin-left: 5px;
+}
 .weatherInfo {
     font-family: fangsong;
     font-weight: bold;
     border: 1px solid #dadcdf;
     border-radius: 5px; /* 10px 반지름의 둥근 외곽선 */
-    width: 250px;
+    width: 300px;
     height: 100px;
     padding: 21px 20px 18px;
 }
