@@ -107,7 +107,8 @@ public class WalkService implements IWalkService {
     /**
      *  서울열린데이터 - 유동 인구 API의 데이터 수집해서 MongoDB에 저장
      **/
-    @Scheduled(cron = "15 53 9 * * ?")
+    // 아마존 서버 시간이 9시 기준 00시
+    @Scheduled(cron = "55 10 00 * * ?")
     @Override
     public int collectWalk() throws Exception {
 
