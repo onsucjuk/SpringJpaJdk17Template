@@ -91,7 +91,6 @@ public class DateUtil {
     public static String getYesterdayDate(String fm) {
         LocalDate yesterday = LocalDate.now().minusDays(1); // 현재 날짜에서 하루 빼기
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fm);
-
         return yesterday.format(formatter);
     }
 

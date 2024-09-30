@@ -631,6 +631,8 @@ public class SeoulSiController {
 
         log.info(this.getClass().getName() + ".walkAnalysis Start!");
 
+        // 장소 번호 받아서 정보에 일치하는 데이터를 MongoDB에서 찾아서 유동인구 수를 넘겨주는 기능
+        // serialNo : 장소 번호
         String serialNo = request.getParameter("serialNo");
 
         log.info("serialNo : " + serialNo);
@@ -639,6 +641,7 @@ public class SeoulSiController {
                 .serialNo(serialNo)
                 .build();
 
+        // 장소 번호 기준 MongoDB 에서 찾기
         WalkDTO rDTO = walkService.getWalkInfoList(pDTO);
 
         log.info(this.getClass().getName() + ".walkAnalysis End!");

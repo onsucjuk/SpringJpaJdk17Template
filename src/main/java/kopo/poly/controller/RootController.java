@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RootController {
 
     @GetMapping(value = "/")
-    public String redirectIndex(ModelMap model) throws Exception {
+    public String redirectIndex() {
 
         log.info(this.getClass().getName() + ".redirectIndex Start!");
 

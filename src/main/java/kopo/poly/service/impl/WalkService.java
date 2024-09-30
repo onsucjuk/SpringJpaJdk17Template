@@ -36,10 +36,13 @@ public class WalkService implements IWalkService {
 
         int start = 1;
         int end = 1000;
+        // 어제 날짜 생성하는 기능 DateUtil에 추가, 날짜만 축출
+        // 5~9째 문자(ex : 2024-09-29_10:40:00 -> 09-29)
         String yesterday = DateUtil.getYesterdayDate("yyyy-MM-dd").substring(5);
 
         while(end < 15000) {
 
+            // API URL 요청 인자(start, end : String 변환)
             String startIdx = String.valueOf(start);
             String endIdx = String.valueOf(end);
 
@@ -56,11 +59,16 @@ public class WalkService implements IWalkService {
 
                 String modelNm = CmmUtil.nvl((String) walkInfo.get("MODEL_NM")); // 모델 번호
                 String serialNo = CmmUtil.nvl((String) walkInfo.get("SERIAL_NO")); // 시리얼 번호
+
+                // 시리얼 번호는 뒤에 4자리만 필요함
                 int len = serialNo.length();
                 serialNo = serialNo.substring(len-4);
+
                 String sensingTime = CmmUtil.nvl((String) walkInfo.get("SENSING_TIME")); // 측정 시간
                 String visitorCount = CmmUtil.nvl((String) walkInfo.get("VISITOR_COUNT")); // 방문자 수
 
+                //데이터 중 어제 날짜만 뽑아 오기 위해 기준 날짜 축출
+                // 5~9째 문자(ex : 2024-09-29_10:40:00 -> 09-29)
                 String tempTime = sensingTime.substring(5,10);
 
                 log.info("yesterday : " + yesterday);
@@ -108,7 +116,7 @@ public class WalkService implements IWalkService {
      *  서울열린데이터 - 유동 인구 API의 데이터 수집해서 MongoDB에 저장
      **/
     // 아마존 서버 시간이 9시 기준 00시
-    @Scheduled(cron = "55 10 00 * * ?")
+    @Scheduled(cron = "15 30 08 * * ?")
     @Override
     public int collectWalk() throws Exception {
 
@@ -159,11 +167,14 @@ public class WalkService implements IWalkService {
         String serialNo = CmmUtil.nvl(pDTO.serialNo());
 
         List<WalkDTO> rList = mongoMapper.getWalkInfoList(serialNo);
+        // 00~23시까지 시간을 idx로 해당 시간의 유동인구[최대값]을 배열에 저장
         long[] tempTimeCount = new long[24];
 
         for(WalkDTO tempDTO : rList) {
+            // 시간 축출(ex : 2024-09-30_23:10:00 -> 23) -> 11~12번째 글자
             int time = Integer.parseInt(tempDTO.sensingTime().substring(11,13));
             int count = Integer.parseInt(tempDTO.visitorCount());
+
             // 시간과 일차하는 리스트의 index의 값(방문자수) 비교 후 최대값으로 대체
             if(tempTimeCount[time] < count) {
                 tempTimeCount[time] = count;
