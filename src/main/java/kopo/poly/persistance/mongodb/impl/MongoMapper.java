@@ -25,7 +25,7 @@ import java.util.Map;
 public class MongoMapper extends AbstractMongoDBCommon implements IMongoMapper {
 
     private final MongoTemplate mongodb;
-    @Override
+    /*@Override
     public int insertData(List<WalkDTO> pList, String colNm) {
 
         log.info(this.getClass().getName() + ".insertData Start");
@@ -41,6 +41,39 @@ public class MongoMapper extends AbstractMongoDBCommon implements IMongoMapper {
         for (WalkDTO pDTO : pList) {
             // 레코드 한개씩 저장하기
             col.insertOne(new Document(new ObjectMapper().convertValue(pDTO, Map.class)));
+        }
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".insertData End!");
+
+        return res;
+    }*/
+
+    @Override
+    public int insertData(List<WalkDTO> pList, String colNm) {
+
+        log.info(this.getClass().getName() + ".insertData Start");
+
+        int res = 0;
+
+        // 데이터를 저장할 컬렉션 생성
+        super.createCollection(mongodb, colNm, "modelNm");
+
+        // 저장할 컬렉션 객체 생성
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+
+        // WalkDTO 객체 리스트를 MongoDB Document 리스트로 변환
+        List<Document> documents = new LinkedList<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        for (WalkDTO pDTO : pList) {
+            documents.add(new Document(mapper.convertValue(pDTO, Map.class)));
+        }
+
+        // insertMany를 사용하여 한 번에 여러 개의 Document 삽입
+        if (!documents.isEmpty()) {
+            col.insertMany(documents);  // insertMany로 대량 삽입
         }
 
         res = 1;

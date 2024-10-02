@@ -40,7 +40,7 @@ public class WalkService implements IWalkService {
         // 5~9째 문자(ex : 2024-09-29_10:40:00 -> 09-29)
         String yesterday = DateUtil.getYesterdayDate("yyyy-MM-dd").substring(5);
 
-        while(end < 15000) {
+        while(end < 28000) {
 
             // API URL 요청 인자(start, end : String 변환)
             String startIdx = String.valueOf(start);
@@ -116,7 +116,7 @@ public class WalkService implements IWalkService {
      *  서울열린데이터 - 유동 인구 API의 데이터 수집해서 MongoDB에 저장
      **/
     // 아마존 서버 시간이 9시 기준 00시
-    @Scheduled(cron = "15 30 08 * * ?")
+    @Scheduled(cron = "30 12 10 * * ?")
     @Override
     public int collectWalk() throws Exception {
 
