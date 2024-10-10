@@ -22,7 +22,7 @@ body {
     font-weight: bold;
     border: 1px solid #dadcdf;
     border-radius: 5px; /* 10px 반지름의 둥근 외곽선 */
-    width: 300px;
+    width: 250px;
     height: 100px;
     padding: 21px 20px 18px;
 }
